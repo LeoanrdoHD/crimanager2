@@ -1,0 +1,1 @@
+<img src="{{asset('vendor/adminlte/dist/img/logo_daci.png')}}" alt="" width="55">
