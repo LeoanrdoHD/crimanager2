@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('criminal_specialties', function (Blueprint $table) {
             $table->id();
             $table->string('specialty_name', 100);
-            $table->timestamps();
         });
     }
 

@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('first_name', 100);
             $table->string('last_name', 100);
-            $table->string('identity_number', 100);
+            $table->string('identity_number', 25)->unique();
             $table->date('date_of_birth');
             $table->integer('age');
-            $table->boolean('is_member_of_criminal_organization');
-            $table->boolean('use_vehicle');
+            $table->boolean('is_member_of_criminal_organization')->nullable();
+            $table->boolean('use_vehicle')->nullable();
             $table->unsignedBigInteger('civil_state_id')->nullable();
             $table->unsignedBigInteger('nationality_id')->nullable();
             $table->unsignedBigInteger('criminal_specialty_id')->nullable();

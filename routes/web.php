@@ -14,12 +14,12 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 
-Route::get('/criminals',[CriminalController::class, 'create']);
-Route::post('/criminals',[CriminalController::class, 'store']);
-Route::get('/criminals/search_cri',[CriminalController::class, 'search_cri']);
+Route::get('/criminals',[CriminalController::class, 'create_criminal']);
+Route::post('/criminals',[CriminalController::class, 'store_criminal'])->name('criminals.store_criminal');
+Route::get('/criminals/search_cri',[CriminalController::class, 'search_criminal']);
 
-Route::get('/criminals/arrest',[CriminalController::class, 'arrest']);
-Route::post('/criminals',[CriminalController::class, 'store_arrest']);
+Route::get('/criminals/arrest',[CriminalController::class, 'create_arrest']);
+Route::post('/criminals/arrest',[CriminalController::class, 'store_arrest']);
 Route::get('/criminals/search_arrest',[CriminalController::class, 'search_arrest']);
 
 

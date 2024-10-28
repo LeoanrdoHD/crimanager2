@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('organization_name', 100);
             $table->string('Criminal_Organization_Specialty', 200);
-            $table->timestamps();
         });
     }
 

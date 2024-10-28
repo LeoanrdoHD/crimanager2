@@ -19,5 +19,6 @@ class DatabaseSeeder extends Seeder
             'email' => 'sadmin@example.com',
             'password'=> '12345678',
         ]);
+        $this->call(CriminalsSeeder::class);
     }
 }

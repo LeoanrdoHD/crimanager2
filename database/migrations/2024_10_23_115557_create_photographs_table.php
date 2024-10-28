@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('photographs', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('criminal_id')->unsigned();
-            $table->string('frontal_photo');
-            $table->string('full_body_photo');
-            $table->string('profile_izq_photo');
-            $table->string('profile_der_photo');
+            $table->unsignedBigInteger('criminal_id')->unsigned();
+            $table->string('frontal_photo',4000);
+            $table->string('full_body_photo',4000);
+            $table->string('profile_izq_photo',4000);
+            $table->string('profile_der_photo',4000);
             $table->timestamps();
         
             $table->foreign('criminal_id')->references('id')->on('criminals');

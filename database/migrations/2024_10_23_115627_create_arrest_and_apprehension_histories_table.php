@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('arrest_and_apprehension_history', function (Blueprint $table) {
+        Schema::create('arrest_and_apprehension_histories', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('criminal_id')->unsigned();
             $table->bigInteger('legal_status_id')->unsigned();
@@ -42,6 +42,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('arrest_and_apprehension_history');
+        Schema::dropIfExists('arrest_and_apprehension_histories');
     }
 };

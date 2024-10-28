@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('tools_types', function (Blueprint $table) {
             $table->id();
             $table->string('tool_type_name', 100);
-            $table->timestamps();
         });
     }
 

@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('criminal_partners', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('criminal_id')->unsigned();
+            $table->unsignedBigInteger('criminal_id')->unsigned();
             $table->string('partner_name');
             $table->string('partner_ci');
-            $table->bigInteger('relationship_type_id')->unsigned();
+            $table->unsignedBigInteger('relationship_type_id')->nullable();
             $table->string('partner_address');
             $table->timestamps();
 

@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('relationship_types', function (Blueprint $table) {
             $table->id();
             $table->string('relationship_type_name', 100);
-            $table->timestamps();
         });
     }
 

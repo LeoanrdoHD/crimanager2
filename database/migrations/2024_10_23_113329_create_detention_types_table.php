@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('detention_types', function (Blueprint $table) {
             $table->id();
             $table->string('detention_name', 100);
-            $table->timestamps();
         });
     }
 

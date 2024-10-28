@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('criminal_id')->unsigned();
             $table->string('street');
-            $table->bigInteger('city_id')->unsigned();
-            $table->bigInteger('nationality_id')->unsigned();
+            $table->unsignedBigInteger('city_id')->nullable();
+            $table->unsignedBigInteger('nationality_id')->nullable();
             $table->timestamps();
 
-            $table->foreign('criminal_id')->references('id')->on('criminals');
+            $table->foreign('criminal_id')->references('id')->on('criminals')->onDelete('cascade');
             $table->foreign('city_id')->references('id')->on('cities');
             $table->foreign('nationality_id')->references('id')->on('nationalities');
         });

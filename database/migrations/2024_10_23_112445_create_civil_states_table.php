@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('civil_states', function (Blueprint $table) {
             $table->id();
             $table->string('civil_state_name', 100);
-            $table->timestamps();
         });
     }
 

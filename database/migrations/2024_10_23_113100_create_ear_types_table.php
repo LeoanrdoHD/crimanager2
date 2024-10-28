@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('ear_types', function (Blueprint $table) {
             $table->id();
             $table->string('ear_type_name', 100);
-            $table->timestamps();
         });
     }
 

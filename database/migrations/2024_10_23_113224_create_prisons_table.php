@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('prison_name', 100);
             $table->string('prison_location', 150);
-            $table->timestamps();
         });
     }
 

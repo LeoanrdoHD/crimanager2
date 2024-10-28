@@ -13,18 +13,18 @@ return new class extends Migration
     {
         Schema::create('physical_characteristics', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('criminal_id')->unsigned();
+            $table->unsignedBigInteger('criminal_id')->unsigned();
             $table->float('height');
             $table->float('weight');
             $table->string('sex', 50);
-            $table->bigInteger('criminal_gender_id')->unsigned();
-            $table->bigInteger('skin_color_id')->unsigned();
-            $table->bigInteger('eye_type_id')->unsigned();
-            $table->bigInteger('ear_type_id')->unsigned();
-            $table->bigInteger('lip_type_id')->unsigned();
-            $table->bigInteger('nose_type_id')->unsigned();
+            $table->unsignedBigInteger('criminal_gender_id')->nullable();
+            $table->unsignedBigInteger('skin_color_id')->nullable();
+            $table->unsignedBigInteger('eye_type_id')->nullable();
+            $table->unsignedBigInteger('ear_type_id')->nullable();
+            $table->unsignedBigInteger('lip_type_id')->nullable();
+            $table->unsignedBigInteger('nose_type_id')->nullable();
             $table->string('complexion', 50);
-            $table->text('distinctive_marks')->nullable();
+            $table->string('distinctive_marks',200);
             $table->timestamps();
         
             $table->foreign('criminal_id')->references('id')->on('criminals');

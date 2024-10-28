@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('legal_statuses', function (Blueprint $table) {
             $table->id();
             $table->string('status_name', 100);
-            $table->timestamps();
         });
     }
 
