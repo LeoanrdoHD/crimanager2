@@ -12,12 +12,13 @@ class CriminalsSeeder extends Seeder
     public function run(): void
     {
         $criminal = new criminal();
+        criminal::factory(50)->create();
         $criminal::factory()->create([
-            'first_name' => 'criminal1',
-            'last_name' => 'el criminal',
-            'identity_number' => '1231232',
-            'date_of_birth' => '24/01/24',
-            'age' => '15',
+            'first_name' => 'RAMIRO JESUS',
+            'last_name' => 'MAMANI FLORES',
+            'identity_number' => '7865932',
+            'date_of_birth' => '24/01/23',
+            'age' => '24',
         ]);
     }
 }

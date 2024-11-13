@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('skin_colors', function (Blueprint $table) {
             $table->id();
             $table->string('skin_color_name', 100);
-            $table->timestamps();
         });
     }
 

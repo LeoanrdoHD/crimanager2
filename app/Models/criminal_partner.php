@@ -9,7 +9,6 @@ class criminal_partner extends Model
     protected $fillable = [
     'criminal_id',
     'partner_name',
-    'partner_ci',
     'relationship_type_id',
     'partner_address',
     ];

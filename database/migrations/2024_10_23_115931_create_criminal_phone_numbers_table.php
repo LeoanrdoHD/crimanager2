@@ -13,12 +13,18 @@ return new class extends Migration
     {
         Schema::create('criminal_phone_numbers', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('criminal_id')->unsigned();
+            $table->unsignedBigInteger('criminal_id')->unsigned();
+            $table->unsignedBigInteger('arrest_and_apprehension_history_id')->unsigned()->nullable();
             $table->string('phone_number');
-            $table->bigInteger('company_id')->unsigned();
+            $table->unsignedBigInteger('company_id')->unsigned();
+            $table->string('imei_number')->nullable();
             $table->timestamps();
         
-            $table->foreign('criminal_id')->references('id')->on('criminals');
+            $table->foreign('criminal_id')->references('id')->on('criminals')->onDelete('cascade');
+            $table->foreign('arrest_and_apprehension_history_id', 'fk_arrest_history_id')
+            ->references('id')
+            ->on('arrest_and_apprehension_histories')
+            ->onDelete('cascade');
             $table->foreign('company_id')->references('id')->on('companies');
         });
     }

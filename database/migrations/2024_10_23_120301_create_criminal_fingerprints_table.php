@@ -14,7 +14,18 @@ return new class extends Migration
         Schema::create('criminal_fingerprints', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('criminal_id');
-            $table->json('fingerprint_data');
+            $table->json('left_thumb')->nullable();
+            $table->json('left_index')->nullable();
+            $table->json('left_middle')->nullable();
+            $table->json('left_ring')->nullable();
+            $table->json('left_little')->nullable();
+            
+            $table->json('right_thumb')->nullable();
+            $table->json('right_index')->nullable();
+            $table->json('right_middle')->nullable();
+            $table->json('right_ring')->nullable();
+            $table->json('right_little')->nullable();
+        
             $table->timestamps();
 
             // Relaciones (Foreign Key)

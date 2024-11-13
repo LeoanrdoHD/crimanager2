@@ -13,26 +13,33 @@ return new class extends Migration
     {
         Schema::create('criminal_vehicles', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('criminal_id')->unsigned();
-            $table->string('license_plate');
-            $table->string('color', 50);
+            $table->unsignedBigInteger('criminal_id')->unsigned();
+            $table->unsignedBigInteger('arrest_and_apprehension_history_id')->unsigned()->nullable();
+            $table->unsignedBigInteger('vehicle_color_id')->unsigned();
+            $table->unsignedBigInteger('type_id')->unsigned();
             $table->integer('year');
-            $table->bigInteger('brand_id')->unsigned();
+            $table->unsignedBigInteger('brand_id')->unsigned();
             $table->string('model');
-            $table->bigInteger('type_id')->unsigned();
-            $table->bigInteger('nationality_id')->unsigned();
+            $table->unsignedBigInteger('industry_id')->unsigned();
+            $table->string('license_plate');
+            $table->unsignedBigInteger('vehicle_service_id')->unsigned();
             $table->text('details')->nullable();
-            $table->string('owner_name');
-            $table->string('owner_ci');
-            $table->string('relationship_with_owner');
             $table->boolean('itv_valid')->default(false);
+            $table->string('user_name')->nullable();
+            $table->string('user_ci')->nullable();
+            $table->unsignedBigInteger('relationship_with_owner_id')->unsigned()->nullable();
             $table->text('observations')->nullable();
+            $table->string('driver_name')->nullable();
             $table->timestamps();
         
-            $table->foreign('criminal_id')->references('id')->on('criminals');
+            $table->foreign('criminal_id')->references('id')->on('criminals')->onDelete('cascade');
+            $table->foreign('arrest_and_apprehension_history_id')->references('id')->on('arrest_and_apprehension_histories')->onDelete('cascade');
+            $table->foreign('vehicle_color_id')->references('id')->on('vehicle_colors');
             $table->foreign('type_id')->references('id')->on('vehicle_types');
             $table->foreign('brand_id')->references('id')->on('brand_vehicles');
-            $table->foreign('nationality_id')->references('id')->on('nationalities');
+            $table->foreign('industry_id')->references('id')->on('industries');
+            $table->foreign('vehicle_service_id')->references('id')->on('vehicle_services');
+            $table->foreign('relationship_with_owner_id')->references('id')->on('relationship_with_owners');
         
         });
     }

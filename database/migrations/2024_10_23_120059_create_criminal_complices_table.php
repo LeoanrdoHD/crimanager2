@@ -13,13 +13,15 @@ return new class extends Migration
     {
         Schema::create('criminal_complices', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('criminal_id')->unsigned();
+            $table->unsignedBigInteger('criminal_id')->unsigned();
+            $table->unsignedBigInteger('arrest_and_apprehension_history_id')->unsigned()->nullable();
             $table->string('complice_name');
             $table->string('CI_complice');
             $table->string('detail_complice');
             $table->timestamps();
         
-            $table->foreign('criminal_id')->references('id')->on('criminals');
+            $table->foreign('criminal_id')->references('id')->on('criminals')->onDelete('cascade');
+            $table->foreign('arrest_and_apprehension_history_id')->references('id')->on('arrest_and_apprehension_histories')->onDelete('cascade');
         });
     }
 

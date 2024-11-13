@@ -9,4 +9,5 @@ class nationality extends Model
     protected $fillable = [
         'nationality_name',
     ];
+    public $timestamps = false;
 }

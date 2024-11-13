@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('criminal_id')->unsigned();
             $table->string('partner_name');
-            $table->string('partner_ci');
             $table->unsignedBigInteger('relationship_type_id')->nullable();
             $table->string('partner_address');
             $table->timestamps();

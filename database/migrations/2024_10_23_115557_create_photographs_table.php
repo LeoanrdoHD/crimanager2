@@ -14,10 +14,13 @@ return new class extends Migration
         Schema::create('photographs', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('criminal_id')->unsigned();
-            $table->string('frontal_photo',4000);
-            $table->string('full_body_photo',4000);
-            $table->string('profile_izq_photo',4000);
-            $table->string('profile_der_photo',4000);
+            $table->mediumText('face_photo')->nullable();
+            $table->mediumText('frontal_photo')->nullable();
+            $table->mediumText('full_body_photo')->nullable();
+            $table->mediumText('profile_izq_photo')->nullable();
+            $table->mediumText('profile_der_photo')->nullable();
+            $table->mediumText('aditional_photo')->nullable();
+            $table->mediumText('barra_photo')->nullable();
             $table->timestamps();
         
             $table->foreign('criminal_id')->references('id')->on('criminals');

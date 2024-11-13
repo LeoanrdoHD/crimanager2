@@ -16,9 +16,21 @@ class CriminalFactory extends Factory
      */
     public function definition(): array
     {
-        return [
-            'first_name' => fake()->name(),
-            'last_name' => fake()->lastName(),
-        ];
+         // Generar una fecha de nacimiento aleatoria en el pasado (por ejemplo, entre 1950 y 2000)
+         $dateOfBirth = $this->faker->dateTimeBetween('-70 years', '-20 years')->format('Y-m-d');
+
+         // Calcular la edad basada en la fecha de nacimiento
+         $age = \Carbon\Carbon::parse($dateOfBirth)->age;
+ 
+         // Generar un número de identidad en el formato especificado
+         $identityNumber = $this->faker->unique()->numberBetween(10000000, 99999999) . ' OR';
+ 
+         return [
+             'first_name' => $this->faker->firstName(),
+             'last_name' => $this->faker->lastName(),
+             'identity_number' => $identityNumber,
+             'date_of_birth' => $dateOfBirth,
+             'age' => $age,
+         ];
     }
 }

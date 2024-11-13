@@ -18,16 +18,25 @@ return new class extends Migration
             $table->string('identity_number', 25)->unique();
             $table->date('date_of_birth');
             $table->integer('age');
+            $table->unsignedBigInteger('country_id')->nullable();
+            $table->unsignedBigInteger('city_id')->nullable();
+            $table->unsignedBigInteger('province_id')->nullable();
             $table->boolean('is_member_of_criminal_organization')->nullable();
             $table->boolean('use_vehicle')->nullable();
+            $table->boolean('use_cellular')->nullable();
             $table->unsignedBigInteger('civil_state_id')->nullable();
             $table->unsignedBigInteger('nationality_id')->nullable();
-            $table->unsignedBigInteger('criminal_specialty_id')->nullable();
+            $table->string('alias_name', 100)->nullable();
+            $table->unsignedBigInteger('ocupation_id')->nullable();
             $table->timestamps();
 
+            $table->foreign('country_id')->references('id')->on('countries');
+            $table->foreign('city_id')->references('id')->on('cities');
+            $table->foreign('province_id')->references('id')->on('provinces');
             $table->foreign('civil_state_id')->references('id')->on('civil_states');
             $table->foreign('nationality_id')->references('id')->on('nationalities');
-            $table->foreign('criminal_specialty_id')->references('id')->on('criminal_specialties');
+            $table->foreign('ocupation_id')->references('id')->on('ocupations');
+            
         });
     }
 

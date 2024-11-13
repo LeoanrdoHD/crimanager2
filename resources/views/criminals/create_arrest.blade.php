@@ -3,128 +3,161 @@
 @section('title', 'Crimanager')
 
 @section('content_header')
-    <h1>REGISTRAR SOBRE SU ARRESTO</h1>
+    <h1 class="class text-center">Agregar Historial a: {{ $criminal->first_name }} {{ $criminal->last_name }}</h1>
+    <style>
+        /* Estilo para alinear y centrar los checkboxes horizontalmente */
+        .checkbox-container {
+            display: flex;
+            justify-content: center; /* Centra los checkboxes horizontalmente */
+            gap: 10px;
+            flex-wrap: wrap; /* Permite que los checkboxes pasen a la siguiente línea en pantallas pequeñas */
+            margin-bottom: 20px;
+        }
+    
+        /* Estilo para los separadores */
+        .section-divider {
+            border: 1px solid rgba(244, 244, 244, 0.478);
+            width: 100%;
+            display: none; /* Oculto inicialmente */
+        }
+    
+        /* Ocultar secciones inicialmente */
+        .section-content {
+            display: none;
+        }
+    </style>
+    
 @stop
 @section('content')
+
+    @if (session('success'))
+        <div id="success-alert"
+            style="position: fixed; top: 20px; right: 20px; z-index: 9999; padding: 10px 20px; background-color: #4caf50; color: white; border-radius: 5px;">
+            {{ session('success') }}
+        </div>
+    @elseif (session('error'))
+        <div id="error-alert"
+            style="position: fixed; top: 20px; right: 20px; z-index: 9999; padding: 10px 20px; background-color: #f44336; color: white; border-radius: 5px;">
+            {{ session('error') }}
+        </div>
+    @endif
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            setTimeout(() => {
+                const successAlert = document.getElementById('success-alert');
+                if (successAlert) successAlert.style.display = 'none';
+
+                const errorAlert = document.getElementById('error-alert');
+                if (errorAlert) errorAlert.style.display = 'none';
+            }, 3000);
+        });
+    </script>
+
     <div class="container">
-        <div class="class text-center">Llenar los siguientes datos</div>
-        <form class="form-arrest" action="/criminals" method="POST">
+        <form class="form-arrest" action="{{ route('criminals.store_arrest') }}" method="POST">
             @csrf
-            <div class="grid grid-cols-2 gap-10">
-                <div>
-                    <label>SELECCIONE UN DELINCUENTE</label>
-                    <div class="form-group">
-                        <label >Nombres y apellido:</label>
-                        <input type="text" class="form-control" name="first_name" placeholder="Ingrese el nombre">
-                    </div>
-                    <div class="form-group">
-                        <label>Cedula de Identidad/DNI:</label>
-                        <input type="text" class="form-control" name="identity_number" placeholder="Ingrese los apellidos">
-                    </div>
-                    <div class="form-group">
-                        <label >Situacion Legal:</label>
-                        <select class="form-control" name="situacion_legal">
-                            <option value="slegal1">Aprehendido</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label >Tipo de Aprehencion::</label>
-                        <select class="form-control" name="type_aprencion">
-                            <option value="slegal1">Orden Judicial</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label >Nuemro de CUD:</label>
-                        <input type="text" class="form-control" name="n_cud" placeholder="Ingrese EL CUD">
-                    </div>
-                    <div class="form-group">
-                        <label >Fecha de Captura:</label>
-                        <input type="date" class="form-control" name="fecha_captura" placeholder="dia/mes/año">
-                    </div>
-                    <div class="form-group">
-                        <label >Hora de Captura:</label>
-                        <input type="time" class="form-control" name="hora_captura" placeholder="dia/mes/año">
-                    </div>
-                    <div class="form-group">
-                        <label >Lugar de Captura:</label>
-                        <input type="text" class="form-control" name="lugar_captura" placeholder="Ingrese la Direccion">
-                    </div>
-                    <div class="form-group">
-                        <label >Detalle de la Captura:</label>
-                        <input type="text" class="form-control" name="detalle_captura" placeholder="Breve descripccion">
-                    </div>
-                    <div class="form-group">
-                        <label>Especialidad/Motivo de captura</label>
-                        <select class="form-control" name="especiality">
-                            <option value="robo">Robo</option>
-                        </select>
-                    </div>
-                    <label>TELEFONOS QUE UTILIZA</label>
-                    <div class="form-group">
-                        <label >Numero de Celular:</label>
-                        <input type="text" class="form-control" name="cel_number" placeholder="Ingrese el numero de celular">
-                    </div>
-                    <div class="form-group">
-                        <label >Compañia Telefonica</label>
-                        <select class="form-control" name="companie_cel">
-                            <option value="">Entel</option>
-                        </select>
-                    </div>
+            <h2 class="class text-center text-lg ">PERFIL DEL DELINCUENTE</h2>
+            <div class="grid grid-cols-3 gap-10">
+                <div class="form-group">
+                    <label>Nombres y Apellidos:</label>
+                    <input type="text" class="form-control" name="nom_apell"
+                        value="{{ $criminal->first_name }} {{ $criminal->last_name }}" disabled>
                 </div>
-                <div>
-                    <label>OTRAS IDENTIDADES</label>
-                    <div class="form-group">
-                        <label>Otros Nombre::</label>
-                        <input type="text" class="form-control" name="otthers_nombres" placeholder="Nombre y Apellidos">
-                    </div>
-                    <div class="form-group">
-                        <label>Otros Numeros de Identidad::</label>
-                        <input type="text" class="form-control" name="others_ci" placeholder="Ingresar CI/DNI">
-                    </div>
-                    <div class="form-group">
-                        <label>Otras Nacionalidades:</label>
-                        <select class="form-control" name="others_natuonality">
-                            <option value="">Bolivia</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label >Otros Direcciones de Residencia:</label>
-                        <input type="text" class="form-control" name="others_direcction" placeholder="Ingresar Direccion">
-                    </div>
-                    <label>Lugar de recidencia:</label>
-                    <div class="grid grid-cols-2 gap-5">
-                        <div class="form-group">
-                            <select class="form-control" name="others_city">
-                                <option value="">Ciudad</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <select class="form-control" name="other_pais">
-                                <option value="">Pais</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Apodo/Chapa</label>
-                        <input type="text" class="form-control" name="apodo" placeholder="Ingrese su Apodo">
-                    </div>
-                    <label>OBJETOS/ARMAS/HERRAMIENTAS</label>
-                    <div class="form-group">
-                        <label >Tipo:</label>
-                        <select class="form-control" name="type_arms">
-                            <option value="">Arma de Fuego</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Detalles del Objeto, Arma o Herramienta:</label>
-                        <input type="text" class="form-control" name="detail_arms"
-                            placeholder="Ingrese la direccion">
-                    </div>
+                <div class="flex justify-center items-center"> <!-- Centrado con flexbox -->
+                    @foreach ($fotos as $photographs)
+                        @if ($photographs->criminal_id === $criminal->id)
+                            <img src="{{ asset($photographs->frontal_photo) }}" width="100" alt="Foto Frontal"
+                                style="border-radius: 50%; object-fit: cover;">
+                        @endif
+                    @endforeach
+                </div>
+                <div class="form-group">
+                    <label>Cédula de Identidad/DNI:</label>
+                    <input type="text" class="form-control" name="identity_number"
+                        value="{{ $criminal->identity_number }}" disabled>
                 </div>
             </div>
-            <div>
-                <button class="btn btn-primary" type="submit">GUARDAR</button>
-            </div>
+            <hr style="border: 1px solid rgba(244, 244, 244, 0.478); width: 100%;">
+            <div class="class text-center text-lg">Llenar los siguientes datos</div>
         </form>
     </div>
-@stop
+    @include('criminals.partials.section1_situacion')
+    <hr style="border: 1px solid rgba(244, 244, 244, 0.347); width: 100%;">
+    <h2 class="class text-center text-lg ">Seleccione los Campos a LLenar</h2>
+    <br>
+    <div class="checkbox-container">
+        <label><input type="checkbox" id="telefonosCheck" onclick="updateSections()"> Teléfonos</label>
+        <label><input type="checkbox" id="armasCheck" onclick="updateSections()"> Armas</label>
+        <label><input type="checkbox" id="aliasCheck" onclick="updateSections()"> Alias</label>
+        <label><input type="checkbox" id="complicesCheck" onclick="updateSections()"> Cómplices</label>
+        <label><input type="checkbox" id="organizacionCheck" onclick="updateSections()"> Organización</label>
+        <label><input type="checkbox" id="condenasCheck" onclick="updateSections()"> Condenas</label>
+        <label><input type="checkbox" id="vehiculosCheck" onclick="updateSections()"> Vehículos</label>
+    </div>
+
+    <!-- Secciones -->
+    <div id="telefonos" class="section-content">
+        @include('criminals.partials.section2_telefonos')
+    </div>
+    <hr id="telefonosHr" class="section-divider">
+
+    <div id="armas" class="section-content">
+        @include('criminals.partials.section4_armas')
+    </div>
+    <hr id="armasHr" class="section-divider">
+
+    <div id="alias" class="section-content">
+        @include('criminals.partials.section3_alias')
+    </div>
+    <hr id="aliasHr" class="section-divider">
+
+    <div id="complices" class="section-content">
+        @include('criminals.partials.section6_complices')
+    </div>
+    <hr id="complicesHr" class="section-divider">
+
+    <div id="organizacion" class="section-content">
+        @include('criminals.partials.section7_organizacion')
+    </div>
+    <hr id="organizacionHr" class="section-divider">
+
+    <div id="condenas" class="section-content">
+        @include('criminals.partials.section8_condenas')
+    </div>
+    <hr id="condenasHr" class="section-divider">
+    <div id="vehiculos" class="section-content">
+        @include('criminals.partials.section5_vehiculos')
+    </div>
+    <hr id="vehiculosHr" class="section-divider">
+
+    <script>
+        function updateSections() {
+            // Lista de todas las secciones y sus checkboxes correspondientes
+            const sections = [
+                { checkboxId: 'telefonosCheck', sectionId: 'telefonos', hrId: 'telefonosHr' },
+                { checkboxId: 'armasCheck', sectionId: 'armas', hrId: 'armasHr' },
+                { checkboxId: 'aliasCheck', sectionId: 'alias', hrId: 'aliasHr' },
+                { checkboxId: 'complicesCheck', sectionId: 'complices', hrId: 'complicesHr' },
+                { checkboxId: 'organizacionCheck', sectionId: 'organizacion', hrId: 'organizacionHr' },
+                { checkboxId: 'condenasCheck', sectionId: 'condenas', hrId: 'condenasHr' },
+                { checkboxId: 'vehiculosCheck', sectionId: 'vehiculos', hrId: 'vehiculosHr' },
+            ];
+
+            // Actualiza la visibilidad de cada sección según el estado del checkbox
+            sections.forEach(section => {
+                const checkbox = document.getElementById(section.checkboxId);
+                const sectionDiv = document.getElementById(section.sectionId);
+                const hrDiv = document.getElementById(section.hrId);
+
+                if (checkbox.checked) {
+                    sectionDiv.style.display = "block";
+                    hrDiv.style.display = "block";
+                } else {
+                    sectionDiv.style.display = "none";
+                    hrDiv.style.display = "none";
+                }
+            });
+        }
+    </script>
+@endsection

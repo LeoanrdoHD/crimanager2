@@ -329,18 +329,47 @@ return [
             'label' => 4,
             'label_color' => 'success',
         ],*/
-        ['header' => 'COFIGURACION DE CUENTA'],
+        ['header' => 'COFIGURACIÓN DE CUENTA'],
         [
             'text' => 'Perfil',
             'url' => 'user/profile',
             'icon' => 'fas fa-fw fa-user',
         ],
-        ['header' => 'NUEVOS REGISTROS'],
+        [
+            'text' => 'Cambiar Contraseña ',
+            'url' => 'user/profile',
+            'icon' => 'fas fa-fw fa-user',
+        ],
+        ['header' => 'GESTIÓN DE USUARIOS'],
+        [
+            'text' => 'Buscar Usuarios',
+            'url' => 'user/register',
+            'icon' => 'fas fa-fw fa-user',
+            
+        ],
+        [
+            'text' => 'Crear Usuario',
+            'url' => 'user/register',
+            'icon' => 'fas fa-fw fa-user',
+            
+        ],
+        ['header' => 'GESTIÓN DE DELINCUENTES'],
         [
             'text' => 'Nuevo Delincuente',
             'url' => 'criminals',
             'icon' => 'fas fa-fw fa-user',
         ],
+        [
+            'text' => 'Buscar Delincuente',
+            'url' => 'criminals/search_cri',
+            'icon' => 'fas fa-fw fa-lock',
+        ],
+        [
+            'text' => 'Actualizar datos',
+            'url' => 'criminals/arrest',
+            'icon' => 'fas fa-fw fa-lock',
+        ],
+/*
         [
             'text' => 'Sobre la Captura',
             'url' => 'criminals/arrest',
@@ -351,13 +380,20 @@ return [
             'url' => 'vehicles',
             'icon' => 'fas fa-fw fa-lock',
         ],
+        */
+        ['header' => 'REPORTES'],
         [
-            'text' => 'Vinculos',
+            'text' => 'Ficha Delincuente',
             'url' => '',
             'icon' => 'fas fa-fw fa-user',
         ],
         [
-            'text' => 'Extras',
+            'text' => 'Organizaciones',
+            'url' => 'admin/settings',
+            'icon' => 'fas fa-fw fa-lock',
+        ],
+        [
+            'text' => 'Vehiculos',
             'url' => 'admin/settings',
             'icon' => 'fas fa-fw fa-lock',
         ],
@@ -400,19 +436,6 @@ return [
                 ],
             ],
         ],*/
-        ['header' => 'BUSQUEDA'],
-        [
-            'text' => 'Delincuentes',
-            'url' => '#',
-        ],
-        [
-            'text' => 'Organizaciones',
-            'url' => '#',
-        ],
-        [
-            'text' => 'Vehiculos',
-            'url' => '',
-        ],
     ],
 
     /*

@@ -17,18 +17,20 @@ return new class extends Migration
             $table->float('height');
             $table->float('weight');
             $table->string('sex', 50);
+            $table->unsignedBigInteger('confleccion_id')->nullable();
             $table->unsignedBigInteger('criminal_gender_id')->nullable();
             $table->unsignedBigInteger('skin_color_id')->nullable();
             $table->unsignedBigInteger('eye_type_id')->nullable();
             $table->unsignedBigInteger('ear_type_id')->nullable();
             $table->unsignedBigInteger('lip_type_id')->nullable();
             $table->unsignedBigInteger('nose_type_id')->nullable();
-            $table->string('complexion', 50);
+           
             $table->string('distinctive_marks',200);
             $table->timestamps();
         
             $table->foreign('criminal_id')->references('id')->on('criminals');
             $table->foreign('criminal_gender_id')->references('id')->on('criminal_genders');
+            $table->foreign('confleccion_id')->references('id')->on('confleccions');
             $table->foreign('skin_color_id')->references('id')->on('skin_colors');
             $table->foreign('eye_type_id')->references('id')->on('eye_types');
             $table->foreign('ear_type_id')->references('id')->on('ear_types');

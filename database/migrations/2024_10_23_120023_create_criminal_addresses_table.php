@@ -13,15 +13,19 @@ return new class extends Migration
     {
         Schema::create('criminal_addresses', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('criminal_id')->unsigned();
-            $table->string('street');
+            $table->unsignedBigInteger('criminal_id')->unsigned();
+            $table->unsignedBigInteger('arrest_and_apprehension_history_id')->nullable();
+            $table->unsignedBigInteger('country_id')->nullable();
             $table->unsignedBigInteger('city_id')->nullable();
-            $table->unsignedBigInteger('nationality_id')->nullable();
+            $table->unsignedBigInteger('province_id')->nullable();
+            $table->string('street');
             $table->timestamps();
 
             $table->foreign('criminal_id')->references('id')->on('criminals')->onDelete('cascade');
+            $table->foreign('arrest_and_apprehension_history_id')->references('id')->on('arrest_and_apprehension_histories')->onDelete('cascade');
+            $table->foreign('country_id')->references('id')->on('countries');
             $table->foreign('city_id')->references('id')->on('cities');
-            $table->foreign('nationality_id')->references('id')->on('nationalities');
+            $table->foreign('province_id')->references('id')->on('provinces');
         });
     }
 
