@@ -1,0 +1,24 @@
+# Fase de construcción: preparar dependencias
+[phases.setup]
+commands = [
+    "composer install --optimize",
+    "npm install --production"
+]
+
+# Fase de optimización de Laravel
+[phases.build]
+commands = [
+    "php artisan optimize",
+    "php artisan config:cache",
+    "php artisan route:cache",
+    "php artisan view:cache"
+]
+
+# Fase de inicio: ejecutar migraciones y levantar el servidor
+[phases.start]
+commands = [
+    "php artisan migrate --force",  # Ejecutar migraciones
+    "php artisan serve --host=0.0.0.0 --port=$PORT"  # Levantar el servidor
+]
+
+
