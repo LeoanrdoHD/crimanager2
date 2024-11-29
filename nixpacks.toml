@@ -1,22 +1,24 @@
-# Define el lenguaje y las herramientas
+# Fase de construcción: preparar dependencias
 [phases.setup]
 commands = [
-  "composer install --optimize-autoloader --no-dev",
-  "npm install --production"
+    "composer install --optimize-autoloader --no-dev",
+    "npm install --production"
 ]
 
+# Fase de optimización de Laravel
 [phases.build]
 commands = [
-  "php artisan optimize",
-  "php artisan config:cache",
-  "php artisan route:cache",
-  "php artisan view:cache"
+    "php artisan optimize",
+    "php artisan config:cache",
+    "php artisan route:cache",
+    "php artisan view:cache"
 ]
 
+# Fase de inicio: ejecutar migraciones y levantar el servidor
 [phases.start]
 commands = [
-  "sleep 15",  # Espera 15 segundos antes de ejecutar migraciones
-  "php artisan migrate --force",
-  "php artisan serve --host=0.0.0.0 --port=$PORT"
+    "php artisan migrate --force",  # Ejecutar migraciones
+    "php artisan serve --host=0.0.0.0 --port=$PORT"  # Levantar el servidor
 ]
+
 
