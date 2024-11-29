@@ -1,7 +1,7 @@
-# Usar una imagen base de PHP con Apache y las extensiones necesarias
-FROM php:8.1-fpm
+# Usar una imagen base de PHP 8.2
+FROM php:8.2-fpm
 
-# Instalar dependencias necesarias
+# Instalar las dependencias necesarias para PHP
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
