@@ -1,7 +1,7 @@
 # Usar una imagen base de PHP 8.2
 FROM php:8.2-fpm
 
-# Instalar las dependencias necesarias para PHP
+# Instalar dependencias necesarias para PHP y otras herramientas
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
@@ -12,8 +12,13 @@ RUN apt-get update && apt-get install -y \
     libicu-dev \
     libonig-dev \
     libzip-dev \
+    curl \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd pdo pdo_mysql mbstring
+
+# Instalar Node.js y npm
+RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs
 
 # Instalar Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
