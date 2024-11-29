@@ -1,7 +1,7 @@
 # Fase de construcción: preparar dependencias
 [phases.setup]
 commands = [
-    "composer install --optimize-autoloader --no-dev",
+    "composer install --optimize",
     "npm install --production"
 ]
 
