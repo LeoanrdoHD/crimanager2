@@ -1,8 +1,7 @@
 @vite('resources/css/app.css')
 <div>
-    <div class="class text-center"><label>:</label></div>
-    <form class="form-criminal" action="{{ route('criminals.store_arrest8') }}" method="POST"
-        enctype="multipart/form-data">
+    <div class="class text-center"><label>Registro de Sentencias Judiciales </label></div>
+    <form class="ajax-form" action="{{ route('criminals.store_arrest8') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="criminal_id" value="{{ $criminal->id }}">
 
@@ -24,8 +23,9 @@
                         <option value="">Seleccionar</option>
                         @foreach ($prision as $prison)
                             <option value="{{ $prison->id }}" data-direccion="{{ $prison->prison_location }}"
-                                data-pais="{{ $prison->country_id }}" data-ciudad="{{ $prison->city_id }}"
-                                data-provincia="{{ $prison->province_id }}">
+                                data-pais="{{ $prison->country->country_name }}"
+                                data-estado="{{ $prison->state->state_name }}"
+                                data-ciudad="{{ $prison->city->city_name }}">
                                 {{ $prison->prison_name }}
                             </option>
                         @endforeach
@@ -39,27 +39,196 @@
                             placeholder="Nombre de la prisión">
                         <label>Dirección de la Prisión:</label>
                         <input type="text" class="form-control" name="prison_location" placeholder="Dirección">
-                        <label>País:</label>
-                        <select class="form-control" name="country_id_p">
-                            <option value="">Seleccionar</option>
-                            @foreach ($pais as $country)
-                                <option value="{{ $country->id }}">{{ $country->country_name }}</option>
-                            @endforeach
-                        </select>
-                        <label>Ciudad:</label>
-                        <select class="form-control" name="city_id_p">
-                            <option value="">Seleccionar</option>
-                            @foreach ($ciudad as $city)
-                                <option value="{{ $city->id }}">{{ $city->city_name }}</option>
-                            @endforeach
-                        </select>
-                        <label>Provincia:</label>
-                        <select class="form-control" name="province_id_p">
-                            <option value="">Seleccionar</option>
-                            @foreach ($provincia as $province)
-                                <option value="{{ $province->id }}">{{ $province->province_name }}</option>
-                            @endforeach
-                        </select>
+
+                        <div class="grid grid-cols-3 gap-10">
+                            <div class="form-group">
+                                <label for="country_p">País:</label>
+                                <select id="country_p" name="country_id_p" class="form-control">
+                                    <option value="">Seleccionar</option>
+                                    @foreach ($pais as $country)
+                                        <option value="{{ $country->id }}"
+                                            {{ old('country_id_p') == $country->id ? 'selected' : '' }}>
+                                            {{ $country->country_name }}
+                                        </option>
+                                    @endforeach
+                                    <option value="otro" {{ old('country_id_p') == 'otro' ? 'selected' : '' }}>Otro
+                                    </option>
+                                </select>
+                                <input type="text" id="newCountryField_p" class="form-control"
+                                    name="new_country_name_p" placeholder="Nombre del nuevo país"
+                                    style="display: {{ old('country_id_p') == 'otro' ? 'block' : 'none' }}; margin-top: 5px;"
+                                    value="{{ old('new_country_name_p') }}">
+                            </div>
+
+                            <!-- Selección de Estado -->
+                            <div class="form-group">
+                                <label for="state_p">Estado/Departamento:</label>
+                                <select id="state_p" name="province_id_p" class="form-control">
+                                    <option value="">Seleccionar</option>
+                                    @foreach ($provincia as $state)
+                                        <option value="{{ $state->id }}"
+                                            {{ old('province_id_p') == $state->id ? 'selected' : '' }}>
+                                            {{ $state->state_name }}
+                                        </option>
+                                    @endforeach
+                                    <option value="otro" {{ old('province_id_p') == 'otro' ? 'selected' : '' }}>Otro
+                                    </option>
+                                </select>
+                                <input type="text" id="newStateField_p" class="form-control" name="new_state_name_p"
+                                    placeholder="Nombre del nuevo estado"
+                                    style="display: {{ old('province_id_p') == 'otro' ? 'block' : 'none' }}; margin-top: 5px;"
+                                    value="{{ old('new_state_name_p') }}">
+                            </div>
+
+                            <!-- Selección de Ciudad -->
+                            <div class="form-group">
+                                <label for="citySelect_p">Ciudad/Municipio:</label>
+                                <select id="citySelect_p" name="city_id_p" class="form-control">
+                                    <option value="">Seleccionar</option>
+                                    @foreach ($ciudad as $city)
+                                        <option value="{{ $city->id }}"
+                                            {{ old('city_id_p') == $city->id ? 'selected' : '' }}>
+                                            {{ $city->city_name }}
+                                        </option>
+                                    @endforeach
+                                    <option value="otro" {{ old('city_id_p') == 'otro' ? 'selected' : '' }}>Otro
+                                    </option>
+                                </select>
+                                <input type="text" id="newCityField_p" class="form-control" name="new_city_name_p"
+                                    placeholder="Nombre de la nueva ciudad"
+                                    style="display: {{ old('city_id_p') == 'otro' ? 'block' : 'none' }}; margin-top: 5px;"
+                                    value="{{ old('new_city_name_p') }}">
+                            </div>
+                        </div>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                const prisonSelect = document.getElementById("prisonSelect");
+                                const camposOtraPrision = document.getElementById("camposOtraPrision");
+                                const camposPrisionSeleccionada = document.getElementById("camposPrisionSeleccionada");
+
+                                const prisonLocationField = document.getElementById("prisonLocation");
+                                const paisField = document.getElementById("pais");
+                                const depField = document.getElementById("dep");
+                                const cityField = document.getElementById("city");
+
+                                prisonSelect.addEventListener("change", function() {
+                                    const selectedOption = this.options[this.selectedIndex];
+                                    const prisonId = this.value;
+
+                                    if (prisonId === "otro") {
+                                        // Mostrar campos para ingresar nueva prisión
+                                        camposOtraPrision.style.display = "block";
+                                        camposPrisionSeleccionada.style.display = "none";
+
+                                        // Limpiar campos de prisión seleccionada
+                                        prisonLocationField.value = "";
+                                        paisField.value = "";
+                                        depField.value = "";
+                                        cityField.value = "";
+
+                                    } else if (prisonId) {
+                                        // Mostrar detalles de la prisión seleccionada
+                                        camposOtraPrision.style.display = "none";
+                                        camposPrisionSeleccionada.style.display = "block";
+
+                                        // Llenar campos con los datos de la prisión seleccionada
+                                        prisonLocationField.value = selectedOption.getAttribute("data-direccion") || "";
+                                        paisField.value = selectedOption.getAttribute("data-pais") || "";
+                                        depField.value = selectedOption.getAttribute("data-estado") || "";
+                                        cityField.value = selectedOption.getAttribute("data-ciudad") || "";
+                                    } else {
+                                        // Si no hay selección, ocultar todo
+                                        camposOtraPrision.style.display = "none";
+                                        camposPrisionSeleccionada.style.display = "none";
+
+                                        // Limpiar campos
+                                        prisonLocationField.value = "";
+                                        paisField.value = "";
+                                        depField.value = "";
+                                        cityField.value = "";
+                                    }
+                                });
+                            });
+                        </script>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                const countrySelect = document.getElementById("country_p");
+                                const stateSelect = document.getElementById("state_p");
+                                const citySelect = document.getElementById("citySelect_p");
+
+                                const newCountryField = document.getElementById("newCountryField_p");
+                                const newStateField = document.getElementById("newStateField_p");
+                                const newCityField = document.getElementById("newCityField_p");
+
+                                // Manejar selección de país
+                                countrySelect.addEventListener("change", function() {
+                                    const countryId = this.value;
+
+                                    if (countryId === "otro") {
+                                        newCountryField.style.display = "block";
+                                        stateSelect.innerHTML =
+                                            '<option value="">Seleccionar</option><option value="otro">Otro</option>';
+                                        citySelect.innerHTML =
+                                            '<option value="">Seleccionar</option><option value="otro">Otro</option>';
+                                    } else {
+                                        newCountryField.style.display = "none";
+                                        if (countryId) {
+                                            fetch(`/states/${countryId}`)
+                                                .then(response => response.json())
+                                                .then(states => {
+                                                    stateSelect.innerHTML =
+                                                        '<option value="">Seleccionar</option><option value="otro">Otro</option>';
+                                                    citySelect.innerHTML =
+                                                        '<option value="">Seleccionar</option><option value="otro">Otro</option>';
+                                                    states.forEach(state => {
+                                                        stateSelect.innerHTML +=
+                                                            `<option value="${state.id}">${state.state_name}</option>`;
+                                                    });
+                                                });
+                                        } else {
+                                            stateSelect.innerHTML = '<option value="">Seleccionar</option>';
+                                            citySelect.innerHTML = '<option value="">Seleccionar</option>';
+                                        }
+                                    }
+                                });
+
+                                // Manejar selección de estado
+                                stateSelect.addEventListener("change", function() {
+                                    const stateId = this.value;
+
+                                    if (stateId === "otro") {
+                                        newStateField.style.display = "block";
+                                        citySelect.innerHTML =
+                                            '<option value="">Seleccionar</option><option value="otro">Otro</option>';
+                                    } else {
+                                        newStateField.style.display = "none";
+                                        if (stateId) {
+                                            fetch(`/cities/${stateId}`)
+                                                .then(response => response.json())
+                                                .then(cities => {
+                                                    citySelect.innerHTML =
+                                                        '<option value="">Seleccionar</option><option value="otro">Otro</option>';
+                                                    cities.forEach(city => {
+                                                        citySelect.innerHTML +=
+                                                            `<option value="${city.id}">${city.city_name}</option>`;
+                                                    });
+                                                });
+                                        } else {
+                                            citySelect.innerHTML = '<option value="">Seleccionar</option>';
+                                        }
+                                    }
+                                });
+
+                                // Manejar selección de ciudad
+                                citySelect.addEventListener("change", function() {
+                                    if (this.value === "otro") {
+                                        newCityField.style.display = "block";
+                                    } else {
+                                        newCityField.style.display = "none";
+                                    }
+                                });
+                            });
+                        </script>
                     </div>
 
                     <!-- Campos para mostrar los detalles de la prisión seleccionada -->
@@ -67,11 +236,11 @@
                         <label>Dirección de la Prisión:</label>
                         <input type="text" class="form-control" id="prisonLocation" readonly>
                         <label>País:</label>
-                        <input type="text" class="form-control" id="country" readonly>
+                        <input type="text" class="form-control" id="pais" readonly>
+                        <label>Departamento/Estado:</label>
+                        <input type="text" class="form-control" id="dep" readonly>
                         <label>Ciudad:</label>
                         <input type="text" class="form-control" id="city" readonly>
-                        <label>Provincia:</label>
-                        <input type="text" class="form-control" id="province" readonly>
                     </div>
 
                     <label>Fecha de Ingreso:</label>
@@ -84,47 +253,292 @@
                     <label>Dirección de Detención Domiciliaria:</label>
                     <input type="text" class="form-control" name="house_arrest_address"
                         placeholder="Ingrese una dirección">
-                    <label>País:</label>
-                    <select class="form-control" name="country_id_h">
-                        <option value="">Seleccionar</option>
-                        @foreach ($pais as $country)
-                            <option value="{{ $country->id }}">{{ $country->country_name }}</option>
-                        @endforeach
-                    </select>
-                    <label>Ciudad:</label>
-                    <select class="form-control" name="city_id_h">
-                        <option value="">Seleccionar</option>
-                        @foreach ($ciudad as $city)
-                            <option value="{{ $city->id }}">{{ $city->city_name }}</option>
-                        @endforeach
-                    </select>
-                    <label>Provincia:</label>
-                    <select class="form-control" name="province_id_h">
-                        <option value="">Seleccionar</option>
-                        @foreach ($provincia as $province)
-                            <option value="{{ $province->id }}">{{ $province->province_name }}</option>
-                        @endforeach
-                    </select>
+                    <div class="grid grid-cols-3 gap-10">
+                        <div class="form-group">
+                            <label for="country_d">País:</label>
+                            <select id="country_d" name="country_id_d" class="form-control">
+                                <option value="">Seleccionar</option>
+                                @foreach ($pais as $country)
+                                    <option value="{{ $country->id }}"
+                                        {{ old('country_id_d') == $country->id ? 'selected' : '' }}>
+                                        {{ $country->country_name }}
+                                    </option>
+                                @endforeach
+                                <option value="otro" {{ old('country_id_d') == 'otro' ? 'selected' : '' }}>Otro
+                                </option>
+                            </select>
+                            <input type="text" id="newCountryField_d" class="form-control"
+                                name="new_country_name_d" placeholder="Nombre del nuevo país"
+                                style="display: {{ old('country_id_d') == 'otro' ? 'block' : 'none' }}; margin-top: 5px;"
+                                value="{{ old('new_country_name_d') }}">
+                        </div>
+
+                        <!-- Selección de Estado -->
+                        <div class="form-group">
+                            <label for="state_d">Estado/Departamento:</label>
+                            <select id="state_d" name="province_id_d" class="form-control">
+                                <option value="">Seleccionar</option>
+                                @foreach ($provincia as $state)
+                                    <option value="{{ $state->id }}"
+                                        {{ old('province_id_d') == $state->id ? 'selected' : '' }}>
+                                        {{ $state->state_name }}
+                                    </option>
+                                @endforeach
+                                <option value="otro" {{ old('province_id_d') == 'otro' ? 'selected' : '' }}>Otro
+                                </option>
+                            </select>
+                            <input type="text" id="newStateField_d" class="form-control" name="new_state_name_d"
+                                placeholder="Nombre del nuevo estado"
+                                style="display: {{ old('province_id_d') == 'otro' ? 'block' : 'none' }}; margin-top: 5px;"
+                                value="{{ old('new_state_name_d') }}">
+                        </div>
+
+                        <!-- Selección de Ciudad -->
+                        <div class="form-group">
+                            <label for="citySelect_d">Ciudad/Municipio:</label>
+                            <select id="citySelect_d" name="city_id_d" class="form-control">
+                                <option value="">Seleccionar</option>
+                                @foreach ($ciudad as $city)
+                                    <option value="{{ $city->id }}"
+                                        {{ old('city_id_d') == $city->id ? 'selected' : '' }}>
+                                        {{ $city->city_name }}
+                                    </option>
+                                @endforeach
+                                <option value="otro" {{ old('city_id_d') == 'otro' ? 'selected' : '' }}>Otro
+                                </option>
+                            </select>
+                            <input type="text" id="newCityField_d" class="form-control" name="new_city_name_d"
+                                placeholder="Nombre de la nueva ciudad"
+                                style="display: {{ old('city_id_d') == 'otro' ? 'block' : 'none' }}; margin-top: 5px;"
+                                value="{{ old('new_city_name_d') }}">
+                        </div>
+                    </div>
+
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            const countrySelect = document.getElementById("country_d");
+                            const stateSelect = document.getElementById("state_d");
+                            const citySelect = document.getElementById("citySelect_d");
+
+                            const newCountryField = document.getElementById("newCountryField_d");
+                            const newStateField = document.getElementById("newStateField_d");
+                            const newCityField = document.getElementById("newCityField_d");
+
+                            // Manejar selección de país
+                            countrySelect.addEventListener("change", function() {
+                                const countryId = this.value;
+
+                                if (countryId === "otro") {
+                                    newCountryField.style.display = "block";
+                                    stateSelect.innerHTML =
+                                        '<option value="">Seleccionar</option><option value="otro">Otro</option>';
+                                    citySelect.innerHTML =
+                                        '<option value="">Seleccionar</option><option value="otro">Otro</option>';
+                                } else {
+                                    newCountryField.style.display = "none";
+                                    if (countryId) {
+                                        fetch(`/states/${countryId}`)
+                                            .then(response => response.json())
+                                            .then(states => {
+                                                stateSelect.innerHTML =
+                                                    '<option value="">Seleccionar</option><option value="otro">Otro</option>';
+                                                citySelect.innerHTML =
+                                                    '<option value="">Seleccionar</option><option value="otro">Otro</option>';
+                                                states.forEach(state => {
+                                                    stateSelect.innerHTML +=
+                                                        `<option value="${state.id}">${state.state_name}</option>`;
+                                                });
+                                            });
+                                    } else {
+                                        stateSelect.innerHTML = '<option value="">Seleccionar</option>';
+                                        citySelect.innerHTML = '<option value="">Seleccionar</option>';
+                                    }
+                                }
+                            });
+
+                            // Manejar selección de estado
+                            stateSelect.addEventListener("change", function() {
+                                const stateId = this.value;
+
+                                if (stateId === "otro") {
+                                    newStateField.style.display = "block";
+                                    citySelect.innerHTML =
+                                        '<option value="">Seleccionar</option><option value="otro">Otro</option>';
+                                } else {
+                                    newStateField.style.display = "none";
+                                    if (stateId) {
+                                        fetch(`/cities/${stateId}`)
+                                            .then(response => response.json())
+                                            .then(cities => {
+                                                citySelect.innerHTML =
+                                                    '<option value="">Seleccionar</option><option value="otro">Otro</option>';
+                                                cities.forEach(city => {
+                                                    citySelect.innerHTML +=
+                                                        `<option value="${city.id}">${city.city_name}</option>`;
+                                                });
+                                            });
+                                    } else {
+                                        citySelect.innerHTML = '<option value="">Seleccionar</option>';
+                                    }
+                                }
+                            });
+
+                            // Manejar selección de ciudad
+                            citySelect.addEventListener("change", function() {
+                                if (this.value === "otro") {
+                                    newCityField.style.display = "block";
+                                } else {
+                                    newCityField.style.display = "none";
+                                }
+                            });
+                        });
+                    </script>
                 </div>
 
                 <!-- Campos para Extradición -->
                 <div id="camposExtradicion" style="display: none;">
                     <label>Fecha de Extradición:</label>
                     <input type="date" class="form-control" name="extradition_date">
-                    <label>País:</label>
-                    <select class="form-control" name="country_id_e">
-                        <option value="">Seleccionar</option>
-                        @foreach ($pais as $country)
-                            <option value="{{ $country->id }}">{{ $country->country_name }}</option>
-                        @endforeach
-                    </select>
-                    <label>Ciudad:</label>
-                    <select class="form-control" name="city_id_e">
-                        <option value="">Seleccionar</option>
-                        @foreach ($ciudad as $city)
-                            <option value="{{ $city->id }}">{{ $city->city_name }}</option>
-                        @endforeach
-                    </select>
+                    <div class="grid grid-cols-3 gap-10">
+                        <div class="form-group">
+                            <label for="country_e">País:</label>
+                            <select id="country_e" name="country_id_e" class="form-control">
+                                <option value="">Seleccionar</option>
+                                @foreach ($pais as $country)
+                                    <option value="{{ $country->id }}"
+                                        {{ old('country_id_e') == $country->id ? 'selected' : '' }}>
+                                        {{ $country->country_name }}
+                                    </option>
+                                @endforeach
+                                <option value="otro" {{ old('country_id_e') == 'otro' ? 'selected' : '' }}>Otro
+                                </option>
+                            </select>
+                            <input type="text" id="newCountryField_e" class="form-control"
+                                name="new_country_name_e" placeholder="Nombre del nuevo país"
+                                style="display: {{ old('country_id_e') == 'otro' ? 'block' : 'none' }}; margin-top: 5px;"
+                                value="{{ old('new_country_name_e') }}">
+                        </div>
+
+                        <!-- Selección de Estado -->
+                        <div class="form-group">
+                            <label for="state_e">Estado/Departamento:</label>
+                            <select id="state_e" name="province_id_e" class="form-control">
+                                <option value="">Seleccionar</option>
+                                @foreach ($provincia as $state)
+                                    <option value="{{ $state->id }}"
+                                        {{ old('province_id_e') == $state->id ? 'selected' : '' }}>
+                                        {{ $state->state_name }}
+                                    </option>
+                                @endforeach
+                                <option value="otro" {{ old('province_id_e') == 'otro' ? 'selected' : '' }}>Otro
+                                </option>
+                            </select>
+                            <input type="text" id="newStateField_e" class="form-control" name="new_state_name_e"
+                                placeholder="Nombre del nuevo estado"
+                                style="display: {{ old('province_id_e') == 'otro' ? 'block' : 'none' }}; margin-top: 5px;"
+                                value="{{ old('new_state_name_e') }}">
+                        </div>
+
+                        <!-- Selección de Ciudad -->
+                        <div class="form-group">
+                            <label for="citySelect_e">Ciudad/Municipio:</label>
+                            <select id="citySelect_e" name="city_id_e" class="form-control">
+                                <option value="">Seleccionar</option>
+                                @foreach ($ciudad as $city)
+                                    <option value="{{ $city->id }}"
+                                        {{ old('city_id_e') == $city->id ? 'selected' : '' }}>
+                                        {{ $city->city_name }}
+                                    </option>
+                                @endforeach
+                                <option value="otro" {{ old('city_id_e') == 'otro' ? 'selected' : '' }}>Otro
+                                </option>
+                            </select>
+                            <input type="text" id="newCityField_e" class="form-control" name="new_city_name_e"
+                                placeholder="Nombre de la nueva ciudad"
+                                style="display: {{ old('city_id_e') == 'otro' ? 'block' : 'none' }}; margin-top: 5px;"
+                                value="{{ old('new_city_name_e') }}">
+                        </div>
+                    </div>
+
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            const countrySelect = document.getElementById("country_e");
+                            const stateSelect = document.getElementById("state_e");
+                            const citySelect = document.getElementById("citySelect_e");
+
+                            const newCountryField = document.getElementById("newCountryField_e");
+                            const newStateField = document.getElementById("newStateField_e");
+                            const newCityField = document.getElementById("newCityField_e");
+
+                            // Manejar selección de país
+                            countrySelect.addEventListener("change", function() {
+                                const countryId = this.value;
+
+                                if (countryId === "otro") {
+                                    newCountryField.style.display = "block";
+                                    stateSelect.innerHTML =
+                                        '<option value="">Seleccionar</option><option value="otro">Otro</option>';
+                                    citySelect.innerHTML =
+                                        '<option value="">Seleccionar</option><option value="otro">Otro</option>';
+                                } else {
+                                    newCountryField.style.display = "none";
+                                    if (countryId) {
+                                        fetch(`/states/${countryId}`)
+                                            .then(response => response.json())
+                                            .then(states => {
+                                                stateSelect.innerHTML =
+                                                    '<option value="">Seleccionar</option><option value="otro">Otro</option>';
+                                                citySelect.innerHTML =
+                                                    '<option value="">Seleccionar</option><option value="otro">Otro</option>';
+                                                states.forEach(state => {
+                                                    stateSelect.innerHTML +=
+                                                        `<option value="${state.id}">${state.state_name}</option>`;
+                                                });
+                                            });
+                                    } else {
+                                        stateSelect.innerHTML = '<option value="">Seleccionar</option>';
+                                        citySelect.innerHTML = '<option value="">Seleccionar</option>';
+                                    }
+                                }
+                            });
+
+                            // Manejar selección de estado
+                            stateSelect.addEventListener("change", function() {
+                                const stateId = this.value;
+
+                                if (stateId === "otro") {
+                                    newStateField.style.display = "block";
+                                    citySelect.innerHTML =
+                                        '<option value="">Seleccionar</option><option value="otro">Otro</option>';
+                                } else {
+                                    newStateField.style.display = "none";
+                                    if (stateId) {
+                                        fetch(`/cities/${stateId}`)
+                                            .then(response => response.json())
+                                            .then(cities => {
+                                                citySelect.innerHTML =
+                                                    '<option value="">Seleccionar</option><option value="otro">Otro</option>';
+                                                cities.forEach(city => {
+                                                    citySelect.innerHTML +=
+                                                        `<option value="${city.id}">${city.city_name}</option>`;
+                                                });
+                                            });
+                                    } else {
+                                        citySelect.innerHTML = '<option value="">Seleccionar</option>';
+                                    }
+                                }
+                            });
+
+                            // Manejar selección de ciudad
+                            citySelect.addEventListener("change", function() {
+                                if (this.value === "otro") {
+                                    newCityField.style.display = "block";
+                                } else {
+                                    newCityField.style.display = "none";
+                                }
+                            });
+                        });
+                    </script>
                 </div>
 
                 <!-- Campos para Libertad -->
@@ -132,27 +546,146 @@
                     <label>Dirección:</label>
                     <input type="text" class="form-control" name="house_address"
                         placeholder="Ingrese una dirección">
-                    <label>País:</label>
-                    <select class="form-control" name="country_id_l">
-                        <option value="">Seleccionar</option>
-                        @foreach ($pais as $country)
-                            <option value="{{ $country->id }}">{{ $country->country_name }}</option>
-                        @endforeach
-                    </select>
-                    <label>Ciudad:</label>
-                    <select class="form-control" name="city_id_l">
-                        <option value="">Seleccionar</option>
-                        @foreach ($ciudad as $city)
-                            <option value="{{ $city->id }}">{{ $city->city_name }}</option>
-                        @endforeach
-                    </select>
-                    <label>Región:</label>
-                    <select class="form-control" name="province_id_l">
-                        <option value="">Seleccionar</option>
-                        @foreach ($provincia as $province)
-                            <option value="{{ $province->id }}">{{ $province->province_name }}</option>
-                        @endforeach
-                    </select>
+                    <div class="grid grid-cols-3 gap-10">
+                        <div class="form-group">
+                            <label for="country_l">País:</label>
+                            <select id="country_l" name="country_id_l" class="form-control">
+                                <option value="">Seleccionar</option>
+                                @foreach ($pais as $country)
+                                    <option value="{{ $country->id }}"
+                                        {{ old('country_id_l') == $country->id ? 'selected' : '' }}>
+                                        {{ $country->country_name }}
+                                    </option>
+                                @endforeach
+                                <option value="otro" {{ old('country_id_l') == 'otro' ? 'selected' : '' }}>Otro
+                                </option>
+                            </select>
+                            <input type="text" id="newCountryField_l" class="form-control"
+                                name="new_country_name_l" placeholder="Nombre del nuevo país"
+                                style="display: {{ old('country_id_l') == 'otro' ? 'block' : 'none' }}; margin-top: 5px;"
+                                value="{{ old('new_country_name_l') }}">
+                        </div>
+
+                        <!-- Selección de Estado -->
+                        <div class="form-group">
+                            <label for="state_l">Estado/Departamento:</label>
+                            <select id="state_l" name="province_id_l" class="form-control">
+                                <option value="">Seleccionar</option>
+                                @foreach ($provincia as $state)
+                                    <option value="{{ $state->id }}"
+                                        {{ old('province_id_l') == $state->id ? 'selected' : '' }}>
+                                        {{ $state->state_name }}
+                                    </option>
+                                @endforeach
+                                <option value="otro" {{ old('province_id_l') == 'otro' ? 'selected' : '' }}>Otro
+                                </option>
+                            </select>
+                            <input type="text" id="newStateField_l" class="form-control" name="new_state_name_l"
+                                placeholder="Nombre del nuevo estado"
+                                style="display: {{ old('province_id_l') == 'otro' ? 'block' : 'none' }}; margin-top: 5px;"
+                                value="{{ old('new_state_name_l') }}">
+                        </div>
+
+                        <!-- Selección de Ciudad -->
+                        <div class="form-group">
+                            <label for="citySelect_l">Ciudad/Municipio:</label>
+                            <select id="citySelect_l" name="city_id_l" class="form-control">
+                                <option value="">Seleccionar</option>
+                                @foreach ($ciudad as $city)
+                                    <option value="{{ $city->id }}"
+                                        {{ old('city_id_l') == $city->id ? 'selected' : '' }}>
+                                        {{ $city->city_name }}
+                                    </option>
+                                @endforeach
+                                <option value="otro" {{ old('city_id_l') == 'otro' ? 'selected' : '' }}>Otro
+                                </option>
+                            </select>
+                            <input type="text" id="newCityField_l" class="form-control" name="new_city_name_l"
+                                placeholder="Nombre de la nueva ciudad"
+                                style="display: {{ old('city_id_l') == 'otro' ? 'block' : 'none' }}; margin-top: 5px;"
+                                value="{{ old('new_city_name_l') }}">
+                        </div>
+                    </div>
+
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            const countrySelect = document.getElementById("country_l");
+                            const stateSelect = document.getElementById("state_l");
+                            const citySelect = document.getElementById("citySelect_l");
+
+                            const newCountryField = document.getElementById("newCountryField_l");
+                            const newStateField = document.getElementById("newStateField_l");
+                            const newCityField = document.getElementById("newCityField_l");
+
+                            // Manejar selección de país
+                            countrySelect.addEventListener("change", function() {
+                                const countryId = this.value;
+
+                                if (countryId === "otro") {
+                                    newCountryField.style.display = "block";
+                                    stateSelect.innerHTML =
+                                        '<option value="">Seleccionar</option><option value="otro">Otro</option>';
+                                    citySelect.innerHTML =
+                                        '<option value="">Seleccionar</option><option value="otro">Otro</option>';
+                                } else {
+                                    newCountryField.style.display = "none";
+                                    if (countryId) {
+                                        fetch(`/states/${countryId}`)
+                                            .then(response => response.json())
+                                            .then(states => {
+                                                stateSelect.innerHTML =
+                                                    '<option value="">Seleccionar</option><option value="otro">Otro</option>';
+                                                citySelect.innerHTML =
+                                                    '<option value="">Seleccionar</option><option value="otro">Otro</option>';
+                                                states.forEach(state => {
+                                                    stateSelect.innerHTML +=
+                                                        `<option value="${state.id}">${state.state_name}</option>`;
+                                                });
+                                            });
+                                    } else {
+                                        stateSelect.innerHTML = '<option value="">Seleccionar</option>';
+                                        citySelect.innerHTML = '<option value="">Seleccionar</option>';
+                                    }
+                                }
+                            });
+
+                            // Manejar selección de estado
+                            stateSelect.addEventListener("change", function() {
+                                const stateId = this.value;
+
+                                if (stateId === "otro") {
+                                    newStateField.style.display = "block";
+                                    citySelect.innerHTML =
+                                        '<option value="">Seleccionar</option><option value="otro">Otro</option>';
+                                } else {
+                                    newStateField.style.display = "none";
+                                    if (stateId) {
+                                        fetch(`/cities/${stateId}`)
+                                            .then(response => response.json())
+                                            .then(cities => {
+                                                citySelect.innerHTML =
+                                                    '<option value="">Seleccionar</option><option value="otro">Otro</option>';
+                                                cities.forEach(city => {
+                                                    citySelect.innerHTML +=
+                                                        `<option value="${city.id}">${city.city_name}</option>`;
+                                                });
+                                            });
+                                    } else {
+                                        citySelect.innerHTML = '<option value="">Seleccionar</option>';
+                                    }
+                                }
+                            });
+
+                            // Manejar selección de ciudad
+                            citySelect.addEventListener("change", function() {
+                                if (this.value === "otro") {
+                                    newCityField.style.display = "block";
+                                } else {
+                                    newCityField.style.display = "none";
+                                }
+                            });
+                        });
+                    </script>
                 </div>
             </div>
         </div>
@@ -184,23 +717,32 @@
         }
 
         function llenarCamposPrision() {
-        var select = document.getElementById("prisonSelect");
-        var selectedOption = select.options[select.selectedIndex];
+            const select = document.getElementById("prisonSelect");
+            const selectedOption = select.options[select.selectedIndex];
 
-        if (selectedOption.value === "otro") {
-            document.getElementById("camposOtraPrision").style.display = "block";
-            document.getElementById("camposPrisionSeleccionada").style.display = "none";
-        } else {
-            document.getElementById("camposOtraPrision").style.display = "none";
-            document.getElementById("camposPrisionSeleccionada").style.display = "block";
+            if (selectedOption) {
+                // Obtener los datos del atributo data-*
+                const direccion = selectedOption.getAttribute("data-direccion") || "N/A";
+                const pais = selectedOption.getAttribute("data-pais") || "N/A";
+                const estado = selectedOption.getAttribute("data-estado") || "N/A";
+                const ciudad = selectedOption.getAttribute("data-ciudad") || "N/A";
 
-            // Llenar los campos de la prisión seleccionada
-            document.getElementById("prisonLocation").value = selectedOption.getAttribute("data-direccion");
-            document.getElementById("country").value = selectedOption.getAttribute("data-pais");
-            document.getElementById("city").value = selectedOption.getAttribute("data-ciudad");
-            document.getElementById("province").value = selectedOption.getAttribute("data-provincia");
+                // Depuración en la consola
+                console.log("Datos seleccionados:");
+                console.log("Dirección:", direccion);
+                console.log("País:", pais);
+                console.log("Estado:", estado);
+                console.log("Ciudad:", ciudad);
+
+                // Actualizar los campos del formulario
+                document.getElementById("prisonLocation").value = direccion;
+                document.getElementById("pais").value = pais;
+                document.getElementById("dep").value = estado;
+                document.getElementById("city").value = ciudad;
+            } else {
+                console.error("No se seleccionó ninguna opción válida.");
+            }
         }
-    }
     </script>
 
 </div>

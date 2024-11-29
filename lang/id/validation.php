@@ -231,7 +231,7 @@ return [
         'product_uid'              => 'UID produk',
         'product_uuid'             => 'UUID produk',
         'promo_code'               => 'Kode promosi',
-        'province'                 => 'propinsi',
+        'state'                 => 'propinsi',
         'quantity'                 => 'kuantitas',
         'reason'                   => 'alasan',
         'recaptcha_response_field' => 'bidang respons recaptcha',

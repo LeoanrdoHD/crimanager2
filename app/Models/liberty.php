@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class liberty extends Model
 {
     protected $fillable = [
+        'criminal_id',
         'conviction_id',
         'house_address',
         'country_id',
         'city_id',
-        'province_id',
+        'state_id',
     ];
 }

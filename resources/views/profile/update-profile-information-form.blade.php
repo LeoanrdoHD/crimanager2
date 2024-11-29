@@ -1,12 +1,10 @@
 <x-form-section submit="updateProfileInformation">
     <x-slot name="title">
-        {{ __('Informacion de Perfil') }}
+        {{ __('Información de Perfil') }}
     </x-slot>
 
     <x-slot name="description">
-        {{ __('Actualiza la información de perfil y la dirección de correo electrónico de tu cuenta.
-        
-        ') }}
+        {{ __('Actualiza la información de perfil de tu cuenta, exceptuando el CI, Nombre y Correo Electrónico.') }}
     </x-slot>
 
     <x-slot name="form">
@@ -16,18 +14,18 @@
                 <!-- Profile Photo File Input -->
                 <input type="file" id="photo" class="hidden" wire:model.live="photo" x-ref="photo"
                     x-on:change="
-                                    photoName = $refs.photo.files[0].name;
-                                    const reader = new FileReader();
-                                    reader.onload = (e) => {
-                                        photoPreview = e.target.result;
-                                    };
-                                    reader.readAsDataURL($refs.photo.files[0]);
-                            " />
+                        photoName = $refs.photo.files[0].name;
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            photoPreview = e.target.result;
+                        };
+                        reader.readAsDataURL($refs.photo.files[0]);
+                    " />
 
                 <x-label for="photo" value="{{ __('Photo') }}" />
 
                 <!-- Current Profile Photo -->
-                <div class="mt-2" x-show="! photoPreview">
+                <div class="mt-2" x-show="!photoPreview">
                     <img src="{{ $this->user->profile_photo_url }}" alt="{{ $this->user->name }}"
                         class="rounded-full h-20 w-20 object-cover">
                 </div>
@@ -53,44 +51,52 @@
             </div>
         @endif
 
-        <!-- Name -->
+        <!-- Name (Read-Only) -->
         <div class="col-span-6 sm:col-span-4">
             <x-label for="name" value="{{ __('Nombre y Apellido') }}" />
-            <x-input id="name" type="text" class="mt-1 block w-full" wire:model="state.name" required
-                autocomplete="name" />
+            <x-input id="name" type="text" class="mt-1 block w-full bg-gray-200" wire:model="state.name" readonly />
             <x-input-error for="name" class="mt-2" />
         </div>
-        <!-- Email -->
+
+        <!-- CI (Read-Only) -->
         <div class="col-span-6 sm:col-span-4">
-            <x-label for="email" value="{{ __('Correo Electronico') }}" />
-            <x-input id="email" type="email" class="mt-1 block w-full" wire:model="state.email" required
-                autocomplete="username" />
+            <x-label for="ci_police" value="{{ __('Cédula de Identidad') }}" />
+            <x-input id="ci_police" type="text" class="mt-1 block w-full bg-gray-200" wire:model="state.ci_police" readonly />
+            <x-input-error for="ci_police" class="mt-2" />
+        </div>
+
+        <!-- Email (Read-Only) -->
+        <div class="col-span-6 sm:col-span-4">
+            <x-label for="email" value="{{ __('Correo Electrónico') }}" />
+            <x-input id="email" type="email" class="mt-1 block w-full bg-gray-200" wire:model="state.email" readonly />
             <x-input-error for="email" class="mt-2" />
+        </div>
 
-            @if (Laravel\Fortify\Features::enabled(Laravel\Fortify\Features::emailVerification()) &&
-                    !$this->user->hasVerifiedEmail())
-                <p class="text-sm mt-2 dark:text-white">
-                    {{ __('Your email address is unverified.') }}
+        <!-- Phone -->
+        <div class="col-span-6 sm:col-span-4">
+            <x-label for="phone" value="{{ __('Celular') }}" />
+            <x-input id="phone" type="text" class="mt-1 block w-full" wire:model="state.phone" autocomplete="tel" />
+            <x-input-error for="phone" class="mt-2" />
+        </div>
 
-                    <button type="button"
-                        class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
-                        wire:click.prevent="sendEmailVerification">
-                        {{ __('Click here to re-send the verification email.') }}
-                    </button>
-                </p>
+        <!-- Grade -->
+        <div class="col-span-6 sm:col-span-4">
+            <x-label for="grade" value="{{ __('Grado') }}" />
+            <x-input id="grade" type="text" class="mt-1 block w-full" wire:model="state.grade" autocomplete="grade" />
+            <x-input-error for="grade" class="mt-2" />
+        </div>
 
-                @if ($this->verificationLinkSent)
-                    <p class="mt-2 font-medium text-sm text-green-600 dark:text-green-400">
-                        {{ __('A new verification link has been sent to your email address.') }}
-                    </p>
-                @endif
-            @endif
+        <!-- Escalafón -->
+        <div class="col-span-6 sm:col-span-4">
+            <x-label for="escalafon" value="{{ __('Escalafón') }}" />
+            <x-input id="escalafon" type="text" class="mt-1 block w-full" wire:model="state.escalafon" autocomplete="escalafon" />
+            <x-input-error for="escalafon" class="mt-2" />
         </div>
     </x-slot>
 
     <x-slot name="actions">
         <x-action-message class="me-3" on="saved">
-            {{ __('Saved.') }}
+            {{ __('Guardado.') }}
         </x-action-message>
 
         <x-button wire:loading.attr="disabled" wire:target="photo">

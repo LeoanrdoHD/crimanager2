@@ -231,7 +231,7 @@ return [
         'product_uid'              => 'UID produktu',
         'product_uuid'             => 'UUID produktu',
         'promo_code'               => 'propagačný kód',
-        'province'                 => 'provincia',
+        'state'                 => 'provincia',
         'quantity'                 => 'množstvo',
         'reason'                   => 'dôvod',
         'recaptcha_response_field' => 'pole odpovede recaptcha',

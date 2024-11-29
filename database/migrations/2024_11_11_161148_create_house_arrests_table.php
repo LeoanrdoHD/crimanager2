@@ -13,17 +13,19 @@ return new class extends Migration
     {
         Schema::create('house_arrests', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('criminal_id');
             $table->unsignedBigInteger('conviction_id');
             $table->string('house_arrest_address');
             $table->unsignedBigInteger('country_id')->nullable();
             $table->unsignedBigInteger('city_id')->nullable();
-            $table->unsignedBigInteger('province_id')->nullable();
+            $table->unsignedBigInteger('state_id')->nullable();
             $table->timestamps();
 
+            $table->foreign('criminal_id')->references('id')->on('criminals')->onDelete('cascade');
             $table->foreign('conviction_id')->references('id')->on('convictions');
             $table->foreign('country_id')->references('id')->on('countries');
             $table->foreign('city_id')->references('id')->on('cities');
-            $table->foreign('province_id')->references('id')->on('provinces');
+            $table->foreign('state_id')->references('id')->on('states');
         });
     }
 

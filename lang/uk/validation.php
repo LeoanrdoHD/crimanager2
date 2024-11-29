@@ -231,7 +231,7 @@ return [
         'product_uid'              => 'UID товару',
         'product_uuid'             => 'UUID товару',
         'promo_code'               => 'промокод',
-        'province'                 => 'провінція',
+        'state'                 => 'провінція',
         'quantity'                 => 'кількість',
         'reason'                   => 'причина',
         'recaptcha_response_field' => 'поле відповіді recaptcha',

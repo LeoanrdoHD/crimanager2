@@ -301,11 +301,11 @@ return [
 
     'menu' => [
         // Navbar items:
-        [
+        /*[
             'type' => 'navbar-search',
             'text' => 'Buscar',
             'topnav_right' => true,
-        ],
+        ],*/
         [
             'type' => 'fullscreen-widget',
             'topnav_right' => true,
@@ -338,36 +338,37 @@ return [
         [
             'text' => 'Cambiar Contraseña ',
             'url' => 'user/profile',
-            'icon' => 'fas fa-fw fa-user',
+            'icon' => 'fas fa-fw fa-lock',
         ],
         ['header' => 'GESTIÓN DE USUARIOS'],
         [
             'text' => 'Buscar Usuarios',
-            'url' => 'user/register',
+            'url' => 'register',
             'icon' => 'fas fa-fw fa-user',
             
         ],
         [
             'text' => 'Crear Usuario',
-            'url' => 'user/register',
-            'icon' => 'fas fa-fw fa-user',
+            'url' => 'auth.register',
+            'icon' => 'fas fa-fw fa-plus',
             
         ],
         ['header' => 'GESTIÓN DE DELINCUENTES'],
         [
             'text' => 'Nuevo Delincuente',
             'url' => 'criminals',
-            'icon' => 'fas fa-fw fa-user',
+            'icon' => 'fas fa-fw fa-plus',
         ],
         [
             'text' => 'Buscar Delincuente',
             'url' => 'criminals/search_cri',
-            'icon' => 'fas fa-fw fa-lock',
+            'icon' => 'fas fa-fw fa-search',
         ],
+        
         [
             'text' => 'Actualizar datos',
-            'url' => 'criminals/arrest',
-            'icon' => 'fas fa-fw fa-lock',
+            'url' => 'criminals/update',
+            'icon' => 'fas fa-fw fa-pen-nib',
         ],
 /*
         [
@@ -381,6 +382,7 @@ return [
             'icon' => 'fas fa-fw fa-lock',
         ],
         */
+        /*
         ['header' => 'REPORTES'],
         [
             'text' => 'Ficha Delincuente',
@@ -395,7 +397,53 @@ return [
         [
             'text' => 'Vehiculos',
             'url' => 'admin/settings',
-            'icon' => 'fas fa-fw fa-lock',
+            'icon' => 'fas fa-fw fa-camera-retro',
+        ],*/
+
+        [
+            'text' => 'REPORTES',
+            'icon' => 'fas fa-fw fa-share',
+            'submenu' => [
+                [
+                    'text' => 'Ficha Delincuente',
+                    'url' => 'reports/search_criminal',
+                ],
+                [
+                    'text' => 'Organizaciones',
+                    'url' => 'reports/search_orga',
+                ],
+                [
+                    'text' => 'Vehiculos',
+                    'url' => 'reports/search_vehicle',
+                ],
+                [
+                    'text' => 'Reporte rapido',
+                    'url' => 'reports/search_fast',
+                ],
+            ],
+        ],
+
+        [
+            'text' => 'SISTEMAS EXTERNOS',
+            'icon' => 'fas fa-fw fa-share',
+            'submenu' => [
+                [
+                    'text' => 'FELCC',
+                    'url' => '#',
+                ],
+                [
+                    'text' => 'ITV',
+                    'url' => '#',
+                ],
+                [
+                    'text' => 'SEGIP',
+                    'url' => '#',
+                ],
+                [
+                    'text' => 'Antecedentes',
+                    'url' => '#',
+                ],
+            ],
         ],
         /*
         [

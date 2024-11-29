@@ -20,7 +20,6 @@
 @endif
 
 @section('auth_header', __('adminlte::adminlte.register_message'))
-
 @section('auth_body')
     <form action="{{ $register_url }}" method="post">
         @csrf
@@ -29,13 +28,11 @@
         <div class="input-group mb-3">
             <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
                    value="{{ old('name') }}" placeholder="{{ __('adminlte::adminlte.full_name') }}" autofocus>
-
             <div class="input-group-append">
                 <div class="input-group-text">
                     <span class="fas fa-user {{ config('adminlte.classes_auth_icon', '') }}"></span>
                 </div>
             </div>
-
             @error('name')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -43,35 +40,79 @@
             @enderror
         </div>
 
-   {{-- Cedula de identidad 
+        {{-- Cedula de Identidad --}}
         <div class="input-group mb-3">
             <input type="text" name="ci_police" class="form-control @error('ci_police') is-invalid @enderror"
-                   value="{{ old('ci_police') }}" placeholder="Cedula de Identidad" autofocus>
-
+                   value="{{ old('ci_police') }}" placeholder="Cédula de Identidad">
             <div class="input-group-append">
                 <div class="input-group-text">
-                    <span class="fas fa-user {{ config('adminlte.classes_auth_icon', '') }}"></span>
+                    <span class="fas fa-id-card {{ config('adminlte.classes_auth_icon', '') }}"></span>
                 </div>
             </div>
-
             @error('ci_police')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>
             @enderror
-        </div>--}}
+        </div>
+
+        {{-- Celular --}}
+        <div class="input-group mb-3">
+            <input type="text" name="phone" class="form-control @error('phone') is-invalid @enderror"
+                   value="{{ old('phone') }}" placeholder="Celular">
+            <div class="input-group-append">
+                <div class="input-group-text">
+                    <span class="fas fa-phone {{ config('adminlte.classes_auth_icon', '') }}"></span>
+                </div>
+            </div>
+            @error('phone')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+        </div>
+
+        {{-- Grado --}}
+        <div class="input-group mb-3">
+            <input type="text" name="grade" class="form-control @error('grade') is-invalid @enderror"
+                   value="{{ old('grade') }}" placeholder="Grado">
+            <div class="input-group-append">
+                <div class="input-group-text">
+                    <span class="fas fa-graduation-cap {{ config('adminlte.classes_auth_icon', '') }}"></span>
+                </div>
+            </div>
+            @error('grade')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+        </div>
+
+        {{-- Escalafón --}}
+        <div class="input-group mb-3">
+            <input type="text" name="escalafon" class="form-control @error('escalafon') is-invalid @enderror"
+                   value="{{ old('escalafon') }}" placeholder="Escalafón">
+            <div class="input-group-append">
+                <div class="input-group-text">
+                    <span class="fas fa-layer-group {{ config('adminlte.classes_auth_icon', '') }}"></span>
+                </div>
+            </div>
+            @error('escalafon')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+        </div>
 
         {{-- Email field --}}
         <div class="input-group mb-3">
             <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
                    value="{{ old('email') }}" placeholder="{{ __('adminlte::adminlte.email') }}">
-
             <div class="input-group-append">
                 <div class="input-group-text">
                     <span class="fas fa-envelope {{ config('adminlte.classes_auth_icon', '') }}"></span>
                 </div>
             </div>
-
             @error('email')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -83,13 +124,11 @@
         <div class="input-group mb-3">
             <input type="password" name="password" class="form-control @error('password') is-invalid @enderror"
                    placeholder="{{ __('adminlte::adminlte.password') }}">
-
             <div class="input-group-append">
                 <div class="input-group-text">
                     <span class="fas fa-lock {{ config('adminlte.classes_auth_icon', '') }}"></span>
                 </div>
             </div>
-
             @error('password')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -102,13 +141,11 @@
             <input type="password" name="password_confirmation"
                    class="form-control @error('password_confirmation') is-invalid @enderror"
                    placeholder="{{ __('adminlte::adminlte.retype_password') }}">
-
             <div class="input-group-append">
                 <div class="input-group-text">
                     <span class="fas fa-lock {{ config('adminlte.classes_auth_icon', '') }}"></span>
                 </div>
             </div>
-
             @error('password_confirmation')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>

@@ -15,7 +15,7 @@
 }
 
 </style>
-    <h1 class="class text-center">REGISTRO PERFIL DE DELINCUENTE NUEVO</h1>
+    <h1 class="class text-center">REGISTRO DE NUEVO DELINCUENTE</h1>
 @stop
 @section('content')
 

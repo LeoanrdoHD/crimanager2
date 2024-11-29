@@ -231,7 +231,7 @@ return [
         'product_uid'              => 'ürün UID\'si',
         'product_uuid'             => 'ürün UUID\'si',
         'promo_code'               => 'promosyon kodu',
-        'province'                 => 'bölge',
+        'state'                 => 'bölge',
         'quantity'                 => 'miktar',
         'reason'                   => 'sebep',
         'recaptcha_response_field' => 'recaptcha yanıt alanı',

@@ -10,7 +10,7 @@ class prison extends Model
         'prison_name',
         'country_id',
         'city_id',
-        'province_id',
+        'state_id',
         'prison_location',
     ];
     public $timestamps = false;
@@ -22,9 +22,13 @@ class prison extends Model
     {
         return $this->belongsTo('app\Models\city');
     }
-    public function province()
+    public function state()
     {
-        return $this->belongsTo('app\Models\province');
+        return $this->belongsTo('app\Models\state');
+    }
+    public function criminals()
+    {
+        return $this->belongsToMany(Criminal::class, 'preventive_detention', 'prison_id', 'criminal_id');
     }
 
 }

@@ -231,7 +231,7 @@ return [
         'product_uid'              => 'termék UID',
         'product_uuid'             => 'termék UUID',
         'promo_code'               => 'promóciós kód',
-        'province'                 => 'tartomány',
+        'state'                 => 'tartomány',
         'quantity'                 => 'Mennyiség',
         'reason'                   => 'ok',
         'recaptcha_response_field' => 'recaptcha válaszmező',

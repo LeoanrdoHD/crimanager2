@@ -27,7 +27,8 @@ class CriminalFactory extends Factory
  
          return [
              'first_name' => $this->faker->firstName(),
-             'last_name' => $this->faker->lastName(),
+             'last_nameP' => $this->faker->lastName(),
+             'last_nameM' => $this->faker->lastName(),
              'identity_number' => $identityNumber,
              'date_of_birth' => $dateOfBirth,
              'age' => $age,

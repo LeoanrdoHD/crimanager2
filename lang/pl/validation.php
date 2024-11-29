@@ -231,7 +231,7 @@ return [
         'product_uid'              => 'UID produktu',
         'product_uuid'             => 'UUID produktu',
         'promo_code'               => 'kod promocyjny',
-        'province'                 => 'województwo/stan',
+        'state'                 => 'województwo/stan',
         'quantity'                 => 'ilość',
         'reason'                   => 'powód',
         'recaptcha_response_field' => 'pole odpowiedzi recaptcha',

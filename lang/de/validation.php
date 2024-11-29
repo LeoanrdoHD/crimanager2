@@ -231,7 +231,7 @@ return [
         'product_uid'              => 'Produkt-UID',
         'product_uuid'             => 'Produkt-UUID',
         'promo_code'               => 'Aktionscode',
-        'province'                 => 'Provinz',
+        'state'                 => 'Provinz',
         'quantity'                 => 'Menge',
         'reason'                   => 'Grund',
         'recaptcha_response_field' => 'Captcha-Feld',

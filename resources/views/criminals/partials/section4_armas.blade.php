@@ -1,6 +1,6 @@
 @vite('resources/css/app.css')
 <div>
-    <form class="form-criminal" action="{{ route('criminals.store_arrest3') }}" method="POST" enctype="multipart/form-data">
+    <form class="ajax-form" action="{{ route('criminals.store_arrest3') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="criminal_id" value="{{ $criminal->id }}">
     

@@ -35,7 +35,7 @@ use App\Models\photograph;
 use App\Models\physical_characteristic;
 use App\Models\preventive_detention;
 use App\Models\prison;
-use App\Models\province;
+use App\Models\state;
 use App\Models\relationship_with_owner;
 use App\Models\tools_type;
 use App\Models\vehicle_color;
@@ -52,7 +52,6 @@ class HistorialController extends Controller
 
     public function create_arrest(Criminal $file)
     {
-
         $history_cri = arrest_and_apprehension_history::get();
         $date_crimi = criminal::all();
         $lstatus = legal_statuse::all();
@@ -63,7 +62,7 @@ class HistorialController extends Controller
 
         $pais = country::all();
         $ciudad = city::all();
-        $provincia = province::all();
+        $provincia = state::all();
         $tcondena = detention_type::all();
         $arma = tools_type::all();
         $nacionalidad = nationality::all();
@@ -74,13 +73,13 @@ class HistorialController extends Controller
         $servicio = vehicle_service::all();
         $relusuario = relationship_with_owner::all();
         $orga = organization::all();
-        $prision = Prison::with(['country', 'city', 'province'])->get();
+        $prision = Prison::with(['country', 'state', 'city'])->get();
 
 
         $date_criminal = criminal::get();
         return view('criminals.create_arrest', ['criminal' => $file], compact('date_crimi', 'orga', 'servicio', 'vcolor', 'marca', 'vtype', 'nacionalidad', 'tcondena', 'arma', 'lstatus', 'relusuario', 't_aprehe', 'fotos', 'cri_esp', 'compania', 'prision', 'pais', 'industria', 'ciudad', 'provincia'))->with('arrest_and_apprehension_histories', $history_cri);
     }
-
+    
     public function search_arrest(Criminal $file)
     {
         return view('criminals.search_arrest', compact('criminals'));
@@ -129,15 +128,13 @@ class HistorialController extends Controller
             // Confirmar la transacción
             DB::commit();
 
-            // Mensaje de éxito en la sesión
-            session()->flash('success', 'El registro se realizó correctamente.');
-            return redirect()->back();
+            // Enviar respuesta JSON de éxito
+            return response()->json(['success' => true, 'message' => 'Historial Registrado con Exito.']);
         } catch (\Exception $e) {
             DB::rollBack();
 
-            // Mensaje de error en la sesión
-            session()->flash('error', 'Ocurrió un error: ' . $e->getMessage());
-            return redirect()->back();
+            // Enviar respuesta JSON de error
+            return response()->json(['success' => false, 'message' => 'Ocurrió un error: ' . $e->getMessage()]);
         }
     }
 
@@ -186,12 +183,13 @@ class HistorialController extends Controller
             // Confirmar la transacción
             DB::commit();
 
-            session()->flash('success', 'Los registros de teléfonos se realizaron correctamente.');
-            return redirect()->back();
+            // Enviar respuesta JSON de éxito
+            return response()->json(['success' => true, 'message' => 'Los registros de teléfonos se realizaron correctamente.']);
         } catch (\Exception $e) {
             DB::rollBack();
-            session()->flash('error', 'Ocurrió un error: ' . $e->getMessage());
-            return redirect()->back();
+
+            // Enviar respuesta JSON de error
+            return response()->json(['success' => false, 'message' => 'Ocurrió un error: ' . $e->getMessage()]);
         }
     }
 
@@ -242,12 +240,13 @@ class HistorialController extends Controller
             // Confirmar la transacción
             DB::commit();
 
-            session()->flash('success', 'Se realizó el registro correctamente.');
-            return redirect()->back();
+            // Enviar respuesta JSON de éxito
+            return response()->json(['success' => true, 'message' => 'Los Datos Fueron Registrados con Exito.']);
         } catch (\Exception $e) {
             DB::rollBack();
-            session()->flash('error', 'Ocurrió un error: ' . $e->getMessage());
-            return redirect()->back();
+
+            // Enviar respuesta JSON de error
+            return response()->json(['success' => false, 'message' => 'Ocurrió un error: ' . $e->getMessage()]);
         }
     }
 
@@ -284,26 +283,62 @@ class HistorialController extends Controller
                 'nationality_id' => $nationalityID,
             ]);
 
-            // Crear registro en la tabla `criminal_addresses`
+            //Llenado Tabla paises
+            // Manejo de País
+            if ($request->filled('new_country_name')) {
+                $country = Country::firstOrCreate(
+                    ['country_name' => $request->new_country_name] // Buscar por nombre
+                );
+                $countryId = $country->id; // Usar el ID del país encontrado o creado
+            } else {
+                $countryId = $request->country_id; // Usar el ID del país seleccionado
+            }
+
+            // Manejo de Estado/Provincia
+            if ($request->filled('new_state_name')) {
+                $state = State::firstOrCreate(
+                    [
+                        'state_name' => $request->new_state_name, // Buscar por nombre
+                        'country_id' => $countryId,              // Y por el país asociado
+                    ]
+                );
+                $stateId = $state->id; // Usar el ID del estado encontrado o creado
+            } else {
+                $stateId = $request->province_id; // Usar el ID del estado seleccionado
+            }
+
+            // Manejo de Ciudad
+            if ($request->filled('new_city_name')) {
+                $city = City::firstOrCreate(
+                    [
+                        'city_name' => $request->new_city_name, // Buscar por nombre
+                        'state_id' => $stateId,                // Y por el estado asociado
+                    ]
+                );
+                $cityId = $city->id; // Usar el ID de la ciudad encontrada o creada
+            } else {
+                $cityId = $request->city_id; // Usar el ID de la ciudad seleccionada
+            }
+
             criminal_address::create([
                 'criminal_id' => $request->criminal_id,
                 'arrest_and_apprehension_history_id' => $existingHistory ? null : $arrestAndApprehensionHistoryId,
-                'country_id' => $request->country_id_a,
-                'city_id' => $request->city_id_a,
-                'province_id' => $request->province_id_a,
+                'country_id' => $countryId,
+                'state_id' => $stateId,
+                'city_id' => $cityId,
                 'street' => $request->street,
             ]);
 
             // Confirmar la transacción
             DB::commit();
 
-            session()->flash('success', 'Se realizó el registro correctamente.');
-            return redirect()->back();
+            // Enviar respuesta JSON de éxito
+            return response()->json(['success' => true, 'message' => 'Los Datos Fueron Registrados con Exito.']);
         } catch (\Exception $e) {
-            // Revertir la transacción en caso de error
             DB::rollBack();
-            session()->flash('error', 'Ocurrió un error: ' . $e->getMessage());
-            return redirect()->back();
+
+            // Enviar respuesta JSON de error
+            return response()->json(['success' => false, 'message' => 'Ocurrió un error: ' . $e->getMessage()]);
         }
     }
     public function store_arrest5(Request $request)
@@ -383,12 +418,13 @@ class HistorialController extends Controller
             // Confirmar la transacción
             DB::commit();
 
-            session()->flash('success', 'Vehiculo Reguitrado con exito.');
-            return redirect()->back();
+            // Enviar respuesta JSON de éxito
+            return response()->json(['success' => true, 'message' => 'Vehiculo Registrado con Exito.']);
         } catch (\Exception $e) {
             DB::rollBack();
-            session()->flash('error', 'Ocurrió un error: ' . $e->getMessage());
-            return redirect()->back();
+
+            // Enviar respuesta JSON de error
+            return response()->json(['success' => false, 'message' => 'Ocurrió un error: ' . $e->getMessage()]);
         }
     }
 
@@ -419,12 +455,13 @@ class HistorialController extends Controller
             // Confirmar la transacción
             DB::commit();
 
-            session()->flash('success', 'Se realizó el registro correctamente.');
-            return redirect()->back();
+            // Enviar respuesta JSON de éxito
+            return response()->json(['success' => true, 'message' => 'Los Datos Fueron Registrados con Exito.']);
         } catch (\Exception $e) {
             DB::rollBack();
-            session()->flash('error', 'Ocurrió un error: ' . $e->getMessage());
-            return redirect()->back();
+
+            // Enviar respuesta JSON de error
+            return response()->json(['success' => false, 'message' => 'Ocurrió un error: ' . $e->getMessage()]);
         }
     }
 
@@ -466,12 +503,13 @@ class HistorialController extends Controller
             // Confirmar la transacción
             DB::commit();
 
-            session()->flash('success', 'Se realizó el registro correctamente.');
-            return redirect()->back();
+            // Enviar respuesta JSON de éxito
+            return response()->json(['success' => true, 'message' => 'Los Datos Fueron Registrados con Exito.']);
         } catch (\Exception $e) {
             DB::rollBack();
-            session()->flash('error', 'Ocurrió un error: ' . $e->getMessage());
-            return redirect()->back();
+
+            // Enviar respuesta JSON de error
+            return response()->json(['success' => false, 'message' => 'Ocurrió un error: ' . $e->getMessage()]);
         }
     }
 
@@ -493,13 +531,49 @@ class HistorialController extends Controller
             // Inicializar variables para los datos de la prisión
             $prisonID = $request->prison_name;
             if ($prisonID === "otro" && $request->filled('otra_prision_nombre')) {
+                // Manejo de País
+                if ($request->filled('new_country_name_p')) {
+                    $country = Country::firstOrCreate(
+                        ['country_name' => $request->new_country_name_p] // Buscar por nombre
+                    );
+                    $countryId = $country->id; // Usar el ID del país encontrado o creado
+                } else {
+                    $countryId = $request->country_id_p; // Usar el ID del país seleccionado
+                }
+
+                // Manejo de Estado/Provincia
+                if ($request->filled('new_state_name_p')) {
+                    $state = State::firstOrCreate(
+                        [
+                            'state_name' => $request->new_state_name_p, // Buscar por nombre
+                            'country_id' => $countryId,                // Y por el país asociado
+                        ]
+                    );
+                    $stateId = $state->id; // Usar el ID del estado encontrado o creado
+                } else {
+                    $stateId = $request->province_id_p; // Usar el ID del estado seleccionado
+                }
+
+                // Manejo de Ciudad
+                if ($request->filled('new_city_name_p')) {
+                    $city = City::firstOrCreate(
+                        [
+                            'city_name' => $request->new_city_name_p, // Buscar por nombre
+                            'state_id' => $stateId,                  // Y por el estado asociado
+                        ]
+                    );
+                    $cityId = $city->id; // Usar el ID de la ciudad encontrada o creada
+                } else {
+                    $cityId = $request->city_id_p; // Usar el ID de la ciudad seleccionada
+                }
+
                 // Crear nueva organización
                 $Nprison = Prison::create([
                     'prison_name' => $request->otra_prision_nombre,
                     'prison_location' => $request->prison_location,
-                    'country_id' => $request->country_id_p,
-                    'city_id' => $request->city_id_p,
-                    'province_id' => $request->province_id_p,
+                    'country_id' => $countryId,
+                    'state_id' => $stateId,
+                    'city_id' => $cityId,
                 ]);
                 $prisonID = $Nprison->id;
             }
@@ -515,6 +589,7 @@ class HistorialController extends Controller
             switch ($request->detention_type_id) {
                 case 1: // DETENCION PREVENTIVA
                     preventive_detention::create([
+                        'criminal_id' => $request->criminal_id,
                         'conviction_id' => $condena->id,
                         'prison_id' => $prisonID,
                         'prison_entry_date' => $request->prison_entry_date,
@@ -523,30 +598,128 @@ class HistorialController extends Controller
                     break;
 
                 case 2: // DETENCION DOMICILIARIA
+                    // Manejo de País
+                    if ($request->filled('new_country_name_d')) {
+                        $country = Country::firstOrCreate(
+                            ['country_name' => $request->new_country_name_d] // Buscar por nombre
+                        );
+                        $countryId = $country->id; // Usar el ID del país encontrado o creado
+                    } else {
+                        $countryId = $request->country_id_d; // Usar el ID del país seleccionado
+                    }
+
+                    // Manejo de Estado/Provincia
+                    if ($request->filled('new_state_name_d')) {
+                        $state = State::firstOrCreate(
+                            [
+                                'state_name' => $request->new_state_name_d, // Buscar por nombre
+                                'country_id' => $countryId,                // Y por el país asociado
+                            ]
+                        );
+                        $stateId = $state->id; // Usar el ID del estado encontrado o creado
+                    } else {
+                        $stateId = $request->province_id_d; // Usar el ID del estado seleccionado
+                    }
+
+                    // Manejo de Ciudad
+                    if ($request->filled('new_city_name_d')) {
+                        $city = City::firstOrCreate(
+                            [
+                                'city_name' => $request->new_city_name_d, // Buscar por nombre
+                                'state_id' => $stateId,                  // Y por el estado asociado
+                            ]
+                        );
+                        $cityId = $city->id; // Usar el ID de la ciudad encontrada o creada
+                    } else {
+                        $cityId = $request->city_id_d; // Usar el ID de la ciudad seleccionada
+                    }
+
                     house_arrest::create([
+                        'criminal_id' => $request->criminal_id,
                         'conviction_id' => $condena->id,
                         'house_arrest_address' => $request->house_arrest_address,
                         'country_id' => $request->country_id_h,
                         'city_id' => $request->city_id_h,
-                        'province_id' => $request->province_id_h,
+                        'state_id' => $request->state_id_h,
                     ]);
                     break;
 
                 case 3: // EXTRADICION
+                    // Manejo de País
+                    if ($request->filled('new_country_name_e')) {
+                        $country = Country::firstOrCreate(
+                            ['country_name' => $request->new_country_name_e] // Buscar por nombre
+                        );
+                        $countryId = $country->id; // Usar el ID del país encontrado o creado
+                    } else {
+                        $countryId = $request->country_id_e; // Usar el ID del país seleccionado
+                    }
+
+                    // Manejo de Estado/Provincia
+                    if ($request->filled('new_state_name_e')) {
+                        $state = State::firstOrCreate(
+                            [
+                                'state_name' => $request->new_state_name_e, // Buscar por nombre
+                                'country_id' => $countryId,                // Y por el país asociado
+                            ]
+                        );
+                        $stateId = $state->id; // Usar el ID del estado encontrado o creado
+                    } else {
+                        $stateId = $request->province_id_e; // Usar el ID del estado seleccionado
+                    }
+
                     extradition::create([
+                        'criminal_id' => $request->criminal_id,
                         'conviction_id' => $condena->id,
                         'extradition_date' => $request->extradition_date,
-                        'country_id' => $request->country_id_e,
-                        'city_id' => $request->city_id_e,
+                        'country_id' => $countryId,
+                        'state_id' => $stateId,
                     ]);
                     break;
 
-                case 4: // LIBERTAD
+                case 4: // 
+                    // Manejo de País
+                    if ($request->filled('new_country_name_l')) {
+                        $country = Country::firstOrCreate(
+                            ['country_name' => $request->new_country_name_l] // Buscar por nombre
+                        );
+                        $countryId = $country->id; // Usar el ID del país encontrado o creado
+                    } else {
+                        $countryId = $request->country_id_l; // Usar el ID del país seleccionado
+                    }
+
+                    // Manejo de Estado/Provincia
+                    if ($request->filled('new_state_name_l')) {
+                        $state = State::firstOrCreate(
+                            [
+                                'state_name' => $request->new_state_name_l, // Buscar por nombre
+                                'country_id' => $countryId,                // Y por el país asociado
+                            ]
+                        );
+                        $stateId = $state->id; // Usar el ID del estado encontrado o creado
+                    } else {
+                        $stateId = $request->province_id_l; // Usar el ID del estado seleccionado
+                    }
+
+                    // Manejo de Ciudad
+                    if ($request->filled('new_city_name_l')) {
+                        $city = City::firstOrCreate(
+                            [
+                                'city_name' => $request->new_city_name_l, // Buscar por nombre
+                                'state_id' => $stateId,                  // Y por el estado asociado
+                            ]
+                        );
+                        $cityId = $city->id; // Usar el ID de la ciudad encontrada o creada
+                    } else {
+                        $cityId = $request->city_id_l; // Usar el ID de la ciudad seleccionada
+                    }
+
                     liberty::create([
+                        'criminal_id' => $request->criminal_id,
                         'conviction_id' => $condena->id,
-                        'country_id' => $request->country_id_l,
-                        'city_id' => $request->city_id_l,
-                        'province_id' => $request->province_id_l,
+                        'country_id' => $countryId,
+                        'state_id' => $stateId,
+                        'city_id' => $cityId,
                         'house_address' => $request->house_address,
                     ]);
                     break;
@@ -555,12 +728,13 @@ class HistorialController extends Controller
             // Confirmar la transacción
             DB::commit();
 
-            session()->flash('success', 'Se realizó el registro correctamente.');
-            return redirect()->back();
+            // Enviar respuesta JSON de éxito
+            return response()->json(['success' => true, 'message' => 'Los Datos Fueron Registrados con Exito.']);
         } catch (\Exception $e) {
             DB::rollBack();
-            session()->flash('error', 'Ocurrió un error: ' . $e->getMessage());
-            return redirect()->back();
+
+            // Enviar respuesta JSON de error
+            return response()->json(['success' => false, 'message' => 'Ocurrió un error: ' . $e->getMessage()]);
         }
     }
 }

@@ -231,7 +231,7 @@ return [
         'product_uid'              => 'UID proizvoda',
         'product_uuid'             => 'UUID proizvoda',
         'promo_code'               => 'promo kod',
-        'province'                 => 'pokrajina',
+        'state'                 => 'pokrajina',
         'quantity'                 => 'količina',
         'reason'                   => 'razlog',
         'recaptcha_response_field' => 'recaptcha polje',

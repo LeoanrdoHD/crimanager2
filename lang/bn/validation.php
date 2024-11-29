@@ -231,7 +231,7 @@ return [
         'product_uid'              => 'পণ্য UID',
         'product_uuid'             => 'পণ্য UUID',
         'promo_code'               => 'প্রচার কোড',
-        'province'                 => 'প্রদেশ',
+        'state'                 => 'প্রদেশ',
         'quantity'                 => 'পরিমাণ',
         'reason'                   => 'কারণ',
         'recaptcha_response_field' => 'recaptcha প্রতিক্রিয়া ক্ষেত্র',

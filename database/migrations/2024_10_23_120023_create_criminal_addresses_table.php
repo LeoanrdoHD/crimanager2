@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('arrest_and_apprehension_history_id')->nullable();
             $table->unsignedBigInteger('country_id')->nullable();
             $table->unsignedBigInteger('city_id')->nullable();
-            $table->unsignedBigInteger('province_id')->nullable();
+            $table->unsignedBigInteger('state_id')->nullable();
             $table->string('street');
             $table->timestamps();
 
@@ -25,7 +25,7 @@ return new class extends Migration
             $table->foreign('arrest_and_apprehension_history_id')->references('id')->on('arrest_and_apprehension_histories')->onDelete('cascade');
             $table->foreign('country_id')->references('id')->on('countries');
             $table->foreign('city_id')->references('id')->on('cities');
-            $table->foreign('province_id')->references('id')->on('provinces');
+            $table->foreign('state_id')->references('id')->on('states');
         });
     }
 

@@ -231,7 +231,7 @@ return [
         'product_uid'              => 'UID محصول',
         'product_uuid'             => 'UUID محصول',
         'promo_code'               => 'کد تبلیغاتی',
-        'province'                 => 'استان',
+        'state'                 => 'استان',
         'quantity'                 => 'تعداد',
         'reason'                   => 'دلیل',
         'recaptcha_response_field' => 'فیلد جواب ریکپچا',

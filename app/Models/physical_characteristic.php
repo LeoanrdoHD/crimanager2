@@ -20,32 +20,44 @@ class physical_characteristic extends Model
         'confleccion_id',
         'distinctive_marks',
     ];
-    public function ear_type()
-    {
-        return $this->belongsTo('app\Models\ear_type');
-    }
-    public function eye_type()
-    {
-        return $this->belongsTo('app\Models\eye_type');
-    }
-    public function lip_type()
-    {
-        return $this->belongsTo('app\Models\lip_type');
-    }
-    public function nose_type()
-    {
-        return $this->belongsTo('app\Models\nose_type');
-    }
-    public function skin_color()
-    {
-        return $this->belongsTo('app\Models\skin_color');
-    }
-    public function confleccion()
-    {
-        return $this->belongsTo('app\Models\confleccion');
-    }
-    public function criminal_gender()
-    {
-        return $this->belongsTo('app\Models\criminal_gender');
-    }
+    public function criminal()
+{
+    return $this->belongsTo(Criminal::class, 'criminal_id');
+}
+
+public function earType()
+{
+    return $this->belongsTo(Ear_Type::class, 'ear_type_id');
+}
+
+public function eyeType()
+{
+    return $this->belongsTo(Eye_Type::class, 'eye_type_id');
+}
+
+public function lipType()
+{
+    return $this->belongsTo(Lip_Type::class, 'lip_type_id');
+}
+
+public function noseType()
+{
+    return $this->belongsTo(Nose_Type::class, 'nose_type_id');
+}
+
+public function skinColor()
+{
+    return $this->belongsTo(Skin_Color::class, 'skin_color_id');
+}
+
+public function Confleccion()
+{
+    return $this->belongsTo(Confleccion::class, 'confleccion_id');
+}
+
+public function criminalGender()
+{
+    return $this->belongsTo(Criminal_Gender::class, 'criminal_gender_id');
+}
+
 }

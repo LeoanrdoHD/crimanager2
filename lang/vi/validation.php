@@ -231,7 +231,7 @@ return [
         'product_uid'              => 'UID sản phẩm',
         'product_uuid'             => 'sản phẩm UUID',
         'promo_code'               => 'mã khuyến mại',
-        'province'                 => 'tỉnh/thành phố',
+        'state'                 => 'tỉnh/thành phố',
         'quantity'                 => 'Số lượng',
         'reason'                   => 'lý do',
         'recaptcha_response_field' => 'trường phản hồi recaptcha',

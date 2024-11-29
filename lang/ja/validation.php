@@ -231,7 +231,7 @@ return [
         'product_uid'              => '製品UID',
         'product_uuid'             => '製品UUID',
         'promo_code'               => 'プロモーションコード',
-        'province'                 => '都道府県',
+        'state'                 => '都道府県',
         'quantity'                 => '量',
         'reason'                   => '理由',
         'recaptcha_response_field' => 'reCAPTCHAの応答',

@@ -1,10 +1,12 @@
 @vite('resources/css/app.css')
 <div>
-    <form class="form-criminal" action="{{ route('criminals.store_arrest') }}" method="POST" enctype="multipart/form-data">
+    <form class="ajax-form" action="{{ route('criminals.store_arrest') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="criminal_id" value="{{ $criminal->id }}">
         
-        <div class="class text-center"><label>Datos de Captura:</label></div>
+        
+        <div class="class text-center text-lg">Datos de Detención:</div>
+        <div><label>Llenar los siguientes datos:</label></div>
         <div class="grid grid-cols-2 gap-10">
             <div>
                 <div class="form-group">

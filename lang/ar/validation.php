@@ -231,7 +231,7 @@ return [
         'product_uid'              => 'معرف المنتج',
         'product_uuid'             => 'معرف المنتج',
         'promo_code'               => 'رمز ترويجي',
-        'province'                 => 'المحافظة',
+        'state'                 => 'المحافظة',
         'quantity'                 => 'الكمية',
         'reason'                   => 'سبب',
         'recaptcha_response_field' => 'حقل استجابة recaptcha',

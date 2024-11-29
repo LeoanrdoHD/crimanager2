@@ -231,7 +231,7 @@ return [
         'product_uid'              => 'UID del producte',
         'product_uuid'             => 'UUID del producte',
         'promo_code'               => 'codi promocional',
-        'province'                 => 'província',
+        'state'                 => 'província',
         'quantity'                 => 'quantitat',
         'reason'                   => 'raó',
         'recaptcha_response_field' => 'camp de resposta recaptcha',

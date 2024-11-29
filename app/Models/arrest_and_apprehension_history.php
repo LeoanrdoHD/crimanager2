@@ -19,19 +19,33 @@ class arrest_and_apprehension_history extends Model
     ];
     public function criminal()
     {
-        return $this->belongsTo('app\Models\criminal');
+        return $this->belongsTo(Criminal::class, 'criminal_id');
     }
-    public function legal_status()
+    
+    public function legalStatus()
     {
-        return $this->belongsTo('app\Models\legal_status');
+        return $this->belongsTo(legal_statuse::class, 'legal_status_id');
     }
-
-    public function apprehension_type()
+    
+    public function apprehensionType()
     {
-        return $this->belongsTo('app\Models\apprehension_type');
+        return $this->belongsTo(Apprehension_Type::class, 'apprehension_type_id');
     }
-    public function detention_type()
+    
+    public function detentionType()
     {
-        return $this->belongsTo('app\Models\detention_type');
+        return $this->belongsTo(Detention_Type::class, 'detention_type_id');
     }
+    public function criminalSpecialty()
+    {
+        return $this->belongsTo(criminal_specialty::class, 'criminal_specialty_id');
+    }
+    public function criminalTools()
+    {
+        return $this->hasMany(criminal_tool::class, 'arrest_and_apprehension_history_id');
+    }  
+    public function phoneNumber()
+    {
+        return $this->hasMany(criminal_phone_number::class, 'arrest_and_apprehension_history_id');
+    }  
 }
