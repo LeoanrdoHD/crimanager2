@@ -1,1 +1,22 @@
+# Define el lenguaje y las herramientas
+[phases.setup]
+commands = [
+  "composer install --optimize-autoloader --no-dev",
+  "npm install --production"
+]
+
+[phases.build]
+commands = [
+  "php artisan optimize",
+  "php artisan config:cache",
+  "php artisan route:cache",
+  "php artisan view:cache"
+]
+
+[phases.start]
+commands = [
+  "sleep 15",  # Espera 15 segundos antes de ejecutar migraciones
+  "php artisan migrate --force",
+  "php artisan serve --host=0.0.0.0 --port=$PORT"
+]
 
