@@ -41,7 +41,7 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('password.confirm') }}"
+            <form method="POST" action="{{ route('password.confirm.custom') }}"
                   class="lockscreen-credentials @if(!config('adminlte.usermenu_image'))ml-0 @endif">
                 @csrf
 
