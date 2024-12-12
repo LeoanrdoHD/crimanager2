@@ -16,15 +16,17 @@ class prison extends Model
     public $timestamps = false;
     public function country()
     {
-        return $this->belongsTo('app\Models\country');
+        return $this->belongsTo(Country::class, 'country_id');
     }
-    public function city()
-    {
-        return $this->belongsTo('app\Models\city');
-    }
+
     public function state()
     {
-        return $this->belongsTo('app\Models\state');
+        return $this->belongsTo(State::class, 'state_id');
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class, 'city_id');
     }
     public function criminals()
     {

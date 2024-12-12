@@ -27,6 +27,12 @@ return [
         'role' => Spatie\Permission\Models\Role::class,
 
     ],
+    'guards' => [
+        'web' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
+    ],
 
     'table_names' => [
 

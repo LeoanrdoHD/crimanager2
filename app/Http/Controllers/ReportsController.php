@@ -3,43 +3,70 @@
 namespace App\Http\Controllers;
 
 use App\Models\arrest_and_apprehension_history;
+use App\Models\conviction;
 use App\Models\criminal;
+use App\Models\criminal_organization;
 use App\Models\criminal_phone_number;
+use App\Models\criminal_vehicle;
 use App\Models\photograph;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Storage;
+
 
 class ReportsController extends Controller
 {
 
     public function search_cri()
     {
-     
+
         $history_cri = arrest_and_apprehension_history::all();
         $fotos = photograph::all();
         $phone_cri = criminal_phone_number::all();
-        $crimi = Criminal::with(    'civilState',
-        'country',
-        'state',
-        'city',
-        'nationality',
-        'occupation',
-        'photographs',
-        'arrestHistories',
-        'criminalAddresses.country',
-        'criminalAddresses.state',
-        'criminalAddresses.city',
-        'physicalCharacteristics.earType',
-        'physicalCharacteristics.eyeType',
-        'physicalCharacteristics.lipType',
-        'physicalCharacteristics.noseType',
-        'physicalCharacteristics.skinColor',
-        'physicalCharacteristics.Confleccion',
-        'physicalCharacteristics.criminalGender',
-        'criminalPartner.relationshipType')->get();
-        $history = arrest_and_apprehension_history::with(    
-       'criminalTools.toolType','phoneNumber.company')->get();
-        
-        return view('criminals.search_cri', compact('crimi', 'history_cri', 'fotos','history','phone_cri'));
+        $vehicle = criminal_vehicle::all();
+        $orga = criminal_organization::all();
+        $condena = conviction::all();
+        $crimi = Criminal::with(
+            'civilState',
+            'country',
+            'state',
+            'city',
+            'nationality',
+            'occupation',
+            'photographs',
+            'arrestHistories',
+            'criminalAddresses.country',
+            'criminalAddresses.state',
+            'criminalAddresses.city',
+            'physicalCharacteristics.earType',
+            'physicalCharacteristics.eyeType',
+            'physicalCharacteristics.lipType',
+            'physicalCharacteristics.noseType',
+            'physicalCharacteristics.skinColor',
+            'physicalCharacteristics.Confleccion',
+            'physicalCharacteristics.criminalGender',
+            'criminalPartner.relationshipType'
+        )->get();
+        $history = arrest_and_apprehension_history::with(
+            'criminalTools.toolType',
+            'phoneNumber.company',
+            'criminalAliase.nationality',
+            'criminalComplice',
+            'criminalOrganization.organization',
+            'criminalVehicle.vehicleColor',
+            'criminalVehicle.vehicleType',
+            'criminalVehicle.brandVehicle',
+            'criminalVehicle.industry',
+            'criminalVehicle.vehicleService',
+            'criminalVehicle.relationshipWithOwner',
+            'criminalConviction.detentionType',
+            'extraditions',
+            'houseArrests',
+            'preventiveDetentions.prison',
+            'liberties',
+        )->get();
+
+        return view('criminals.search_cri', compact('crimi', 'history_cri', 'fotos', 'history', 'phone_cri', 'vehicle', 'orga', 'condena'));
     }
 
     public function show_crimi($criminal_id)
@@ -75,6 +102,38 @@ class ReportsController extends Controller
         // Redirige a la vista con los datos
         return view('criminals.show_file', compact('criminal', 'history'));
     }
+
+    public function generatePDF($criminal_id) {
+        // ... tu código aquí
+        $criminal = Criminal::with([
+            'civilState',
+            'country',
+            'state',
+            'city',
+            'nationality',
+            'occupation',
+            'photographs',
+            'arrestHistories',
+            'criminalAddresses.country',
+            'criminalAddresses.state',
+            'criminalAddresses.city',
+            'physicalCharacteristics.earType',
+            'physicalCharacteristics.eyeType',
+            'physicalCharacteristics.lipType',
+            'physicalCharacteristics.noseType',
+            'physicalCharacteristics.skinColor',
+            'physicalCharacteristics.Confleccion',
+            'physicalCharacteristics.criminalGender',
+            'criminalPartner.relationshipType'
+        ])
+            ->findOrFail($criminal_id);
+        // Cargar la vista
+        $pdf = PDF::loadView('exportar.pdf_todo', compact('criminal'));
+    
+        // Descargar el PDF
+        return $pdf->download('criminal.pdf');
+    }
+    
     public function showFileHistory($criminal_id, $history_id)
     {
         // Cargar el criminal con todas sus relaciones
@@ -102,9 +161,25 @@ class ReportsController extends Controller
             'arrestHistories.criminalSpecialty',
             'criminalPartner.relationshipType'
         ])->findOrFail($criminal_id);
-
         // Cargar el historial específico con sus herramientas relacionadas
-        $history = arrest_and_apprehension_history::with('criminalTools.toolType','phoneNumber.company')
+        $history = arrest_and_apprehension_history::with(
+            'criminalTools.toolType',
+            'phoneNumber.company',
+            'criminalAliase.nationality',
+            'criminalComplice',
+            'criminalOrganization.organization',
+            'criminalVehicle.vehicleColor',
+            'criminalVehicle.vehicleType',
+            'criminalVehicle.brandVehicle',
+            'criminalVehicle.industry',
+            'criminalVehicle.vehicleService',
+            'criminalVehicle.relationshipWithOwner',
+            'criminalConviction.detentionType',
+            'extraditions',
+            'houseArrests',
+            'preventiveDetentions.prison',
+            'liberties',
+        )
             ->where('id', $history_id)
             ->where('criminal_id', $criminal_id)
             ->firstOrFail();
@@ -115,11 +190,53 @@ class ReportsController extends Controller
 
     public function search_criminal()
     {
-        $crimi = criminal::all();
         $history_cri = arrest_and_apprehension_history::all();
         $fotos = photograph::all();
-        $criminals = Criminal::with('organizations')->get();
-        return view('reports.search_criminal', compact('crimi', 'criminals', 'history_cri', 'fotos'));
+        $phone_cri = criminal_phone_number::all();
+        $vehicle = criminal_vehicle::all();
+        $orga = criminal_organization::all();
+        $condena = conviction::all();
+        $crimi = Criminal::with(
+            'civilState',
+            'country',
+            'state',
+            'city',
+            'nationality',
+            'occupation',
+            'photographs',
+            'arrestHistories',
+            'criminalAddresses.country',
+            'criminalAddresses.state',
+            'criminalAddresses.city',
+            'physicalCharacteristics.earType',
+            'physicalCharacteristics.eyeType',
+            'physicalCharacteristics.lipType',
+            'physicalCharacteristics.noseType',
+            'physicalCharacteristics.skinColor',
+            'physicalCharacteristics.Confleccion',
+            'physicalCharacteristics.criminalGender',
+            'criminalPartner.relationshipType'
+        )->get();
+        $history = arrest_and_apprehension_history::with(
+            'criminalTools.toolType',
+            'phoneNumber.company',
+            'criminalAliase.nationality',
+            'criminalComplice',
+            'criminalOrganization.organization',
+            'criminalVehicle.vehicleColor',
+            'criminalVehicle.vehicleType',
+            'criminalVehicle.brandVehicle',
+            'criminalVehicle.industry',
+            'criminalVehicle.vehicleService',
+            'criminalVehicle.relationshipWithOwner',
+            'criminalConviction.detentionType',
+            'extraditions',
+            'houseArrests',
+            'preventiveDetentions.prison',
+            'liberties',
+        )->get();
+
+        return view('reports.search_criminal', compact('crimi', 'history_cri', 'fotos', 'history', 'phone_cri', 'vehicle', 'orga', 'condena'));
     }
 
     public function show_criminal(Criminal $file)
@@ -130,11 +247,53 @@ class ReportsController extends Controller
     }
     public function search_orga()
     {
-        $crimi = criminal::all();
         $history_cri = arrest_and_apprehension_history::all();
         $fotos = photograph::all();
-        $criminals = Criminal::with('organizations')->get();
-        return view('reports.search_orga', compact('crimi', 'criminals', 'history_cri', 'fotos'));
+        $phone_cri = criminal_phone_number::all();
+        $vehicle = criminal_vehicle::all();
+        $orga = criminal_organization::all();
+        $condena = conviction::all();
+        $crimi = Criminal::with(
+            'civilState',
+            'country',
+            'state',
+            'city',
+            'nationality',
+            'occupation',
+            'photographs',
+            'arrestHistories',
+            'criminalAddresses.country',
+            'criminalAddresses.state',
+            'criminalAddresses.city',
+            'physicalCharacteristics.earType',
+            'physicalCharacteristics.eyeType',
+            'physicalCharacteristics.lipType',
+            'physicalCharacteristics.noseType',
+            'physicalCharacteristics.skinColor',
+            'physicalCharacteristics.Confleccion',
+            'physicalCharacteristics.criminalGender',
+            'criminalPartner.relationshipType'
+        )->get();
+        $history = arrest_and_apprehension_history::with(
+            'criminalTools.toolType',
+            'phoneNumber.company',
+            'criminalAliase.nationality',
+            'criminalComplice',
+            'criminalOrganization.organization',
+            'criminalVehicle.vehicleColor',
+            'criminalVehicle.vehicleType',
+            'criminalVehicle.brandVehicle',
+            'criminalVehicle.industry',
+            'criminalVehicle.vehicleService',
+            'criminalVehicle.relationshipWithOwner',
+            'criminalConviction.detentionType',
+            'extraditions',
+            'houseArrests',
+            'preventiveDetentions.prison',
+            'liberties',
+        )->get();
+
+        return view('reports.search_orga', compact('crimi', 'history_cri', 'fotos', 'history', 'phone_cri', 'vehicle', 'orga', 'condena'));
     }
 
     public function show_orga(Criminal $file)
@@ -145,11 +304,53 @@ class ReportsController extends Controller
     }
     public function search_vehicle()
     {
-        $crimi = criminal::all();
         $history_cri = arrest_and_apprehension_history::all();
         $fotos = photograph::all();
-        $criminals = Criminal::with('organizations')->get();
-        return view('reports.search_vehicle', compact('crimi', 'criminals', 'history_cri', 'fotos'));
+        $phone_cri = criminal_phone_number::all();
+        $vehicle = criminal_vehicle::all();
+        $orga = criminal_organization::all();
+        $condena = conviction::all();
+        $crimi = Criminal::with(
+            'civilState',
+            'country',
+            'state',
+            'city',
+            'nationality',
+            'occupation',
+            'photographs',
+            'arrestHistories',
+            'criminalAddresses.country',
+            'criminalAddresses.state',
+            'criminalAddresses.city',
+            'physicalCharacteristics.earType',
+            'physicalCharacteristics.eyeType',
+            'physicalCharacteristics.lipType',
+            'physicalCharacteristics.noseType',
+            'physicalCharacteristics.skinColor',
+            'physicalCharacteristics.Confleccion',
+            'physicalCharacteristics.criminalGender',
+            'criminalPartner.relationshipType'
+        )->get();
+        $history = arrest_and_apprehension_history::with(
+            'criminalTools.toolType',
+            'phoneNumber.company',
+            'criminalAliase.nationality',
+            'criminalComplice',
+            'criminalOrganization.organization',
+            'criminalVehicle.vehicleColor',
+            'criminalVehicle.vehicleType',
+            'criminalVehicle.brandVehicle',
+            'criminalVehicle.industry',
+            'criminalVehicle.vehicleService',
+            'criminalVehicle.relationshipWithOwner',
+            'criminalConviction.detentionType',
+            'extraditions',
+            'houseArrests',
+            'preventiveDetentions.prison',
+            'liberties',
+        )->get();
+
+        return view('reports.search_vehicle', compact('crimi', 'history_cri', 'fotos', 'history', 'phone_cri', 'vehicle', 'orga', 'condena'));
     }
 
     public function show_vehicle(Criminal $file)
@@ -160,11 +361,53 @@ class ReportsController extends Controller
     }
     public function search_fast()
     {
-        $crimi = criminal::all();
         $history_cri = arrest_and_apprehension_history::all();
         $fotos = photograph::all();
-        $criminals = Criminal::with('organizations')->get();
-        return view('reports.search_fast', compact('crimi', 'criminals', 'history_cri', 'fotos'));
+        $phone_cri = criminal_phone_number::all();
+        $vehicle = criminal_vehicle::all();
+        $orga = criminal_organization::all();
+        $condena = conviction::all();
+        $crimi = Criminal::with(
+            'civilState',
+            'country',
+            'state',
+            'city',
+            'nationality',
+            'occupation',
+            'photographs',
+            'arrestHistories',
+            'criminalAddresses.country',
+            'criminalAddresses.state',
+            'criminalAddresses.city',
+            'physicalCharacteristics.earType',
+            'physicalCharacteristics.eyeType',
+            'physicalCharacteristics.lipType',
+            'physicalCharacteristics.noseType',
+            'physicalCharacteristics.skinColor',
+            'physicalCharacteristics.Confleccion',
+            'physicalCharacteristics.criminalGender',
+            'criminalPartner.relationshipType'
+        )->get();
+        $history = arrest_and_apprehension_history::with(
+            'criminalTools.toolType',
+            'phoneNumber.company',
+            'criminalAliase.nationality',
+            'criminalComplice',
+            'criminalOrganization.organization',
+            'criminalVehicle.vehicleColor',
+            'criminalVehicle.vehicleType',
+            'criminalVehicle.brandVehicle',
+            'criminalVehicle.industry',
+            'criminalVehicle.vehicleService',
+            'criminalVehicle.relationshipWithOwner',
+            'criminalConviction.detentionType',
+            'extraditions',
+            'houseArrests',
+            'preventiveDetentions.prison',
+            'liberties',
+        )->get();
+
+        return view('reports.search_fast', compact('crimi', 'history_cri', 'fotos', 'history', 'phone_cri', 'vehicle', 'orga', 'condena'));
     }
 
     public function show_fast(Criminal $file)

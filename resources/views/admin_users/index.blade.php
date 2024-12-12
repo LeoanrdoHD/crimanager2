@@ -5,7 +5,7 @@
 
 @section('content_header')
     <h1 class="text-center">
-        BUSCAR POR ORGANIZACIONES</h1>
+        LISTA DE USUARIOS DEL SISTEMA</h1>
     <link rel="stylesheet" href="{{ asset('css/search.css') }}">
 @stop
 
@@ -19,6 +19,66 @@
 @stop
 
 @section('content')
+    <style>
+        /* Contenedor del switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 25px;
+        }
+
+        /* Estilo del checkbox oculto */
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        /* Slider del switch */
+        .slider {
+            position: absolute;
+            cursor: not-allowed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ff4d4d;
+            /* Rojo para inactivo */
+            transition: 0.4s;
+            border-radius: 25px;
+        }
+
+        /* Slider verde cuando está activo */
+        .slider.active {
+            background-color: #4CAF50;
+            /* Verde para activo */
+        }
+
+        /* Botón circular dentro del slider */
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 4px;
+            bottom: 2.5px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        /* Posición del botón cuando está activo */
+        input:checked+.slider:before {
+            transform: translateX(25px);
+        }
+    </style>
+    @can('crear.Usuarios')
+    <a href="{{ route('admin.users.create') }}" class="btn btn-primary">
+        Crear Nuevo Usuario
+    </a>
+    @endcan
+    
     @if (session('success'))
         <div id="success-alert"
             style="position: fixed; top: 20px; right: 20px; z-index: 9999; padding: 10px 20px; background-color: #4caf50; color: white; border-radius: 5px;">
@@ -32,86 +92,64 @@
             });
         </script>
     @endif
+
     <!-- Tabla de criminales -->
     <div class="container">
         <table class="table" id="criminales">
             <thead>
                 <tr>
-                    <th scope="col">Nro.</th>
-                    <th scope="col">Nombre y Apellidos</th>
+                    <th scope="col">N°.</th>
+                    <th scope="col">Grado Nombres y Apellidos</th>
                     <th scope="col">CI o DNI</th>
-                    <th scope="col">Alias</th>
-                    <th scope="col">Fotografía</th>
-                    <th scope="col">Historial de Capturas</th>
-                    <th scope="col">Organización</th>
-                    <th scope="col">Actividad</th>
+                    <th scope="col">Fotografia</th>
+                    <th scope="col">Correo</th>
+                    <th scope="col">Celular</th>
                     <th scope="col">Rol</th>
+                    <th scope="col">estado</th>
                     <th scope="col">Botones</th>
+
                 </tr>
             </thead>
             <tbody>
-                @foreach ($crimi as $criminals)
+                @foreach ($usuarios as $users)
                     <tr>
-                        <td>{{ $criminals->id }}</td>
-                        <td>{{ $criminals->first_name }} {{ $criminals->last_nameP }} {{ $criminals->last_nameM }}</td>
-                        <td>{{ $criminals->identity_number }}</td>
-                        <td>{{ $criminals->alias_name }}</td>
+                        <td>{{ $users->id }}</td>
+                        <td>{{ ucwords(strtolower($users->grade)) }}. {{ ucwords(strtolower($users->name)) }}</td>
+                        <td>{{ $users->ci_police }}</td>
                         <td>
-                            @foreach ($fotos as $photographs)
-                                @if ($photographs->criminal_id === $criminals->id)
-                                    <img src="{{ asset($photographs->face_photo) }}" width="75" alt="Foto Frontal"
-                                        style="border-radius: 50%; object-fit: cover;">
-                                @endif
-                            @endforeach
+                            <img src="{{ asset($users->profile_photo_url) }}" width="75" alt="Foto de Perfil"
+                                style="border-radius: 40%; object-fit: cover;">
+                        </td>
+                        <td>{{ $users->email }}</td>
+                        <td>{{ $users->phone }}</td>
+                        <td>
+                            <p>
+                                @foreach ($users->roles as $role)
+                                    {{ strtoupper($role->name) }} <br>
+                                @endforeach
+                            </p>
+                        </td>
+
+
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" {{ $users->estado ? 'checked' : '' }} disabled>
+                                <span class="slider {{ $users->estado ? 'active' : 'inactive' }}"></span>
+                            </label>
                         </td>
                         <td>
-                            @foreach ($history_cri as $arrest_and_apprehension_histories)
-                                @if ($arrest_and_apprehension_histories->criminal_id === $criminals->id)
-                                    <a
-                                        href="{{ route('criminals.history', ['criminal_id' => $criminals->id, 'history_id' => $arrest_and_apprehension_histories->id]) }}">
-                                        {{ $arrest_and_apprehension_histories->arrest_date }}
-                                    </a><br>
-                                @endif
-                            @endforeach
+                            <a href="{{ route('admin.users.show', $users->id) }}" class="btn btn-primary d-block mb-2"
+                                style="padding: 2px 8px; font-size: 12px; min-height: 25px; line-height: 1.2;">
+                                Ver Todo
+                            </a>
+                            <a href="{{ route('admin.users.edit', $users->id) }}" class="btn btn-warning d-block"
+                                style="padding: 2px 8px; font-size: 12px; min-height: 25px; line-height: 1.2;">
+                                Editar
+                            </a>
+
+
                         </td>
-                        <td>
-                            @foreach ($orga as $criminal_organization)
-                                @if ($criminal_organization->criminal_id === $criminals->id)
-                                    <p>
-                                        {{ $criminal_organization->organization->organization_name }}
-                                    </p><br>
-                                @endif
-                            @endforeach
-                        </td>
-                        <td>
-                            @foreach ($orga as $criminal_organization)
-                                @if ($criminal_organization->criminal_id === $criminals->id)
-                                    <p>
-                                        {{ $criminal_organization->organization->Criminal_Organization_Specialty }}
-                                    </p><br>
-                                @endif
-                            @endforeach
-                        </td>
-                        <td>
-                            @foreach ($orga as $criminal_organization)
-                                @if ($criminal_organization->criminal_id === $criminals->id)
-                                    <p>
-                                        {{ $criminal_organization->criminal_rol }}
-                                    </p><br>
-                                @endif
-                            @endforeach
-                        </td>
-                        <td>
-                            <div class="d-flex flex-column align-items-start">
-                                <a href="/criminals/search_cri/{{ $criminals->id }}"
-                                    class="btn btn-primary btn-sm w-100 mb-2">Ver Todo</a>
-                                @can('agregar.criminal')
-                                    <a href="/criminals/arrest/show_file/{{ $criminals->id }}"
-                                        class="btn btn-success btn-sm w-100">Agregar</a>
-                                @endcan
-                            </div>
-                        </td>
-                       
+
                     </tr>
                 @endforeach
             </tbody>
@@ -157,6 +195,9 @@
                     }
                 }
             });
+
         });
     </script>
+
+
 @stop

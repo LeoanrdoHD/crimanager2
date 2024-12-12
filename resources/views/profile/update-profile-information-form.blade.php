@@ -42,7 +42,7 @@
                 </x-secondary-button>
 
                 @if ($this->user->profile_photo_path)
-                    <x-secondary-button type="button" class="mt-2" wire:click="deleteProfilePhoto">
+                    <x-secondary-button type="button" class="mt-2 me-2" wire:click="deleteProfilePhoto">
                         {{ __('Remove Photo') }}
                     </x-secondary-button>
                 @endif
@@ -99,7 +99,7 @@
             {{ __('Guardado.') }}
         </x-action-message>
 
-        <x-button wire:loading.attr="disabled" wire:target="photo">
+        <x-button class="mt-2 me-2" wire:loading.attr="disabled" wire:target="photo">
             {{ __('Guardar') }}
         </x-button>
     </x-slot>

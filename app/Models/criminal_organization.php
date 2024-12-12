@@ -14,6 +14,14 @@ class criminal_organization extends Model
     ];
     public function organization()
     {
-        return $this->belongsTo('app\Models\organization');
+        return $this->belongsTo(organization::class, 'organization_id');
+    }
+    public function criminal()
+    {
+        return $this->belongsTo(Criminal::class, 'criminal_id');
+    }
+    public function arrestHistories()
+    {
+        return $this->belongsTo(arrest_and_apprehension_history::class, 'arrest_and_apprehension_history_id');
     }
 }

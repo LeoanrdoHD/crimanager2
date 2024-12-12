@@ -25,28 +25,43 @@ class criminal_vehicle extends Model
         'observations',
         'driver_name',
     ];
-    public function vehicle_color()
+    public function criminal()
     {
-        return $this->belongsTo('app\Models\vehicle_color');
+        return $this->belongsTo(Criminal::class, 'criminal_id');
     }
-    public function vehicle_type()
+
+    public function arrestHistories()
     {
-        return $this->belongsTo('app\Models\vehicle_type');
+        return $this->belongsTo(arrest_and_apprehension_history::class, 'arrest_and_apprehension_history_id');
     }
-    public function brand_vehicle()
+
+    public function vehicleColor()
     {
-        return $this->belongsTo('app\Models\brand_vehicle');
+        return $this->belongsTo(vehicle_color::class, 'vehicle_color_id');
     }
-    public function industrie()
+
+    public function vehicleType()
     {
-        return $this->belongsTo('app\Models\industrie');
+        return $this->belongsTo(vehicle_type::class, 'type_id');
     }
-    public function vehicle_service()
+
+    public function brandVehicle()
     {
-        return $this->belongsTo('app\Models\vehicle_service');
+        return $this->belongsTo(brand_vehicle::class, 'brand_id');
     }
-    public function relationship_with_owner()
+
+    public function industry()
     {
-        return $this->belongsTo('app\Models\relationship_with_owner');
+        return $this->belongsTo(industrie::class, 'industry_id');
+    }
+
+    public function vehicleService()
+    {
+        return $this->belongsTo(vehicle_service::class, 'vehicle_service_id');
+    }
+
+    public function relationshipWithOwner()
+    {
+        return $this->belongsTo(relationship_with_owner::class, 'relationship_with_owner_id');
     }
 }

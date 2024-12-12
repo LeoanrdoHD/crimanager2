@@ -1,67 +1,44 @@
-@extends('adminlte::page')
-@vite('resources/css/app.css')
+<!DOCTYPE html>
+<html lang="es">
 
-@section('title', 'Crimanager')
-@section('content_header')
-    <h1 class="text-center">
-        Registro de Captura de: {{ $criminal->first_name }} {{ $criminal->last_nameP }} {{ $criminal->last_nameM }}
-    </h1>
-@endsection
-@section('css')
-    <link rel="stylesheet" href="{{ asset('css/print.css') }}" media="print">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOLA A TODOAS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <style>
         h3 {
-            color: #28a745;
-            /* Verde oscuro */
+            color: #101110FF;
             font-weight: 700;
-            /* Grosor medio */
             text-transform: uppercase;
-            /* Convierte el texto a mayúsculas */
             font-size: 25px;
-            /* Tamaño ligeramente mayor que el h4 */
             letter-spacing: 0.5px;
-            /* Espaciado sutil entre letras */
             margin-bottom: 12px;
-            /* Espacio debajo */
         }
 
         h4.section-title {
-            color: #28a745;
-            /* Verde oscuro */
+            color: #030303FF;
             font-weight: 700;
-            /* Grosor medio */
             text-transform: uppercase;
-            /* Convierte el texto a mayúsculas */
-            font-size: 18px;
-            /* Tamaño reducido */
+            font-size: 14px;
             letter-spacing: 0.5px;
-            /* Menor espaciado entre letras */
             margin-bottom: 10px;
-            /* Ajusta el espacio debajo del título */
         }
 
         .listah {
             font-size: 18px;
-            /* Tamaño más pequeño que los títulos */
             font-weight: bold;
-            /* Negrita */
-            color: #0ac041;
-            /* Verde oscuro (puedes ajustarlo) */
+            color: #0A0A0AFF;
             text-transform: uppercase;
-            /* Convertir a mayúsculas */
             margin-bottom: 10px;
-            /* Espaciado inferior */
             display: block;
-            /* Asegura que el texto sea un bloque separado */
         }
 
-
         .card {
-            background-color: #333;
-            /* Fondo oscuro */
-            color: white;
-            /* Texto blanco */
-            border: none;
+            background-color: #f8f9fa;
+            color: #333;
+            border: 1px solid #ddd;
             border-radius: 10px;
             padding: 20px;
             margin-bottom: 20px;
@@ -88,37 +65,34 @@
         }
 
         p {
-            margin: 6px 0;
-            /* Reduce espacio entre líneas */
-            font-size: 16px;
-            /* Ajusta el tamaño del texto */
-            text-transform: uppercase;
-            /* Convierte a mayúsculas */
+            margin: 4px 0;
+            font-size: 12px;
+            text-transform: capitalize;
         }
+
         strong {
-            text-transform: uppercase;
+            text-transform: capitalize;
             font-weight: bold;
+            font-size: 12px;
         }
 
         h5 {
             text-transform: uppercase;
-            color: #ddd;
+            color: #333;
             margin-bottom: 10px;
-            border-bottom: 1px solid #555;
+            border-bottom: 1px solid #ddd;
             padding-bottom: 5px;
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .img-thumbnail {
             border-radius: 10%;
-            /* Ajusta redondez de las imágenes */
             object-fit: cover;
             max-width: 100%;
         }
 
         .g-3 .col-6 {
             margin-bottom: 10px;
-            /* Reduce espacio entre imágenes */
             text-align: center;
         }
 
@@ -127,28 +101,24 @@
         }
 
         hr {
-            border: 0.5px solid #555;
+            border: 0.5px solid #ddd;
             margin: 5px 0;
         }
 
-        /* Ajuste de alineación en Características Físicas */
         .characteristics-row {
             display: flex;
             flex-wrap: wrap;
-            /* Permite ajuste de líneas */
             gap: 5px;
-            /* Espacio entre columnas */
         }
 
         .characteristics-row>div {
             flex: 1 1 45%;
-            /* 2 columnas por fila */
         }
 
         .arrest-history {
-            border: 1px solid #dddddd3b;
+            border: 1px solid #ddd;
             border-radius: 10px;
-            background-color: #201F1FFF;
+            background-color: #fff;
             margin-bottom: 20px;
             padding: 15px;
         }
@@ -156,7 +126,7 @@
         .section-title {
             font-size: 18px;
             font-weight: bold;
-            color: #ffffff;
+            color: #333;
             margin-bottom: 15px;
             text-transform: uppercase;
         }
@@ -168,10 +138,28 @@
 
         .separator {
             border: 0;
-            border-top: 1px solid #4a4a4a;
+            border-top: 1px solid #ddd;
             margin: 10px 0;
         }
 
+        .arrest-history {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #f8f9fa;
+            color: #333;
+            margin-bottom: 20px;
+            padding: 15px;
+        }
+
+        .mb-4 {
+            margin-bottom: 1.5rem !important;
+        }
+
+        .p-3 {
+            padding: 1rem !important;
+        }
+
+        /* New styles for two columns */
         .two-columns {
             display: flex;
             flex-wrap: wrap;
@@ -182,11 +170,22 @@
             padding: 10px;
             box-sizing: border-box;
         }
-    </style>
-@stop
 
-@section('content')
-    <div class="todo">
+        /* Footer style */
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #555;
+            margin-top: 20px;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="two-columns">
+
         <div class="card">
             <div class="card-header">
                 <h3>Información del Criminal</h3>
@@ -208,76 +207,14 @@
                         <p><strong>Nacionalidad:</strong>
                             {{ $criminal->nationality->nationality_name ?? 'No especificado' }}</p>
                         <p><strong>Estado Civil:</strong>
-                            {{ $criminal->civilState->civil_state_name ?? 'No especificado' }}
+                            {{ $criminal->civilState->civil_state_name ?? 'No especificado' }}</p>
+                        <p><strong>Ocupación:</strong> {{ $criminal->occupation->ocupation_name ?? 'No especificado' }}
                         </p>
-                        <p><strong>Ocupación:</strong> {{ $criminal->occupation->ocupation_name ?? 'No especificado' }}</p>
-                    </div>
-
-                    <div class="col-md-3">
-                        @if ($criminal->photographs->first())
-                            <img src="{{ asset($criminal->photographs->first()->face_photo) }}"
-                                alt="Foto Frontal de {{ $criminal->first_name }}" class="img-fluid1 img-thumbnail1"
-                                style="width: 100%; max-width: 225px; border-radius: 20%; object-fit: cover;">
-                            <p><strong>Fotografía Rostro</strong></p>
-                        @else
-                            <p>No hay fotografía de Rostro disponible.</p>
-                        @endif
-                    </div>
-
-                    <!-- Galería de Fotografías Restantes (5/12 columnas) -->
-                    <div class="col-md-5"
-                        style="border: 1px solid #dddddd3b; border-radius: 10px; background-color: #24242492;">
-                        <h5>Otras Fotografías:</h5>
-                        <div class="row g-3">
-                            <!-- Fotografía de cuerpo completo -->
-                            <div class="col-6 col-sm-4">
-                                <img src="{{ asset($criminal->photographs->first()->frontal_photo) }}"
-                                    class="img-fluid img-thumbnail" alt="Foto de Barra"
-                                    style="width: 50%; max-width: 125px; border-radius: 20%; object-fit: cover;">
-                                <p><strong>Fotografía Frontal</strong></p>
-                            </div>
-                            <div class="col-6 col-sm-4">
-                                <img src="{{ asset($criminal->photographs->first()->full_body_photo) }}"
-                                    class="img-fluid img-thumbnail" alt="Foto de Cuerpo Completo"
-                                    style="width: 50%; max-width: 125px; border-radius: 20%; object-fit: cover;">
-                                <p class="text-center"><strong>Cuerpo Completo</strong></p>
-                            </div>
-                            <!-- Fotografía de Perfil Izquierdo -->
-                            <div class="col-6 col-sm-4">
-                                <img src="{{ asset($criminal->photographs->first()->profile_izq_photo) }}"
-                                    class="img-fluid img-thumbnail" alt="Perfil Izquierdo"
-                                    style="width: 50%; max-width: 125px; border-radius: 20%; object-fit: cover;">
-                                <p><strong>Perfil Izquierdo</strong></p>
-                            </div>
-                            <!-- Fotografía de Perfil Derecho -->
-                            <div class="col-6 col-sm-4">
-                                <img src="{{ asset($criminal->photographs->first()->profile_der_photo) }}"
-                                    class="img-fluid img-thumbnail" alt="Perfil Derecho"
-                                    style="width: 50%; max-width: 125px; border-radius: 20%; object-fit: cover;">
-                                <p><strong>Perfil Derecho</strong></p>
-                            </div>
-                            <!-- Fotografía Adicional -->
-                            <div class="col-6 col-sm-4">
-                                <img src="{{ asset($criminal->photographs->first()->aditional_photo) }}"
-                                    class="img-fluid img-thumbnail" alt="Foto Adicional"
-                                    style="width: 50%; max-width: 125px; border-radius: 20%; object-fit: cover;">
-                                <p><strong>Fotografía Adicional</strong></p>
-                            </div>
-                            <!-- Fotografía de Barra -->
-                            <div class="col-6 col-sm-4">
-                                <img src="{{ asset($criminal->photographs->first()->barra_photo) }}"
-                                    class="img-fluid img-thumbnail" alt="Foto de Barra"
-                                    style="width: 50%; max-width: 125px; border-radius: 20%; object-fit: cover;">
-                                <p><strong>Fotografía de Barra</strong></p>
-                            </div>
-                        </div>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-md-4">
-
-                        <label>Direccion de Residencia:</label>
+                        <h4 class="section-title">Direcciones de Residencia:</h4>
                         @forelse ($criminal->criminalAddresses as $address)
                             <p><strong></strong> {{ $address->country->country_name ?? 'No especificado' }} -
                                 {{ $address->state->state_name ?? 'No especificado' }} -
@@ -287,85 +224,83 @@
                             <p>No hay direcciones registradas para este criminal.</p>
                         @endforelse
                     </div>
-                    <div class="col-md-3">
-                        @forelse ($criminal->criminalPartner as $Partner)
-                            <p><strong>Persona de Referencia:</strong> {{ $Partner->partner_name ?? 'No especificado' }}
-                            </p>
-                            <p><strong>Relacion con el Delincuente:</strong>
-                                {{ $Partner->relationshipType->relationship_type_name ?? 'No especificado' }}</p>
-                            <p><strong>Dirección:</strong> {{ $Partner->partner_address ?? 'No especificado' }}</p>
-                        @empty
-                            <p>No hay direcciones registradas para este criminal.</p>
-                        @endforelse
-                    </div>
+                </div>
+                <div class="col-md-3">
+                    @forelse ($criminal->criminalPartner as $Partner)
+                        <p><strong>Persona de Referencia:</strong> {{ $Partner->partner_name ?? 'No especificado' }}
+                        </p>
+                        <p><strong>Relacion con el Delincuente:</strong>
+                            {{ $Partner->relationshipType->relationship_type_name ?? 'No especificado' }}</p>
+                        <p><strong>Dirección:</strong> {{ $Partner->partner_address ?? 'No especificado' }}</p>
+                    @empty
+                        <p>No hay direcciones registradas para este criminal.</p>
+                    @endforelse
+                </div>
 
-                    <div class="col-md-5">
-                        <label>Caracteristicas Fisicas:</label>
-                        @forelse ($criminal->physicalCharacteristics as $characteristic)
-                            <div class="row">
-                                <!-- Columna 1 -->
-                                <div class="col-md-5">
-                                    <p><strong>Altura:</strong> {{ $characteristic->height ?? 'No especificado' }} cm</p>
-                                    <p><strong>Peso:</strong> {{ $characteristic->weight ?? 'No especificado' }} kg</p>
-                                    <p><strong>Sexo:</strong> {{ $characteristic->sex ?? 'No especificado' }}</p>
-                                    <p><strong>Género:</strong>
-                                        {{ $characteristic->criminalGender->gender_name ?? 'No especificado' }}</p>
-                                    <p><strong>Complexión:</strong>
-                                        {{ $characteristic->confleccion->conflexion_name ?? 'No especificado' }}</p>
-                                </div>
-                                <!-- Columna 2 -->
-                                <div class="col-md-7">
-                                    <p><strong>Color de Piel:</strong>
-                                        {{ $characteristic->skinColor->skin_color_name ?? 'No especificado' }}</p>
-                                    <p><strong>Tipo de Ojos:</strong>
-                                        {{ $characteristic->eyeType->eye_type_name ?? 'No especificado' }}</p>
-                                    <p><strong>Tipo de Oídos:</strong>
-                                        {{ $characteristic->earType->ear_type_name ?? 'No especificado' }}</p>
-                                    <p><strong>Tipo de Labios:</strong>
-                                        {{ $characteristic->lipType->lip_type_name ?? 'No especificado' }}</p>
-                                    <p><strong>Tipo de Nariz:</strong>
-                                        {{ $characteristic->noseType->nose_type_name ?? 'No especificado' }}</p>
-                                </div>
+                <div class="col-md-5">
+                    <h4 class="section-title">Caracteristicas Físicas:</h4>
+                    @forelse ($criminal->physicalCharacteristics as $characteristic)
+                        <div class="row">
+                            <!-- Columna 1 -->
+                            <div class="col-md-5">
+                                <p><strong>Altura:</strong> {{ $characteristic->height ?? 'No especificado' }} cm</p>
+                                <p><strong>Peso:</strong> {{ $characteristic->weight ?? 'No especificado' }} kg</p>
+                                <p><strong>Sexo:</strong> {{ $characteristic->sex ?? 'No especificado' }}</p>
+                                <p><strong>Género:</strong>
+                                    {{ $characteristic->criminalGender->gender_name ?? 'No especificado' }}</p>
+                                <p><strong>Complexión:</strong>
+                                    {{ $characteristic->confleccion->conflexion_name ?? 'No especificado' }}</p>
                             </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <p><strong>Marcas Distintivas:</strong>
-                                        {{ $characteristic->distinctive_marks ?? 'No especificadas' }}</p>
-                                </div>
+                            <!-- Columna 2 -->
+                            <div class="col-md-7">
+                                <p><strong>Color de Piel:</strong>
+                                    {{ $characteristic->skinColor->skin_color_name ?? 'No especificado' }}</p>
+                                <p><strong>Tipo de Ojos:</strong>
+                                    {{ $characteristic->eyeType->eye_type_name ?? 'No especificado' }}</p>
+                                <p><strong>Tipo de Oídos:</strong>
+                                    {{ $characteristic->earType->ear_type_name ?? 'No especificado' }}</p>
+                                <p><strong>Tipo de Labios:</strong>
+                                    {{ $characteristic->lipType->lip_type_name ?? 'No especificado' }}</p>
+                                <p><strong>Tipo de Nariz:</strong>
+                                    {{ $characteristic->noseType->nose_type_name ?? 'No especificado' }}</p>
                             </div>
-                        @empty
-                            <p>No hay características físicas disponibles para este criminal.</p>
-                        @endforelse
-                    </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p><strong>Marcas Distintivas:</strong>
+                                    {{ $characteristic->distinctive_marks ?? 'No especificadas' }}</p>
+                            </div>
+                        </div>
+                    @empty
+                        <p>No hay características físicas disponibles para este criminal.</p>
+                    @endforelse
                 </div>
             </div>
         </div>
-        <div class="card mt-4">
+        <div class="card">
             <div class="card-header">
                 <h3>Lista de Historial de Arrestos</h3>
             </div>
             <div class="card-body">
                 @if ($criminal->arrestHistories->isNotEmpty())
                     @foreach ($criminal->arrestHistories as $history)
-                        <div class="arrest-history mb-4 p-3"
-                            style="border: 1px solid #dddddd3b; border-radius: 10px; background-color: #272727FF;">
-                            <p class=" text-center">
-                                @php
-                                    // Convertir la fecha y hora usando el espacio de nombres completo
-                                    $formattedDate = \Carbon\Carbon::parse($history->arrest_date)->translatedFormat(
-                                        'l d \d\e F \d\e Y',
-                                    );
-                                    $formattedTime = \Carbon\Carbon::parse($history->arrest_time)->format('H:i');
+                        <div class="arrest-history mb-4 p-3" <p class=" text-center">
+                            @php
+                                // Convertir la fecha y hora usando el espacio de nombres completo
+                                $formattedDate = \Carbon\Carbon::parse($history->arrest_date)->translatedFormat(
+                                    'l d \d\e F \d\e Y',
+                                );
+                                $formattedTime = \Carbon\Carbon::parse($history->arrest_time)->format('H:i');
 
-                                    // Determinar si es mañana o tarde
-                                    $formattedTimePeriod =
-                                        \Carbon\Carbon::parse($history->arrest_time)->format('H') < 12
-                                            ? 'de la mañana'
-                                            : 'de la tarde';
-                                @endphp
+                                // Determinar si es mañana o tarde
+                                $formattedTimePeriod =
+                                    \Carbon\Carbon::parse($history->arrest_time)->format('H') < 12
+                                        ? 'de la mañana'
+                                        : 'de la tarde';
+                            @endphp
 
-                                <strong class="listah">Historial de arresto del {{ $formattedDate }} a las
-                                    {{ $formattedTime }} {{ $formattedTimePeriod }}</strong>
+                            <strong class="listah">Historial de arresto del {{ $formattedDate }} a las
+                                {{ $formattedTime }} {{ $formattedTimePeriod }}</strong>
 
                             </p>
                             <div class="row">
@@ -373,11 +308,13 @@
                                 <div class="col-md-4">
 
                                     @if ($history->legalStatus)
-                                        <p><strong>Situación Legal:</strong> {{ $history->legalStatus->status_name }}</p>
+                                        <p><strong>Situación Legal:</strong> {{ $history->legalStatus->status_name }}
+                                        </p>
                                     @endif
 
                                     @if ($history->apprehensionType)
-                                        <p><strong>Tipo de Captura:</strong> {{ $history->apprehensionType->type_name }}
+                                        <p><strong>Tipo de Captura:</strong>
+                                            {{ $history->apprehensionType->type_name }}
                                         </p>
                                     @endif
 
@@ -427,7 +364,8 @@
                                         <div class="tools-list">
                                             @foreach ($history->phoneNumber as $phone)
                                                 <div class="tool-item">
-                                                    <p><strong>Compañía:</strong> {{ $phone->company->companies_name }}</p>
+                                                    <p><strong>Compañía:</strong> {{ $phone->company->companies_name }}
+                                                    </p>
                                                     <p><strong>Nro. Celular:</strong> {{ $phone->phone_number }}</p>
                                                     <p><strong>Nro. IMEI:</strong> {{ $phone->imei_number }}</p>
                                                     <hr class="separator"> <!-- Línea separadora -->
@@ -446,7 +384,8 @@
                                         <div class="tools-list">
                                             @foreach ($history->criminalAliase as $aliase)
                                                 <div class="tool-item">
-                                                    <p><strong>Nombres y Apellidos:</strong> {{ $aliase->alias_name }}</p>
+                                                    <p><strong>Nombres y Apellidos:</strong> {{ $aliase->alias_name }}
+                                                    </p>
                                                     <p><strong>Nro de Identidad:</strong>
                                                         {{ $aliase->alias_identity_number }}
                                                     </p>
@@ -487,10 +426,13 @@
                                         <div class="tools-list">
                                             @foreach ($history->criminalComplice as $complice)
                                                 <div class="tool-item">
-                                                    <p><strong>Nombres Y Apellidos:</strong> {{ $complice->complice_name }}
+                                                    <p><strong>Nombres Y Apellidos:</strong>
+                                                        {{ $complice->complice_name }}
                                                     </p>
-                                                    <p><strong>Nro. de Identidad:</strong> {{ $complice->CI_complice }}</p>
-                                                    <p><strong>Otros detalles:</strong> {{ $complice->detail_complice }}
+                                                    <p><strong>Nro. de Identidad:</strong> {{ $complice->CI_complice }}
+                                                    </p>
+                                                    <p><strong>Otros detalles:</strong>
+                                                        {{ $complice->detail_complice }}
                                                     </p>
                                                     <hr class="separator"> <!-- Línea separadora -->
                                                 </div>
@@ -511,14 +453,16 @@
                                                     </p>
                                                     <p><strong>Especialidad:</strong>
                                                         {{ $grupo->organization->Criminal_Organization_Specialty }}</p>
-                                                    <p><strong>Rol en la Organizacion:</strong> {{ $grupo->criminal_rol }}
+                                                    <p><strong>Rol en la Organizacion:</strong>
+                                                        {{ $grupo->criminal_rol }}
                                                     </p>
                                                     <hr class="separator"> <!-- Línea separadora -->
                                                 </div>
                                             @endforeach
                                         </div>
                                     @else
-                                        <p>No se encontraron Organizaciones criminales relacionadas para este historial.</p>
+                                        <p>No se encontraron Organizaciones criminales relacionadas para este historial.
+                                        </p>
                                     @endif
                                 </div>
                             </div>
@@ -530,12 +474,14 @@
                                             @foreach ($history->criminalVehicle as $vehicle)
                                                 <div class="col-md-6 mb-4"> <!-- Dividimos en 2 columnas -->
                                                     <div class="tool-item">
-                                                        <p><strong>Color:</strong> {{ $vehicle->vehicleColor->color_name }}
+                                                        <p><strong>Color:</strong>
+                                                            {{ $vehicle->vehicleColor->color_name }}
                                                         </p>
                                                         <p><strong>Tipo:</strong>
                                                             {{ $vehicle->vehicleType->vehicle_type_name }}</p>
                                                         <p><strong>Año:</strong> {{ $vehicle->year }}</p>
-                                                        <p><strong>Marca:</strong> {{ $vehicle->brandVehicle->brand_name }}
+                                                        <p><strong>Marca:</strong>
+                                                            {{ $vehicle->brandVehicle->brand_name }}
                                                         </p>
                                                         <p><strong>Modelo:</strong> {{ $vehicle->model }}</p>
                                                         <p><strong>Industria:</strong>
@@ -590,7 +536,8 @@
                                         <div class="tools-list">
                                             @foreach ($history->preventiveDetentions as $preventivo)
                                                 <div class="tool-item">
-                                                    <p><strong>Prisión:</strong> {{ $preventivo->prison->prison_name }}</p>
+                                                    <p><strong>Prisión:</strong> {{ $preventivo->prison->prison_name }}
+                                                    </p>
                                                     <p><strong>Dirección de la Prisión:</strong>
                                                         {{ $preventivo->prison->prison_location }}
                                                     </p>
@@ -662,73 +609,24 @@
             </div>
         </div>
     </div>
-    <div class="text-center">
-        <style>
-            .btn-export-pdf {
-                background-color: red;
-                color: white;
-                padding: 10px 20px;
-                text-decoration: none;
-                border-radius: 5px;
-            }
-            .btn-imprimir {
-                background-color: rgb(64, 131, 232);
-                color: white;
-                padding: 8px 15px;
-                text-decoration: none;
-                border-radius: 5px;
-            }
-        </style>
-        <a href="{{ route('generate-pdf', $criminal->id) }}" class="btn-export-pdf">Exportar a PDF</a>
-        <button id="printButton" class="btn-imprimir">Imprimir</button>
-
-        <script>
-            document.getElementById('printButton').addEventListener('click', function() {
-                const printContents = document.querySelector('.todo').outerHTML;
-                const originalContents = document.body.innerHTML;
-
-                const printHTML = `
-                        <html>
-                        <head>
-                            <style>
-                                body {
-                                    font-family: Arial, sans-serif;
-                                    color: #000 !important;
-                                    background-color: #fff;
-                                }
-                                .card {
-                                    border: 1px solid #ccc;
-                                    margin: 10px;
-                                    padding: 20px;
-                                    border-radius: 10px;
-                                    background-color: #fff;
-                                }
-                                .img-thumbnail {
-                                    object-fit: cover;
-                                    width: 200px;
-                                    height: 150px;
-                                    margin: 10px;
-                                }
-                                h3,h4, p, strong {
-                                    color: #000 !important;
-                                      text-transform: uppercase;
-                                }
-                                      
-                            </style>
-                        </head>
-                        <body>
-                            <h1 class="text-center">Reporte de Criminal</h1>
-                            ${printContents}
-                        </body>
-                        </html>
-                    `;
-
-                document.body.innerHTML = printHTML;
-                window.print();
-                document.body.innerHTML = originalContents;
-                window.location.reload();
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var connectors = ["es", "la", "y", "o", "u", "que", "de", "en", "con", "a", "el", "los", "las"];
+            var paragraphs = document.querySelectorAll("p");
+            var footer = document.createElement("div");
+            paragraphs.forEach(function(paragraph) {
+                var words = paragraph.innerText.split(" ");
+                var formattedText = words.map(function(word) {
+                    return connectors.includes(word.toLowerCase()) ? word.toLowerCase() : word
+                        .charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+                }).join(" ");
+                paragraph.innerText = formattedText;
             });
-        </script>
-    </div>
-    <br>
-@stop
+            footer.className = "footer";
+            footer.innerText = "GENERADO EL " + new Date().toLocaleString() + " DACI ORURO";
+            document.body.appendChild(footer);
+        });
+    </script>
+</body>
+
+</html>

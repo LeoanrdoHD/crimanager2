@@ -13,13 +13,14 @@ return new class extends Migration
         $table->string('phone')->after('ci_police')->nullable();
         $table->string('grade')->after('phone')->nullable();
         $table->string('escalafon')->after('grade')->nullable();
+        $table->boolean('estado')->after('escalafon')->nullable();
     });
 }
 
 public function down()
 {
     Schema::table('users', function (Blueprint $table) {
-        $table->dropColumn(['ci_police', 'phone', 'grade', 'escalafon']);
+        $table->dropColumn(['ci_police', 'phone', 'grade', 'escalafon','estado']);
     });
 }
 

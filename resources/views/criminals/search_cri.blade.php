@@ -41,16 +41,17 @@
     <!-- Modal -->
     <div class="modal fade" id="columnToggleModal" tabindex="-1" aria-labelledby="columnToggleModalLabel"
         aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-xl"> <!-- Modal ancho -->
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="columnToggleModalLabel">Seleccionar columnas a mostrar</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body">
-                    <!-- Contenedor con grilla de 3 columnas -->
-                    <div id="columnToggleContainer" class="row">
-                        <div class="col-md-4">
+                    <!-- Contenedor con grilla responsiva -->
+                    <div id="columnToggleContainer" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+                        <!-- Columna 1 -->
+                        <div class="col">
                             <div class="form-check mb-2">
                                 <input class="form-check-input column-toggle" type="checkbox" data-column="0" checked>
                                 <label class="form-check-label">Nro.</label>
@@ -64,7 +65,8 @@
                                 <label class="form-check-label">Apellido</label>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <!-- Columna 2 -->
+                        <div class="col">
                             <div class="form-check mb-2">
                                 <input class="form-check-input column-toggle" type="checkbox" data-column="3" checked>
                                 <label class="form-check-label">CI o DNI</label>
@@ -78,7 +80,8 @@
                                 <label class="form-check-label">Fotografía</label>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <!-- Columna 3 -->
+                        <div class="col">
                             <div class="form-check mb-2">
                                 <input class="form-check-input column-toggle" type="checkbox" data-column="6" checked>
                                 <label class="form-check-label">Historial de Capturas</label>
@@ -89,7 +92,7 @@
                             </div>
                         </div>
                         <!-- Nuevas columnas -->
-                        <div class="col-md-4">
+                        <div class="col">
                             <div class="form-check mb-2">
                                 <input class="form-check-input column-toggle" type="checkbox" data-column="9">
                                 <label class="form-check-label">Edad</label>
@@ -103,21 +106,21 @@
                                 <label class="form-check-label">Peso</label>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col">
                             <div class="form-check mb-2">
                                 <input class="form-check-input column-toggle" type="checkbox" data-column="12">
                                 <label class="form-check-label">Nacionalidad</label>
                             </div>
                             <div class="form-check mb-2">
                                 <input class="form-check-input column-toggle" type="checkbox" data-column="13">
-                                <label class="form-check-label">Conflexion</label>
+                                <label class="form-check-label">Complexión</label>
                             </div>
                             <div class="form-check mb-2">
                                 <input class="form-check-input column-toggle" type="checkbox" data-column="14">
                                 <label class="form-check-label">Características Particulares</label>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col">
                             <div class="form-check mb-2">
                                 <input class="form-check-input column-toggle" type="checkbox" data-column="15">
                                 <label class="form-check-label">Celular</label>
@@ -131,7 +134,7 @@
                                 <label class="form-check-label">Dirección</label>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col">
                             <div class="form-check mb-2">
                                 <input class="form-check-input column-toggle" type="checkbox" data-column="18">
                                 <label class="form-check-label">Profesión</label>
@@ -145,32 +148,38 @@
                                 <label class="form-check-label">Actividad de la Organización</label>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col">
                             <div class="form-check mb-2">
                                 <input class="form-check-input column-toggle" type="checkbox" data-column="21">
-                                <label class="form-check-label">Rol en una organización</label>
+                                <label class="form-check-label">Rol en una Organización</label>
                             </div>
                             <div class="form-check mb-2">
                                 <input class="form-check-input column-toggle" type="checkbox" data-column="22">
-                                <label class="form-check-label">Placa de vehículo</label>
+                                <label class="form-check-label">Placa de Vehículo</label>
                             </div>
                             <div class="form-check mb-2">
                                 <input class="form-check-input column-toggle" type="checkbox" data-column="23">
-                                <label class="form-check-label">Lugar de captura</label>
+                                <label class="form-check-label">Lugar de Captura</label>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col">
                             <div class="form-check mb-2">
                                 <input class="form-check-input column-toggle" type="checkbox" data-column="24">
-                                <label class="form-check-label">Situación Legal</label>
+                                <label class="form-check-label">Tipo de Registro</label>
                             </div>
                             <div class="form-check mb-2">
                                 <input class="form-check-input column-toggle" type="checkbox" data-column="25">
-                                <label class="form-check-label">Tipo de pena</label>
+                                <label class="form-check-label">Situación Legal</label>
                             </div>
                             <div class="form-check mb-2">
                                 <input class="form-check-input column-toggle" type="checkbox" data-column="26">
                                 <label class="form-check-label">Nro. CUD</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input column-toggle" type="checkbox" data-column="27">
+                                <label class="form-check-label">Tipo de Condena</label>
                             </div>
                         </div>
                     </div>
@@ -232,9 +241,10 @@
                     <th scope="col">Rol en una Organización</th>
                     <th scope="col">Placa de Vehículo</th>
                     <th scope="col">Lugar de Captura</th>
+                    <th scope="col">Tipo de Registro</th>
                     <th scope="col">Situación Legal</th>
-                    <th scope="col">Tipo de Pena</th>
                     <th scope="col">Nro. CUD</th>
+                    <th scope="col">Tipo de Condena</th>
                 </tr>
             </thead>
             <tbody>
@@ -248,7 +258,7 @@
                         <td>
                             @foreach ($fotos as $photographs)
                                 @if ($photographs->criminal_id === $criminals->id)
-                                    <img src="{{ asset($photographs->face_photo) }}" width="50" alt="Foto Frontal"
+                                    <img src="{{ asset($photographs->face_photo) }}" width="75" alt="Foto Frontal"
                                         style="border-radius: 50%; object-fit: cover;">
                                 @endif
                             @endforeach
@@ -264,13 +274,23 @@
                             @endforeach
                         </td>
                         <td>
-                            @foreach ($criminals->organizations as $organization)
-                                {{ $organization->organization_name }}<br>
+                            @foreach ($orga as $criminal_organization)
+                                @if ($criminal_organization->criminal_id === $criminals->id)
+                                    <p>
+                                        {{ $criminal_organization->organization->organization_name }}
+                                    </p><br>
+                                @endif
                             @endforeach
                         </td>
                         <td>
-                            <a href="/criminals/search_cri/{{ $criminals->id }}" class="btn btn-primary">Ver Todo</a>
-                            <a href="arrest/show_file/{{ $criminals->id }}" class="btn btn-primary">Agregar</a>
+                            <div class="d-flex flex-column align-items-start">
+                                <a href="/criminals/search_cri/{{ $criminals->id }}"
+                                    class="btn btn-primary btn-sm w-100 mb-2">Ver Todo</a>
+                                @can('agregar.criminal')
+                                    <a href="arrest/show_file/{{ $criminals->id }}"
+                                        class="btn btn-success btn-sm w-100">Agregar</a>
+                                @endcan
+                            </div>
                         </td>
                         <!-- Columnas adicionales con datos vacíos si no están disponibles -->
                         <td>{{ $criminals->age ?? '' }}</td>
@@ -312,7 +332,7 @@
                                 @if ($criminal_phone_number->criminal_id === $criminals->id)
                                     <p>
                                         {{ $criminal_phone_number->phone_number }}
-                                    </p>
+                                    </p><br>
                                 @endif
                             @endforeach
                         </td>
@@ -330,19 +350,85 @@
                             @endforelse
                         </td>
                         <td>{{ $criminals->occupation->ocupation_name ?? '' }}</td>
-                        <td>{{ $criminals->speciality ?? '' }}</td>
-                        <td>{{ $criminals->organization_activity ?? '' }}</td>
-                        <td>{{ $criminals->role_in_organization ?? '' }}</td>
-                        <td>{{ $criminals->vehicle_plate ?? '' }}</td>
-                        <td>{{ $criminals->capture_place ?? '' }}</td>
-                        <td>{{ $criminals->legal_situation ?? '' }}</td>
-                        <td>{{ $criminals->penalty_type ?? '' }}</td>
-                        <td> @foreach ($history_cri as $arrest_and_apprehension_histories)
-                            @if ($arrest_and_apprehension_histories->criminal_id === $criminals->id)
-                              
-                                    {{ $arrest_and_apprehension_histories->cud_number}}
-                            @endif
-                        @endforeach</td>
+                        <td>
+                            @foreach ($history_cri as $arrest_and_apprehension_histories)
+                                @if ($arrest_and_apprehension_histories->criminal_id === $criminals->id)
+                                    {{ $arrest_and_apprehension_histories->criminalSpecialty->specialty_name }}
+                                    <br>
+                                @endif
+                            @endforeach
+                        </td>
+                        <td>
+                            @foreach ($orga as $criminal_organization)
+                                @if ($criminal_organization->criminal_id === $criminals->id)
+                                    <p>
+                                        {{ $criminal_organization->organization->Criminal_Organization_Specialty }}
+                                    </p><br>
+                                @endif
+                            @endforeach
+                        </td>
+                        <td>
+                            @foreach ($orga as $criminal_organization)
+                                @if ($criminal_organization->criminal_id === $criminals->id)
+                                    <p>
+                                        {{ $criminal_organization->criminal_rol }}
+                                    </p><br>
+                                @endif
+                            @endforeach
+                        </td>
+
+                        <td>
+                            @foreach ($vehicle as $criminal_vehicle)
+                                @if ($criminal_vehicle->criminal_id === $criminals->id)
+                                    <p>
+                                        {{ $criminal_vehicle->license_plate }}
+                                    </p><br>
+                                @endif
+                            @endforeach
+                        </td>
+                        <td>
+                            @foreach ($history_cri as $arrest_and_apprehension_histories)
+                                @if ($arrest_and_apprehension_histories->criminal_id === $criminals->id)
+                                    {{ $arrest_and_apprehension_histories->arrest_location }}<br>
+                                @endif
+                            @endforeach
+                        </td>
+                        <td>
+                            @foreach ($history_cri as $arrest_and_apprehension_histories)
+                                @if ($arrest_and_apprehension_histories->criminal_id === $criminals->id)
+                                    {{ $arrest_and_apprehension_histories->legalStatus->status_name }}
+                                    <br>
+                                @endif
+                            @endforeach
+                        </td>
+                        <td>
+                            @foreach ($history_cri as $arrest_and_apprehension_histories)
+                                @if ($arrest_and_apprehension_histories->criminal_id === $criminals->id)
+                                    @if ($arrest_and_apprehension_histories->apprehensionType)
+                                        {{ $arrest_and_apprehension_histories->apprehensionType->type_name }}<br>
+                                    @else
+                                        ---<br>
+                                    @endif
+                                @endif
+                            @endforeach
+                        </td>
+
+                        <td>
+                            @foreach ($history_cri as $arrest_and_apprehension_histories)
+                                @if ($arrest_and_apprehension_histories->criminal_id === $criminals->id)
+                                    {{ $arrest_and_apprehension_histories->cud_number }}<br>
+                                @endif
+                            @endforeach
+                        </td>
+                        <td>
+                            @foreach ($condena as $conviction)
+                                @if ($conviction->criminal_id === $criminals->id)
+                                    <p>
+                                        {{ $conviction->detentionType->detention_name }}
+                                    </p><br>
+                                @endif
+                            @endforeach
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
@@ -369,7 +455,9 @@
                         visible: true
                     }, // Columnas visibles por defecto
                     {
-                        targets: [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,26],
+                        targets: [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26,
+                            27
+                        ],
                         visible: false
                     } // Columnas opcionales ocultas por defecto
                 ],
@@ -434,6 +522,4 @@
             moveButtonsColumnToEnd(table);
         });
     </script>
-
-
 @stop

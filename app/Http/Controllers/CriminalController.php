@@ -74,7 +74,13 @@ class CriminalController extends Controller
                 'first_name' => 'required|string|min:3|max:80',
                 'last_nameP' => 'nullable|string|min:1|max:40',
                 'last_nameM' => 'nullable|string|min:1|max:40',
-                'identity_number' => 'required|string|max:20|unique:criminals,identity_number',
+                'identity_number' => [
+                    'required',
+                    'string',
+                    'max:20',
+                    'unique:criminals,identity_number',
+                    'regex:/^\d{1,15}-[A-Z]{1,3}$/',
+                ],
                 'date_of_birth' => 'required|date|before:today',
                 'age' => 'nullable|integer|min:0|max:120',
                 'country_id' => 'required',
@@ -262,7 +268,7 @@ class CriminalController extends Controller
                 'barra_photo' => $request->file('barra_photo')
             ];
 
-            $destino_img = 'fotos_criminal/';
+            $destino_img = 'fotos_criminal';
             $rutas = [];
 
             foreach ($imagenes as $key => $imagen) {

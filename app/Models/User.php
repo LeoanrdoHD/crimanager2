@@ -22,21 +22,22 @@ class User extends Authenticatable
     use TwoFactorAuthenticatable;
     use HasRoles;
 
+    protected $guard_name = 'web';
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
-            'name',
-            'email',
-            'password',
-            'ci_police',
-            'phone',
-            'grade',
-            'escalafon',
-        
-        
+        'name',
+        'email',
+        'password',
+        'ci_police',
+        'phone',
+        'grade',
+        'escalafon',
+        'estado',
     ];
 
     /**
@@ -78,5 +79,9 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function adminlte_desc()
+    {
+        return $this->roles->first()->name ?? 'Sin rol'; // Cambia esto según la lógica de tu aplicación
     }
 }

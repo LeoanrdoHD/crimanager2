@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="{{ asset('vendor/icheck-bootstrap/icheck-bootstrap.min.css') }}">
 @stop
 
-
 @php( $login_url = View::getSection('login_url') ?? config('adminlte.login_url', 'login') )
 @php( $register_url = View::getSection('register_url') ?? config('adminlte.register_url', 'register') )
 @php( $password_reset_url = View::getSection('password_reset_url') ?? config('adminlte.password_reset_url', 'password/reset') )
@@ -29,6 +28,12 @@
 @section('auth_header', __('adminlte::adminlte.login_message'))
 
 @section('auth_body')
+@if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
+
     <form action="{{ $login_url }}" method="post">
         @csrf
 
@@ -101,12 +106,12 @@
         </p>
     @endif--}}
 
-    {{-- Register link --}}
+    {{-- Register link 
     @if($register_url)
         <p class="my-0">
             <a href="{{ $register_url }}">
                 {{ __('adminlte::adminlte.register_a_new_membership') }}
             </a>
         </p>
-    @endif
+    @endif--}}
 @stop

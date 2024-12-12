@@ -590,6 +590,7 @@ class HistorialController extends Controller
                 case 1: // DETENCION PREVENTIVA
                     preventive_detention::create([
                         'criminal_id' => $request->criminal_id,
+                        'arrest_and_apprehension_history_id' => $existingHistory ? null : $arrestAndApprehensionHistoryId,
                         'conviction_id' => $condena->id,
                         'prison_id' => $prisonID,
                         'prison_entry_date' => $request->prison_entry_date,
@@ -636,11 +637,13 @@ class HistorialController extends Controller
 
                     house_arrest::create([
                         'criminal_id' => $request->criminal_id,
+                        'arrest_and_apprehension_history_id' => $existingHistory ? null : $arrestAndApprehensionHistoryId,
                         'conviction_id' => $condena->id,
                         'house_arrest_address' => $request->house_arrest_address,
-                        'country_id' => $request->country_id_h,
-                        'city_id' => $request->city_id_h,
-                        'state_id' => $request->state_id_h,
+                        'country_id' => $request->country_id_d,
+                        'state_id' => $request->province_id_d,
+                        'city_id' => $request->city_id_d,
+                    
                     ]);
                     break;
 
@@ -670,10 +673,11 @@ class HistorialController extends Controller
 
                     extradition::create([
                         'criminal_id' => $request->criminal_id,
+                        'arrest_and_apprehension_history_id' => $existingHistory ? null : $arrestAndApprehensionHistoryId,
                         'conviction_id' => $condena->id,
                         'extradition_date' => $request->extradition_date,
-                        'country_id' => $countryId,
-                        'state_id' => $stateId,
+                        'country_id' => $request->country_id_e,
+                        'state_id' => $request->province_id_e,
                     ]);
                     break;
 
@@ -716,6 +720,7 @@ class HistorialController extends Controller
 
                     liberty::create([
                         'criminal_id' => $request->criminal_id,
+                        'arrest_and_apprehension_history_id' => $existingHistory ? null : $arrestAndApprehensionHistoryId,
                         'conviction_id' => $condena->id,
                         'country_id' => $countryId,
                         'state_id' => $stateId,

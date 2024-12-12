@@ -94,4 +94,8 @@ class criminal extends Model
         // belongsToMany indica que un criminal puede pertenecer a muchas organizaciones
         return $this->belongsToMany(prison::class, 'preventive_detentions', 'criminal_id', 'prison_id');
     }
+    public function criminalConviction()
+    {
+        return $this->hasMany(conviction::class, 'criminal_id');
+    }  
 }

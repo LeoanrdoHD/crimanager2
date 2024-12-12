@@ -4,7 +4,8 @@
 @section('title', 'Crimanager')
 
 @section('content_header')
-    <h1 class="text-center">BUSCAR FICHA DE DELINCUENTES</h1>
+    <h1 class="text-center">
+        BUSCAR POR VEHÍCULOS</h1>
     <link rel="stylesheet" href="{{ asset('css/search.css') }}">
 @stop
 
@@ -12,9 +13,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.3/css/responsive.bootstrap5.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/colreorder/1.5.6/css/colReorder.dataTables.min.css">
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
-
 @stop
 
 @section('content')
@@ -32,125 +33,34 @@
         </script>
     @endif
 
-    <!-- Botón para abrir el modal -->
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#columnToggleModal">
-        Configurar columnas
-    </button>
-
-    <!-- Modal -->
-    <div class="modal fade" id="columnToggleModal" tabindex="-1" aria-labelledby="columnToggleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="columnToggleModalLabel">Seleccionar columnas a mostrar</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Contenedor con grilla de 3 columnas -->
-                    <div id="columnToggleContainer" class="row">
-                        <div class="col-md-4">
-                            <div class="form-check mb-2">
-                                <input class="form-check-input column-toggle" type="checkbox" data-column="0" checked>
-                                <label class="form-check-label">Nro.</label>
-                            </div>
-                            <div class="form-check mb-2">
-                                <input class="form-check-input column-toggle" type="checkbox" data-column="1" checked>
-                                <label class="form-check-label">Nombre</label>
-                            </div>
-                            <div class="form-check mb-2">
-                                <input class="form-check-input column-toggle" type="checkbox" data-column="2" checked>
-                                <label class="form-check-label">Apellido</label>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-check mb-2">
-                                <input class="form-check-input column-toggle" type="checkbox" data-column="3" checked>
-                                <label class="form-check-label">CI o DNI</label>
-                            </div>
-                            <div class="form-check mb-2">
-                                <input class="form-check-input column-toggle" type="checkbox" data-column="4" checked>
-                                <label class="form-check-label">Alias</label>
-                            </div>
-                            <div class="form-check mb-2">
-                                <input class="form-check-input column-toggle" type="checkbox" data-column="5" checked>
-                                <label class="form-check-label">Fotografía</label>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-check mb-2">
-                                <input class="form-check-input column-toggle" type="checkbox" data-column="6" checked>
-                                <label class="form-check-label">Historial de Capturas</label>
-                            </div>
-                            <div class="form-check mb-2">
-                                <input class="form-check-input column-toggle" type="checkbox" data-column="7" checked>
-                                <label class="form-check-label">Pertenece a</label>
-                            </div>
-                            <div class="form-check mb-2">
-                                <input class="form-check-input column-toggle" type="checkbox" data-column="8" checked>
-                                <label class="form-check-label">Botones</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <script>
-        document.getElementById("applyColumns").addEventListener("click", function() {
-            const checkboxes = document.querySelectorAll(".column-toggle");
-            checkboxes.forEach((checkbox) => {
-                const column = checkbox.getAttribute("data-column");
-                const isChecked = checkbox.checked;
-
-                // Aplica la visibilidad de la columna según el estado del checkbox
-                const tableColumn = document.querySelectorAll(
-                    `table tr td:nth-child(${+column + 1}), table tr th:nth-child(${+column + 1})`);
-                tableColumn.forEach((cell) => {
-                    cell.style.display = isChecked ? "" : "none";
-                });
-            });
-
-            // Cierra el modal
-            const modal = bootstrap.Modal.getInstance(document.getElementById("columnToggleModal"));
-            modal.hide();
-        });
-    </script>
-
-
     <!-- Tabla de criminales -->
     <div class="container">
         <table class="table" id="criminales">
             <thead>
                 <tr>
                     <th scope="col">Nro.</th>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Apellido</th>
+                    <th scope="col">Nombre y Apellidos</th>
                     <th scope="col">CI o DNI</th>
                     <th scope="col">Alias</th>
                     <th scope="col">Fotografía</th>
                     <th scope="col">Historial de Capturas</th>
-                    <th scope="col">Pertenece a:</th>
+                    <th scope="col">Nro. de Placa</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Propietario</th>
                     <th scope="col">Botones</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($crimi as $criminals)
                     <tr>
-                        <th scope="row">{{ $criminals->id }}</th>
-                        <td>{{ $criminals->first_name }}</td>
-                        <td>{{ $criminals->last_nameP }} {{ $criminals->last_nameM }}</td>
+                        <td>{{ $criminals->id }}</td>
+                        <td>{{ $criminals->first_name }} {{ $criminals->last_nameP }} {{ $criminals->last_nameM }}</td>
                         <td>{{ $criminals->identity_number }}</td>
                         <td>{{ $criminals->alias_name }}</td>
                         <td>
                             @foreach ($fotos as $photographs)
                                 @if ($photographs->criminal_id === $criminals->id)
-                                    <img src="{{ asset($photographs->face_photo) }}" width="50" alt="Foto Frontal"
+                                    <img src="{{ asset($photographs->face_photo) }}" width="75" alt="Foto Frontal"
                                         style="border-radius: 50%; object-fit: cover;">
                                 @endif
                             @endforeach
@@ -158,19 +68,49 @@
                         <td>
                             @foreach ($history_cri as $arrest_and_apprehension_histories)
                                 @if ($arrest_and_apprehension_histories->criminal_id === $criminals->id)
-                                    <a href="{{ $arrest_and_apprehension_histories->id }}">
+                                    <a
+                                        href="{{ route('criminals.history', ['criminal_id' => $criminals->id, 'history_id' => $arrest_and_apprehension_histories->id]) }}">
                                         {{ $arrest_and_apprehension_histories->arrest_date }}
-                                    </a>
-                                    <br>
+                                    </a><br>
                                 @endif
                             @endforeach
                         </td>
                         <td>
-                            @foreach ($criminals->organizations as $organization)
-                                {{ $organization->organization_name }}<br>
+                            @foreach ($vehicle as $criminal_vehicle)
+                                @if ($criminal_vehicle->criminal_id === $criminals->id)
+                                    <p>
+                                        {{ $criminal_vehicle->license_plate }}
+                                    </p><br>
+                                @endif
                             @endforeach
                         </td>
-                        <td><a href="/criminals/search_vehicle/{{ $criminals->id }}" class="btn btn-primary">Ver Todo</a>
+                        <td>
+                            @foreach ($vehicle as $criminal_vehicle)
+                                @if ($criminal_vehicle->criminal_id === $criminals->id)
+                                    <p>
+                                        {{ $criminal_vehicle->vehicleType->vehicle_type_name }} {{ $criminal_vehicle->brandVehicle->brand_name }} {{ $criminal_vehicle->model }} {{ $criminal_vehicle->year }}
+                                    </p><br>
+                                @endif
+                            @endforeach
+                        </td>
+                        <td>
+                            @foreach ($vehicle as $criminal_vehicle)
+                                @if ($criminal_vehicle->criminal_id === $criminals->id)
+                                    <p>
+                                        {{ $criminal_vehicle->user_name }}
+                                    </p><br>
+                                @endif
+                            @endforeach
+                        </td>
+                        <td>
+                            <div class="d-flex flex-column align-items-start">
+                                <a href="/criminals/search_cri/{{ $criminals->id }}"
+                                    class="btn btn-primary btn-sm w-100 mb-2">Ver Todo</a>
+                                    @can('agregar.criminal')
+                                    <a href="/criminals/arrest/show_file/{{ $criminals->id }}"
+                                        class="btn btn-success btn-sm w-100">Agregar</a>
+                                @endcan
+                            </div>
                         </td>
                     </tr>
                 @endforeach
@@ -185,11 +125,13 @@
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
     <script src="https://cdn.datatables.net/responsive/3.0.3/js/dataTables.responsive.js"></script>
     <script src="https://cdn.datatables.net/responsive/3.0.3/js/responsive.bootstrap5.js"></script>
+    <script src="https://cdn.datatables.net/colreorder/1.5.6/js/dataTables.colReorder.min.js"></script>
     <script>
-        $(document).ready(function() {
-            // Inicializar el DataTable
+       $(document).ready(function() {
+            // Inicialización de DataTables con ColReorder habilitado
             var table = $('#criminales').DataTable({
                 responsive: true,
+                colReorder: true, // Habilita la extensión ColReorder
                 language: {
                     decimal: ",",
                     emptyTable: "No hay datos disponibles en la tabla",
@@ -214,12 +156,7 @@
                     }
                 }
             });
-
-            // Manejar visibilidad de columnas
-            $('.column-toggle').on('change', function() {
-                var column = table.column($(this).data('column'));
-                column.visible($(this).is(':checked'));
-            });
         });
+    </script>
     </script>
 @stop

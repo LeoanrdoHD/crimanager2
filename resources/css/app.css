@@ -5,3 +5,16 @@
 [x-cloak] {
     display: none;
 }
+.user-header {
+    padding: 0.5rem 0.5rem !important; /* Reduce el padding */
+    height: auto; /* Ajusta la altura */
+}
+.user-header img {
+    width: 40px; /* Reduce el tamaño de la imagen */
+    height: 40px;
+}
+.user-header h5,
+.user-header p {
+    font-size: 0.9rem; /* Ajusta el tamaño del texto */
+    margin: 0; /* Reduce el margen */
+}

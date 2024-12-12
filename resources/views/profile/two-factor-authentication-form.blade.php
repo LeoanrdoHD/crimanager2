@@ -1,6 +1,6 @@
 <x-action-section>
     <x-slot name="title">
-        {{ __('Autenticacion 2 de Factores') }}
+        {{ __('Autenticación 2 de Factores') }}
     </x-slot>
 
     <x-slot name="description">

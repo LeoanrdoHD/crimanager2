@@ -30,7 +30,7 @@ return [
     |
     */
 
-    'use_ico_only' => false,
+    'use_ico_only' => true,
     'use_full_favicon' => false,
 
     /*
@@ -134,8 +134,8 @@ return [
     */
 
     'usermenu_enabled' => true,
-    'usermenu_header' => false,
-    'usermenu_header_class' => 'bg-primary',
+    'usermenu_header' => true,
+    'usermenu_header_class' => 'bg-success',
     'usermenu_image' => true,
     'usermenu_desc' => true,
     'usermenu_profile_url' => true,
@@ -154,7 +154,7 @@ return [
 
     'layout_topnav' => null,
     'layout_boxed' => null,
-    'layout_fixed_sidebar' => null,
+    'layout_fixed_sidebar' => true,
     'layout_fixed_navbar' => null,
     'layout_fixed_footer' => null,
     'layout_dark_mode' => true,
@@ -197,7 +197,7 @@ return [
     'classes_content_header' => '',
     'classes_content' => '',
     'classes_content_de_ley' => '',
-    'classes_sidebar' => 'sidebar-dark-primary elevation-4',
+    'classes_sidebar' => 'sidebar-dark-success elevation-4',
     'classes_sidebar_nav' => '',
     'classes_topnav' => 'navbar-dark navbar-dark',
     'classes_topnav_nav' => 'navbar-expand',
@@ -223,7 +223,7 @@ return [
     'sidebar_scrollbar_theme' => 'os-theme-light',
     'sidebar_scrollbar_auto_hide' => 'l',
     'sidebar_nav_accordion' => true,
-    'sidebar_nav_animation_speed' => 300,
+    'sidebar_nav_animation_speed' => 200,
 
     /*
     |--------------------------------------------------------------------------
@@ -261,7 +261,7 @@ return [
     'dashboard_url' => 'dashboard',
     'logout_url' => 'logout',
     'login_url' => 'login',
-    'register_url' => 'register',
+    'register_url' => '',
     'password_reset_url' => 'password/reset',
     'password_email_url' => 'password/email',
     'profile_url' => 'user/profile',
@@ -340,37 +340,40 @@ return [
             'url' => 'user/profile',
             'icon' => 'fas fa-fw fa-lock',
         ],
-        ['header' => 'GESTIÓN DE USUARIOS'],
+
         [
-            'text' => 'Buscar Usuarios',
-            'url' => 'register',
-            'icon' => 'fas fa-fw fa-user',
-            
+            'header' => 'GESTIÓN DE USUARIOS',
+            'can' => 'crear.Usuarios',
+        ],
+        [
+            'text' => 'Buscar Usuario',
+            'url' => 'admin_users',
+            'icon' => 'fas fa-fw fa-users',
+            'can' => 'crear.Usuarios',
         ],
         [
             'text' => 'Crear Usuario',
-            'url' => 'auth.register',
+            'url' => 'admin_users/create',
             'icon' => 'fas fa-fw fa-plus',
-            
+            'can' => 'crear.Usuarios',
+
         ],
+
         ['header' => 'GESTIÓN DE DELINCUENTES'],
         [
             'text' => 'Nuevo Delincuente',
             'url' => 'criminals',
             'icon' => 'fas fa-fw fa-plus',
+            'can' => 'crear.criminal',
         ],
         [
             'text' => 'Buscar Delincuente',
             'url' => 'criminals/search_cri',
             'icon' => 'fas fa-fw fa-search',
         ],
-        
-        [
-            'text' => 'Actualizar datos',
-            'url' => 'criminals/update',
-            'icon' => 'fas fa-fw fa-pen-nib',
-        ],
-/*
+
+       
+        /*
         [
             'text' => 'Sobre la Captura',
             'url' => 'criminals/arrest',
@@ -413,13 +416,14 @@ return [
                     'url' => 'reports/search_orga',
                 ],
                 [
-                    'text' => 'Vehiculos',
+                    'text' => 'Vehículos',
                     'url' => 'reports/search_vehicle',
                 ],
+/*
                 [
-                    'text' => 'Reporte rapido',
+                    'text' => 'Reporte rápido',
                     'url' => 'reports/search_fast',
-                ],
+                ],*/
             ],
         ],
 
@@ -429,19 +433,15 @@ return [
             'submenu' => [
                 [
                     'text' => 'FELCC',
-                    'url' => '#',
+                    'url' => 'https://inf.policiadnfr.gob.bo/login',
                 ],
                 [
-                    'text' => 'ITV',
-                    'url' => '#',
+                    'text' => 'ANH',
+                    'url' => 'https://hydro.anh.gob.bo/ConsultasInterinstitucionales/Sitio/Persona/wfAutenticacion.aspx',
                 ],
                 [
                     'text' => 'SEGIP',
-                    'url' => '#',
-                ],
-                [
-                    'text' => 'Antecedentes',
-                    'url' => '#',
+                    'url' => 'https://consulta.segip.gob.bo/Autenticacion/Autenticacion ',
                 ],
             ],
         ],
