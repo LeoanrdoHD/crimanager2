@@ -4,629 +4,641 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HOLA A TODOAS</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Perfil del Delincuente</title>
     <style>
-        h3 {
-            color: #101110FF;
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 25px;
-            letter-spacing: 0.5px;
-            margin-bottom: 12px;
+        body {
+            font-family: Arial, sans-serif;
+            margin: 5px;
         }
 
-        h4.section-title {
-            color: #030303FF;
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 14px;
-            letter-spacing: 0.5px;
-            margin-bottom: 10px;
+        table {
+            width: 100%;
+            border-collapse: collapse;
         }
 
-        .listah {
-            font-size: 18px;
-            font-weight: bold;
-            color: #0A0A0AFF;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-            display: block;
-        }
-
-        .card {
-            background-color: #f8f9fa;
-            color: #333;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .card-header h3 {
-            margin: 0;
-            text-align: center;
-            font-weight: bold;
-        }
-
-        .card-body {
-            padding: 1px;
-        }
-
-        .row {
-            margin-bottom: 1px;
-        }
-
-        .col-md-4,
-        .col-md-3,
-        .col-md-5 {
-            padding: 10px;
-        }
-
-        p {
-            margin: 4px 0;
-            font-size: 12px;
-            text-transform: capitalize;
-        }
-
-        strong {
-            text-transform: capitalize;
-            font-weight: bold;
+        th,
+        td {
+            border: 1px solid black;
+            padding: 2px;
+            text-align: left;
+            font-family: Arial, sans-serif;
             font-size: 12px;
         }
 
-        h5 {
-            text-transform: uppercase;
-            color: #333;
-            margin-bottom: 10px;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 5px;
-            font-size: 13px;
+        th {
+            background-color: #f2f2f2;
+            font-size: 12px;
         }
 
-        .img-thumbnail {
-            border-radius: 10%;
-            object-fit: cover;
-            max-width: 100%;
-        }
-
-        .g-3 .col-6 {
-            margin-bottom: 10px;
+        .header {
             text-align: center;
+            font-weight: bold;
+            font-size: 1.2em;
         }
 
-        .text-center {
-            text-align: center;
-        }
-
-        hr {
-            border: 0.5px solid #ddd;
-            margin: 5px 0;
-        }
-
-        .characteristics-row {
+        .header-title {
             display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+            width: 100%;
         }
 
-        .characteristics-row>div {
-            flex: 1 1 45%;
-        }
-
-        .arrest-history {
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            background-color: #fff;
-            margin-bottom: 20px;
-            padding: 15px;
+        .logo {
+            height: 60px;
+            flex-shrink: 0;
+            /* Impide que el logo se encoja */
         }
 
         .section-title {
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-        }
-
-        .tool-item,
-        .tool-item p {
-            margin: 0;
-        }
-
-        .separator {
-            border: 0;
-            border-top: 1px solid #ddd;
-            margin: 10px 0;
-        }
-
-        .arrest-history {
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            background-color: #f8f9fa;
-            color: #333;
-            margin-bottom: 20px;
-            padding: 15px;
-        }
-
-        .mb-4 {
-            margin-bottom: 1.5rem !important;
-        }
-
-        .p-3 {
-            padding: 1rem !important;
-        }
-
-        /* New styles for two columns */
-        .two-columns {
-            display: flex;
-            flex-wrap: wrap;
-        }
-
-        .two-columns>div {
-            flex: 1 1 50%;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-
-        /* Footer style */
-        .footer {
             text-align: center;
+            font-weight: bold;
+            background-color: #f2f2f2;
             font-size: 12px;
-            color: #555;
-            margin-top: 20px;
-            border-top: 1px solid #ddd;
-            padding-top: 10px;
+        }
+
+        .photo-cell {
+            text-align: center;
+        }
+
+        .table-inner {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .table-inner td {
+            text-align: center;
+            padding: 4px;
+        }
+
+        .spaced {
+            padding-bottom: 10px;
+        }
+
+        .info-item {
+            margin-bottom: 5px;
+            /* Reduce el espacio entre elementos */
+            line-height: 1;
+            /* Reduce el interlineado */
+            display: flex;
+            align-items: baseline;
+        }
+
+        .label-bold {
+            font-weight: bold;
+            /* Negrita para etiquetas */
+            margin-right: 5px;
+            /* Espaciado con el contenido */
+        }
+
+        .text-uppercase {
+            text-transform: uppercase;
+            /* Convierte el texto a mayúsculas */
+            font-weight: normal;
+            /* Letras normales */
+        }
+
+        /* Elementos de información */
+        .info-item {
+            margin-bottom: 5px;
+            display: flex;
+            align-items: baseline;
+        }
+
+        /* Texto predeterminado */
+        .no-data {
+            font-style: italic;
+            color: #666;
+        }
+
+        .signature-cell,
+        .seal-cell {
+            text-align: center;
+            vertical-align: middle;
+            padding-top: 70px;
+            /* Espaciado solo arriba */
+        }
+
+        .signature-cell span,
+        .seal-cell span {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+            /* Espacio entre la línea y el texto */
+        }
+
+        .signature-line {
+            border-top: 1px solid black;
+            width: 70%;
+            /* Ajusta el ancho de la línea según sea necesario */
+            margin: 0 auto;
         }
     </style>
 </head>
 
 <body>
-    <div class="two-columns">
+    <div class="header-title">
+        <table style="width: 100%; table-layout: fixed; border: none;">
+            <tr>
+                <!-- Logo izquierdo (2 columnas) -->
+                <td style="width: 20.66%; text-align: left; border: none;">
+                    <img src="{{ public_path('storage/logo-pol.jpeg') }}" alt="Logo" style="height: 80px;">
+                </td>
+                
+                <!-- Texto centrado (8 columnas) -->
+                <td style="width: 66.66%; text-align: center; border: none;">
+                    <span style="font-weight: bold; font-size: 14px;">
+                        POLICÍA BOLIVIANA<br>
+                        FUERZA ESPECIAL DE LUCHA CONTRA EL CRIMEN<br>
+                        DIRECCIÓN DE ANÁLISIS CRIMINAL E INTELIGENCIA
+                    </span>
+                </td>
+                
+                <!-- Logo derecho (2 columnas) -->
+                <td style="width: 20.66%; text-align: right; border: none;">
+                    <img src="{{ public_path('storage/logo_daci.png') }}" alt="Logo" style="height: 80px;">
+                </td>
+            </tr>
+        </table>
+    </div>
 
-        <div class="card">
-            <div class="card-header">
-                <h3>Información del Criminal</h3>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <!-- Información de Nombres y Documento (4/12 columnas) -->
-                    <div class="col-md-4">
-                        <p><strong>Nombres y Apellidos:</strong> {{ $criminal->first_name }} {{ $criminal->last_nameP }}
-                            {{ $criminal->last_nameM }}</p>
-                        <p><strong>Alias:</strong> {{ $criminal->alias_name }}</p>
-                        <p><strong>Número de Identidad:</strong> {{ $criminal->identity_number }}</p>
-                        <p><strong>Fecha de Nacimiento:</strong> {{ $criminal->date_of_birth }}</p>
-                        <p><strong>Edad:</strong> {{ $criminal->age }}</p>
-                        <label>Lugar de Nacimiento:</label>
-                        <p><strong></strong> {{ $criminal->country->country_name ?? 'No especificado' }} -
-                            {{ $criminal->state->state_name ?? 'No especificado' }} -
-                            {{ $criminal->city->city_name ?? 'No especificada' }}</p>
-                        <p><strong>Nacionalidad:</strong>
-                            {{ $criminal->nationality->nationality_name ?? 'No especificado' }}</p>
-                        <p><strong>Estado Civil:</strong>
-                            {{ $criminal->civilState->civil_state_name ?? 'No especificado' }}</p>
-                        <p><strong>Ocupación:</strong> {{ $criminal->occupation->ocupation_name ?? 'No especificado' }}
-                        </p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        <h4 class="section-title">Direcciones de Residencia:</h4>
-                        @forelse ($criminal->criminalAddresses as $address)
-                            <p><strong></strong> {{ $address->country->country_name ?? 'No especificado' }} -
-                                {{ $address->state->state_name ?? 'No especificado' }} -
-                                {{ $address->city->city_name ?? 'No especificada' }}</p>
-                            <p><strong>Dirección:</strong> {{ $address->street ?? 'No especificado' }}</p>
-                        @empty
-                            <p>No hay direcciones registradas para este criminal.</p>
-                        @endforelse
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    @forelse ($criminal->criminalPartner as $Partner)
-                        <p><strong>Persona de Referencia:</strong> {{ $Partner->partner_name ?? 'No especificado' }}
-                        </p>
-                        <p><strong>Relacion con el Delincuente:</strong>
-                            {{ $Partner->relationshipType->relationship_type_name ?? 'No especificado' }}</p>
-                        <p><strong>Dirección:</strong> {{ $Partner->partner_address ?? 'No especificado' }}</p>
-                    @empty
-                        <p>No hay direcciones registradas para este criminal.</p>
-                    @endforelse
-                </div>
 
-                <div class="col-md-5">
-                    <h4 class="section-title">Caracteristicas Físicas:</h4>
-                    @forelse ($criminal->physicalCharacteristics as $characteristic)
-                        <div class="row">
-                            <!-- Columna 1 -->
-                            <div class="col-md-5">
-                                <p><strong>Altura:</strong> {{ $characteristic->height ?? 'No especificado' }} cm</p>
-                                <p><strong>Peso:</strong> {{ $characteristic->weight ?? 'No especificado' }} kg</p>
-                                <p><strong>Sexo:</strong> {{ $characteristic->sex ?? 'No especificado' }}</p>
-                                <p><strong>Género:</strong>
-                                    {{ $characteristic->criminalGender->gender_name ?? 'No especificado' }}</p>
-                                <p><strong>Complexión:</strong>
-                                    {{ $characteristic->confleccion->conflexion_name ?? 'No especificado' }}</p>
+    <table>
+        <!-- Fila de título de sección -->
+        <tr>
+            <td colspan="12" class="section-title">PERFIL DEL DELINCUENTE</td>
+        </tr>
+        <!-- Fila de Datos Generales -->
+        <tr>
+            <th colspan="5">DATOS GENERALES</th>
+            <th colspan="2">FOTO DE PERFIL</th>
+            <th colspan="5">RASGOS FÍSICOS</th>
+        </tr>
+        <tr>
+            <td colspan="5">
+                <div class="info-item">
+                    <span class="label-bold">Nombres y Apellidos:</span>
+                    <span class="text-uppercase">
+                        {{ $criminal->first_name }} {{ $criminal->last_nameP }} {{ $criminal->last_nameM }}
+                    </span>
+                </div>
+                <div class="info-item">
+                    <span class="label-bold">Alias:</span>
+                    <span class="text-uppercase">{{ $criminal->alias_name }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="label-bold">Número de Identidad:</span>
+                    <span class="text-uppercase">{{ $criminal->identity_number }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="label-bold">Fecha de Nacimiento:</span>
+                    <span class="text-uppercase">{{ $criminal->date_of_birth }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="label-bold">Edad:</span>
+                    <span class="text-uppercase">{{ $criminal->age }} AÑOS</span>
+                </div>
+                <div class="info-item">
+                    <span class="label-bold">Lugar de Nacimiento:</span>
+                    <span class="text-uppercase">
+                        {{ $criminal->country->country_name ?? 'No especificado' }} -
+                        {{ $criminal->state->state_name ?? 'No especificado' }} -
+                        {{ $criminal->city->city_name ?? 'No especificada' }}
+                    </span>
+                </div>
+                <div class="info-item">
+                    <span class="label-bold">Nacionalidad:</span>
+                    <span class="text-uppercase">
+                        {{ $criminal->nationality->nationality_name ?? 'No especificado' }}
+                    </span>
+                </div>
+                <div class="info-item">
+                    <span class="label-bold">Estado Civil:</span>
+                    <span class="text-uppercase">
+                        {{ $criminal->civilState->civil_state_name ?? 'No especificado' }}
+                    </span>
+                </div>
+                <div class="info-item">
+                    <span class="label-bold">Ocupación:</span>
+                    <span class="text-uppercase">
+                        {{ $criminal->occupation->ocupation_name ?? 'No especificado' }}
+                    </span>
+                </div>
+            </td>
+            <td colspan="2" class="photo-cell" style="text-align: center;">
+                @if ($criminal->photographs->first())
+                    <img src="{{ public_path($criminal->photographs->first()->face_photo) }}"
+                        alt="Foto Frontal de {{ $criminal->first_name }}" class="img-fluid1 img-thumbnail1"
+                        style="width:80%; height: auto; max-width: 150px; object-fit: cover;">
+                @else
+                    <p>No hay fotografía de Rostro disponible.</p>
+                @endif
+            </td>
+            <td colspan="5">
+                @forelse ($criminal->physicalCharacteristics as $characteristic)
+                    <div class="physical-characteristics">
+                        <!-- Columna 1 -->
+                        <div class="column">
+                            <div class="info-item">
+                                <span class="label-bold">Altura:</span>
+                                <span>{{ $characteristic->height ?? 'No especificado' }} cm</span>
+                                <span class="label-bold"> Peso:</span>
+                                <span>{{ $characteristic->weight ?? 'No especificado' }} kg</span>
                             </div>
-                            <!-- Columna 2 -->
-                            <div class="col-md-7">
-                                <p><strong>Color de Piel:</strong>
-                                    {{ $characteristic->skinColor->skin_color_name ?? 'No especificado' }}</p>
-                                <p><strong>Tipo de Ojos:</strong>
-                                    {{ $characteristic->eyeType->eye_type_name ?? 'No especificado' }}</p>
-                                <p><strong>Tipo de Oídos:</strong>
-                                    {{ $characteristic->earType->ear_type_name ?? 'No especificado' }}</p>
-                                <p><strong>Tipo de Labios:</strong>
-                                    {{ $characteristic->lipType->lip_type_name ?? 'No especificado' }}</p>
-                                <p><strong>Tipo de Nariz:</strong>
-                                    {{ $characteristic->noseType->nose_type_name ?? 'No especificado' }}</p>
+                            <div class="info-item">
+                                <span class="label-bold">Sexo:</span>
+                                <span>{{ $characteristic->sex ?? 'No especificado' }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label-bold">Género:</span>
+                                <span>{{ $characteristic->criminalGender->gender_name ?? 'No especificado' }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label-bold">Complexión:</span>
+                                <span>{{ $characteristic->confleccion->conflexion_name ?? 'No especificado' }}</span>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p><strong>Marcas Distintivas:</strong>
-                                    {{ $characteristic->distinctive_marks ?? 'No especificadas' }}</p>
+                        <!-- Columna 2 -->
+                        <div class="column">
+                            <div class="info-item">
+                                <span class="label-bold">Color de Piel:</span>
+                                <span>{{ $characteristic->skinColor->skin_color_name ?? 'No especificado' }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label-bold">Tipo de Ojos:</span>
+                                <span>{{ $characteristic->eyeType->eye_type_name ?? 'No especificado' }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label-bold">Tipo de Oídos:</span>
+                                <span>{{ $characteristic->earType->ear_type_name ?? 'No especificado' }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label-bold">Tipo de Labios:</span>
+                                <span>{{ $characteristic->lipType->lip_type_name ?? 'No especificado' }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label-bold">Tipo de Nariz:</span>
+                                <span>{{ $characteristic->noseType->nose_type_name ?? 'No especificado' }}</span>
                             </div>
                         </div>
-                    @empty
-                        <p>No hay características físicas disponibles para este criminal.</p>
-                    @endforelse
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-header">
-                <h3>Lista de Historial de Arrestos</h3>
-            </div>
-            <div class="card-body">
-                @if ($criminal->arrestHistories->isNotEmpty())
-                    @foreach ($criminal->arrestHistories as $history)
-                        <div class="arrest-history mb-4 p-3" <p class=" text-center">
+                        <!-- Marcas distintivas -->
+                        <div class="full-width">
+                            <div class="info-item">
+                                <span class="label-bold">Marcas Distintivas:</span>
+                                <span>{{ $characteristic->distinctive_marks ?? 'No especificadas' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <p class="no-data">No hay características físicas disponibles para este criminal.</p>
+                @endforelse
+
+            </td>
+        </tr>
+
+        <!-- Otras Fotos -->
+        <tr>
+            <td colspan="12" class="section-title">OTRAS FOTOS</td>
+        </tr>
+        <tr>
+            <td colspan="12">
+        <tr>
+            <th colspan="2">MEDIO CUERPO</th>
+            <th colspan="2">PERFIL IZQ</th>
+            <th colspan="2">PERFIL DERECHO</th>
+            <th colspan="2">CUERPO COMPLETO</th>
+            <th colspan="2">FOTO EXTRA</th>
+            <th colspan="2">EN BARRA</th>
+        </tr>
+        <tr>
+            <td colspan="2" class="photo-cell" style="text-align: center;">
+                @if ($criminal->photographs->first())
+                    <img src="{{ public_path($criminal->photographs->first()->frontal_photo) }}"
+                        alt="Foto Frontal de {{ $criminal->first_name }}" class="img-fluid1 img-thumbnail1"
+                        style="width:80%; height: auto; max-width: 150px; object-fit: cover;">
+                @else
+                    <p>No hay fotografía de Rostro disponible.</p>
+                @endif
+            </td>
+            <td colspan="2" class="photo-cell" style="text-align: center;">
+                @if ($criminal->photographs->first())
+                    <img src="{{ public_path($criminal->photographs->first()->profile_izq_photo) }}"
+                        alt="Foto Frontal de {{ $criminal->first_name }}" class="img-fluid1 img-thumbnail1"
+                        style="width:80%; height: auto; max-width: 150px; object-fit: cover;">
+                @else
+                    <p>No hay fotografía de Rostro disponible.</p>
+                @endif
+            </td>
+            <td colspan="2" class="photo-cell" style="text-align: center;">
+                @if ($criminal->photographs->first())
+                    <img src="{{ public_path($criminal->photographs->first()->profile_der_photo) }}"
+                        alt="Foto Frontal de {{ $criminal->first_name }}" class="img-fluid1 img-thumbnail1"
+                        style="width:80%; height: auto; max-width: 150px; object-fit: cover;">
+                @else
+                    <p>No hay fotografía de Rostro disponible.</p>
+                @endif
+            </td>
+            <td colspan="2" class="photo-cell" style="text-align: center;">
+                @if ($criminal->photographs->first())
+                    <img src="{{ public_path($criminal->photographs->first()->full_body_photo) }}"
+                        alt="Foto Frontal de {{ $criminal->first_name }}" class="img-fluid1 img-thumbnail1"
+                        style="width:80%; height: auto; max-width: 150px; object-fit: cover;">
+                @else
+                    <p>No hay fotografía de Rostro disponible.</p>
+                @endif
+            </td>
+            <td colspan="2" class="photo-cell" style="text-align: center;">
+                @if ($criminal->photographs->first())
+                    <img src="{{ public_path($criminal->photographs->first()->frontal_photo) }}"
+                        alt="Foto Frontal de {{ $criminal->first_name }}" class="img-fluid1 img-thumbnail1"
+                        style="width:80%; height: auto; max-width: 150px; object-fit: cover;">
+                @else
+                    <p>No hay fotografía de Rostro disponible.</p>
+                @endif
+            </td>
+            <td colspan="2" class="photo-cell" style="text-align: center;">
+                @if ($criminal->photographs->first())
+                    <img src="{{ public_path($criminal->photographs->first()->frontal_photo) }}"
+                        alt="Foto Frontal de {{ $criminal->first_name }}" class="img-fluid1 img-thumbnail1"
+                        style="width:80%; height: auto; max-width: 150px; object-fit: cover;">
+                @else
+                    <p>No hay fotografía de Rostro disponible.</p>
+                @endif
+            </td>
+        </tr>
+        <!-- Domicilio y Referencias -->
+        <tr>
+            <th colspan="6">DOMICILIO</th>
+            <th colspan="6">REFERENCIAS</th>
+        </tr>
+        <tr>
+            <td colspan="6">
+                @php
+                    $lastAddress = $criminal->criminalAddresses->last();
+                @endphp
+
+                @if ($lastAddress)
+                    <div class="address-info">
+                        <div class="info-item">
+                            <span class="label-bold">País:</span>
+                            <span
+                                class="text-uppercase">{{ $lastAddress->country->country_name ?? 'No especificado' }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label-bold">Departamento:</span>
+                            <span
+                                class="text-uppercase">{{ $lastAddress->state->state_name ?? 'No especificado' }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label-bold">Ciudad:</span>
+                            <span
+                                class="text-uppercase">{{ $lastAddress->city->city_name ?? 'No especificada' }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label-bold">Dirección:</span>
+                            <span class="text-uppercase">{{ $lastAddress->street ?? 'No especificado' }}</span>
+                        </div>
+                    </div>
+                @else
+                    <p class="no-data">No hay direcciones registradas para este criminal.</p>
+                @endif
+
+            </td>
+            <td colspan="6">
+                @forelse ($criminal->criminalPartner as $partner)
+                    <div class="partner-info">
+                        <div class="info-item">
+                            <span class="label-bold">Persona de Referencia:</span>
+                            <span class="text-uppercase">{{ $partner->partner_name ?? 'No especificado' }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label-bold">Relación con el Delincuente:</span>
+                            <span
+                                class="text-uppercase">{{ $partner->relationshipType->relationship_type_name ?? 'No especificado' }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label-bold">Dirección:</span>
+                            <span class="text-uppercase">{{ $partner->partner_address ?? 'No especificado' }}</span>
+                        </div>
+                    </div>
+                @empty
+                    <p class="no-data">No hay información registrada de compañeros para este criminal.</p>
+                @endforelse
+
+            </td>
+        </tr>
+        <!-- Historial de Arrestos -->
+        <tr>
+            <td colspan="12" class="section-title">HISTORIAL DE CAPTURAS</td>
+        </tr>
+
+        @foreach ($criminal->arrestHistories as $index => $history)
+            <tr>
+                <td colspan="12">
+                    <div>
+                        <p class="text-center">
                             @php
-                                // Convertir la fecha y hora usando el espacio de nombres completo
                                 $formattedDate = \Carbon\Carbon::parse($history->arrest_date)->translatedFormat(
                                     'l d \d\e F \d\e Y',
                                 );
                                 $formattedTime = \Carbon\Carbon::parse($history->arrest_time)->format('H:i');
-
-                                // Determinar si es mañana o tarde
                                 $formattedTimePeriod =
                                     \Carbon\Carbon::parse($history->arrest_time)->format('H') < 12
                                         ? 'de la mañana'
                                         : 'de la tarde';
                             @endphp
+                            <strong class="listah">Historial de arresto Nro. {{ $index + 1 }} del {{ $formattedDate }}
+                                a las {{ $formattedTime }} {{ $formattedTimePeriod }}</strong>
+                        </p>
+                        <table class="table table-bordered">
+                            <tr>
+                                <td colspan="12">
+                                    <div class="info-item">
+                                        <span class="label-bold">Situación Legal:</span>
+                                        <span
+                                            class="text-uppercase">{{ $history->legalStatus->status_name ?? 'No especificado' }}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="label-bold">Tipo de Captura:</span>
+                                        <span
+                                            class="text-uppercase">{{ $history->apprehensionType->type_name ?? 'No especificado' }}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="label-bold">Número de CUD:</span>
+                                        <span
+                                            class="text-uppercase">{{ $history->cud_number ?? 'No especificado' }}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="label-bold">Lugar de Captura:</span>
+                                        <span
+                                            class="text-uppercase">{{ $history->arrest_location ?? 'No especificado' }}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="label-bold">Especialidad o Motivo de Captura:</span>
+                                        <span
+                                            class="text-uppercase">{{ $history->criminalSpecialty->specialty_name ?? 'No especificado' }}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="label-bold">Detalles de Captura:</span>
+                                        <span
+                                            class="text-uppercase">{{ $history->arrest_details ?? 'No especificado' }}</span>
+                                    </div>
+                                </td>
+                            </tr>
 
-                            <strong class="listah">Historial de arresto del {{ $formattedDate }} a las
-                                {{ $formattedTime }} {{ $formattedTimePeriod }}</strong>
-
-                            </p>
-                            <div class="row">
-                                <!-- Columna 1: Detalles del Arresto -->
-                                <div class="col-md-4">
-
-                                    @if ($history->legalStatus)
-                                        <p><strong>Situación Legal:</strong> {{ $history->legalStatus->status_name }}
-                                        </p>
-                                    @endif
-
-                                    @if ($history->apprehensionType)
-                                        <p><strong>Tipo de Captura:</strong>
-                                            {{ $history->apprehensionType->type_name }}
-                                        </p>
-                                    @endif
-
-                                    @if ($history->cud_number)
-                                        <p><strong>Número de CUD:</strong> {{ $history->cud_number }}</p>
-                                    @endif
-
-                                    @if ($history->arrest_location)
-                                        <p><strong>Lugar de Captura:</strong> {{ $history->arrest_location }}</p>
-                                    @endif
-
-                                    @if ($history->criminal_specialty_id)
-                                        <p><strong>Especialidad o Motivo de Captura:</strong>
-                                            {{ $history->criminalSpecialty->specialty_name }}
-                                        </p>
-                                    @endif
-
-                                    @if ($history->arrest_details)
-                                        <p><strong>Detalles de Captura:</strong> {{ $history->arrest_details }}</p>
-                                    @endif
-                                </div>
-
-                                <!-- Columna 2: Herramientas y Armas -->
-                                <div class="col-md-4">
-                                    <h4 class="section-title">Objetos, Armas y Herramientas Usadas:</h4>
-
-                                    @if ($history->criminalTools->isNotEmpty())
-                                        <div class="tools-list">
-                                            @foreach ($history->criminalTools as $tool)
-                                                <div class="tool-item">
-                                                    <p><strong>Tipo:</strong> {{ $tool->toolType->tool_type_name }}</p>
-                                                    <p><strong>Descripción:</strong> {{ $tool->tool_details }}</p>
-                                                    <hr class="separator"> <!-- Línea separadora -->
-                                                </div>
-                                            @endforeach
+                            <tr>
+                                <th colspan="4">OBJETOS, ARMAS O HERRAMIENTAS</th>
+                                <th colspan="4">NÚMEROS DE TELÉFONOS USADOS</th>
+                                <th colspan="4">OTRAS IDENTIDADES</th>
+                            </tr>
+                            <tr>
+                                <td colspan="4">
+                                    @foreach ($history->criminalTools as $tool)
+                                        <div class="info-item">
+                                            <span class="label-bold">Tipo:</span>
+                                            <span
+                                                class="text-uppercase">{{ $tool->toolType->tool_type_name ?? 'No especificado' }}</span>
                                         </div>
-                                    @else
-                                        <p>No se encontraron herramientas relacionadas para este historial.</p>
-                                    @endif
-                                </div>
+                                        <div class="info-item">
+                                            <span class="label-bold">Descripción:</span>
+                                            <span
+                                                class="text-uppercase">{{ $tool->tool_details ?? 'No especificado' }}</span>
+                                        </div>
+                                    @endforeach
+                                </td>
+                                <td colspan="4">
+                                    @foreach ($history->phoneNumber as $phone)
+                                        <div class="info-item">
+                                            <span class="label-bold">Nro. Celular:</span>
+                                            <span class="text-uppercase">{{ $phone->phone_number }}</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="label-bold">Compañía:</span>
+                                            <span class="text-uppercase">{{ $phone->company->companies_name }}</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="label-bold">Nro. IMEI:</span>
+                                            <span class="text-uppercase">{{ $phone->imei_number }}</span>
+                                        </div>
+                                    @endforeach
+                                </td>
+                                <td colspan="4">
+                                    @foreach ($history->criminalAliase as $aliase)
+                                        <div class="info-item">
+                                            <span class="label-bold">Nombres y Apellidos:</span>
+                                            <span class="text-uppercase">{{ $aliase->alias_name }}</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="label-bold">Nro de Identidad:</span>
+                                            <span class="text-uppercase">{{ $aliase->alias_identity_number }}</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="label-bold">Nacionalidad:</span>
+                                            <span
+                                                class="text-uppercase">{{ $aliase->nationality->nationality_name }}</span>
+                                        </div>
+                                    @endforeach
+                                </td>
+                            </tr>
 
-                                <!-- Columna 3: Números de Teléfono -->
-                                <div class="col-md-4">
-                                    <h4 class="section-title">Números de Teléfono Usados:</h4>
+                            <tr>
+                                <th colspan="6">COMPLICES</th>
+                                <th colspan="6">ORGANIZACIONES</th>
+                            </tr>
+                            <tr>
+                                <td colspan="6">
+                                    @foreach ($history->criminalComplice as $complice)
+                                        <div class="info-item">
+                                            <span class="label-bold">Nombres y Apellidos:</span>
+                                            <span class="text-uppercase">{{ $complice->complice_name }}</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="label-bold">Nro. de Identidad:</span>
+                                            <span class="text-uppercase">{{ $complice->CI_complice }}</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="label-bold">Otros detalles:</span>
+                                            <span class="text-uppercase">{{ $complice->detail_complice }}</span>
+                                        </div>
+                                    @endforeach
+                                </td>
+                                <td colspan="6">
+                                    @foreach ($history->criminalOrganization as $group)
+                                        <div class="info-item">
+                                            <span class="label-bold">Nombre:</span>
+                                            <span
+                                                class="text-uppercase">{{ $group->organization->organization_name }}</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="label-bold">Especialidad:</span>
+                                            <span
+                                                class="text-uppercase">{{ $group->organization->Criminal_Organization_Specialty }}</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="label-bold">Rol en la Organización:</span>
+                                            <span class="text-uppercase">{{ $group->criminal_rol }}</span>
+                                        </div>
+                                    @endforeach
+                                </td>
+                            </tr>
 
-                                    @if ($history->phoneNumber->isNotEmpty())
-                                        <div class="tools-list">
-                                            @foreach ($history->phoneNumber as $phone)
-                                                <div class="tool-item">
-                                                    <p><strong>Compañía:</strong> {{ $phone->company->companies_name }}
-                                                    </p>
-                                                    <p><strong>Nro. Celular:</strong> {{ $phone->phone_number }}</p>
-                                                    <p><strong>Nro. IMEI:</strong> {{ $phone->imei_number }}</p>
-                                                    <hr class="separator"> <!-- Línea separadora -->
-                                                </div>
-                                            @endforeach
+                            <tr>
+                                <td colspan="12" class="section-title">VEHÍCULO USADO EN EL HECHO</td>
+                            </tr>
+                            <tr>
+                                <td colspan="12">
+                                    @foreach ($history->criminalVehicle as $vehicle)
+                                        <div class="info-item">
+                                            <span class="label-bold">Color:</span>
+                                            <span
+                                                class="text-uppercase">{{ $vehicle->vehicleColor->color_name }}</span>
                                         </div>
-                                    @else
-                                        <p>No se encontraron números de teléfono relacionados para este historial.</p>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <h4 class="section-title">Otras Identidades:</h4>
-                                    @if ($history->criminalAliase->isNotEmpty())
-                                        <div class="tools-list">
-                                            @foreach ($history->criminalAliase as $aliase)
-                                                <div class="tool-item">
-                                                    <p><strong>Nombres y Apellidos:</strong> {{ $aliase->alias_name }}
-                                                    </p>
-                                                    <p><strong>Nro de Identidad:</strong>
-                                                        {{ $aliase->alias_identity_number }}
-                                                    </p>
-                                                    <p><strong>Nacionalidad:</strong>
-                                                        {{ $aliase->nationality->nationality_name }}</p>
-                                                    <hr class="separator"> <!-- Línea separadora -->
-                                                </div>
-                                            @endforeach
+                                        <div class="info-item">
+                                            <span class="label-bold">Tipo:</span>
+                                            <span
+                                                class="text-uppercase">{{ $vehicle->vehicleType->vehicle_type_name }}</span>
                                         </div>
-                                    @else
-                                        <p>No se encontraron Identidades relacionadas para este historial.</p>
-                                    @endif
-                                    <h4 class="section-title">Otra Direccion de Residencia:</h4>
-                                    @if ($history->criminalAliase->isNotEmpty())
-                                        <div class="tools-list">
-                                            @foreach ($history->criminalAliase as $aliase)
-                                                <div class="tool-item">
-                                                    <strong>PAIS - ESTADO - CIUDAD:</strong>
-                                                    <p> {{ $address->country->country_name ?? 'No especificado' }} -
-                                                        {{ $address->state->state_name ?? 'No especificado' }} -
-                                                        {{ $address->city->city_name ?? 'No especificada' }}</p>
-                                                    <p><strong>Dirección:</strong>
-                                                        {{ $address->street ?? 'No especificado' }}
-                                                    </p>
-                                                    <hr class="separator"> <!-- Línea separadora -->
-                                                </div>
-                                            @endforeach
+                                        <div class="info-item">
+                                            <span class="label-bold">Año:</span>
+                                            <span class="text-uppercase">{{ $vehicle->year }}</span>
                                         </div>
-                                    @else
-                                        <p>No se encontraron direcciones relacionadas para este historial.</p>
-                                    @endif
-                                </div>
-                                <!-- HERRAMIENTAS Y ARMAS -->
-                                <div class="col-md-4">
-                                    <h4 class="section-title">Nombre de Complices:</h4>
-
-                                    @if ($history->criminalComplice->isNotEmpty())
-                                        <div class="tools-list">
-                                            @foreach ($history->criminalComplice as $complice)
-                                                <div class="tool-item">
-                                                    <p><strong>Nombres Y Apellidos:</strong>
-                                                        {{ $complice->complice_name }}
-                                                    </p>
-                                                    <p><strong>Nro. de Identidad:</strong> {{ $complice->CI_complice }}
-                                                    </p>
-                                                    <p><strong>Otros detalles:</strong>
-                                                        {{ $complice->detail_complice }}
-                                                    </p>
-                                                    <hr class="separator"> <!-- Línea separadora -->
-                                                </div>
-                                            @endforeach
+                                        <div class="info-item">
+                                            <span class="label-bold">Marca:</span>
+                                            <span
+                                                class="text-uppercase">{{ $vehicle->brandVehicle->brand_name }}</span>
                                         </div>
-                                    @else
-                                        <p>No se encontraron complices relacionados para este historial.</p>
-                                    @endif
-                                </div>
-                                <div class="col-md-4">
-                                    <h4 class="section-title">Organizacion Criminal:</h4>
-                                    @if ($history->criminalOrganization->isNotEmpty())
-                                        <div class="tools-list">
-                                            @foreach ($history->criminalOrganization as $grupo)
-                                                <div class="tool-item">
-                                                    <p><strong>Nombre:</strong>
-                                                        {{ $grupo->organization->organization_name }}
-                                                    </p>
-                                                    <p><strong>Especialidad:</strong>
-                                                        {{ $grupo->organization->Criminal_Organization_Specialty }}</p>
-                                                    <p><strong>Rol en la Organizacion:</strong>
-                                                        {{ $grupo->criminal_rol }}
-                                                    </p>
-                                                    <hr class="separator"> <!-- Línea separadora -->
-                                                </div>
-                                            @endforeach
+                                        <div class="info-item">
+                                            <span class="label-bold">Placa:</span>
+                                            <span class="text-uppercase">{{ $vehicle->license_plate }}</span>
                                         </div>
-                                    @else
-                                        <p>No se encontraron Organizaciones criminales relacionadas para este historial.
-                                        </p>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <h4 class="section-title">Vehículos Usados en el Hecho:</h4>
-                                    @if ($history->criminalVehicle->isNotEmpty())
-                                        <div class="row">
-                                            @foreach ($history->criminalVehicle as $vehicle)
-                                                <div class="col-md-6 mb-4"> <!-- Dividimos en 2 columnas -->
-                                                    <div class="tool-item">
-                                                        <p><strong>Color:</strong>
-                                                            {{ $vehicle->vehicleColor->color_name }}
-                                                        </p>
-                                                        <p><strong>Tipo:</strong>
-                                                            {{ $vehicle->vehicleType->vehicle_type_name }}</p>
-                                                        <p><strong>Año:</strong> {{ $vehicle->year }}</p>
-                                                        <p><strong>Marca:</strong>
-                                                            {{ $vehicle->brandVehicle->brand_name }}
-                                                        </p>
-                                                        <p><strong>Modelo:</strong> {{ $vehicle->model }}</p>
-                                                        <p><strong>Industria:</strong>
-                                                            {{ $vehicle->industry->industry_name }}
-                                                        </p>
-                                                        <p><strong>Placa:</strong> {{ $vehicle->license_plate }}</p>
-                                                        <p><strong>Servicio:</strong>
-                                                            {{ $vehicle->vehicleService->service_name }}</p>
-                                                        <p><strong>Detalles:</strong> {{ $vehicle->details }}</p>
-                                                    </div>
-                                                    <hr class="separator"> <!-- Línea separadora -->
-                                                </div>
-                                                <div class="col-md-6 mb-4"> <!-- Dividimos en 2 columnas -->
-                                                    <div class="tool-item">
-                                                        @if ($vehicle->itv_valid)
-                                                            <p><strong>ITV válido:</strong> Sí</p>
-                                                            <p><strong>Tipo:</strong> {{ $vehicle->user_name }}</p>
-                                                            <p><strong>Año:</strong> {{ $vehicle->user_ci }}</p>
-                                                            <p><strong>Relación con el propietario:</strong>
-                                                                {{ $vehicle->relationshipWithOwner->relationship_name }}
-                                                            </p>
-                                                            <p><strong>Marca:</strong> {{ $vehicle->observations }}</p>
-                                                            <p><strong>Modelo:</strong> {{ $vehicle->driver_name }}</p>
-                                                        @else
-                                                            <p>No tiene inspección técnica vehicular (ITV).</p>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    @else
-                                        <p>No se encontraron Identidades relacionadas para este historial.</p>
-                                    @endif
-                                </div>
-
-                                <!-- CONDENAS -->
-                                <div class="col-md-4">
-                                    <h4 class="section-title">CONDENAS:</h4>
-                                    @if ($history->criminalConviction->isNotEmpty())
-                                        <div class="tools-list">
-                                            @foreach ($history->criminalConviction as $condena)
-                                                <div class="tool-item">
-                                                    <p><strong>Tipo de Condena:</strong>
-                                                        {{ $condena->detentionType->detention_name }}</p>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    @else
-                                        <p>No se encontraron complices relacionados para este historial.</p>
-                                    @endif
-                                    @if ($history->preventiveDetentions->isNotEmpty())
-                                        <div class="tools-list">
-                                            @foreach ($history->preventiveDetentions as $preventivo)
-                                                <div class="tool-item">
-                                                    <p><strong>Prisión:</strong> {{ $preventivo->prison->prison_name }}
-                                                    </p>
-                                                    <p><strong>Dirección de la Prisión:</strong>
-                                                        {{ $preventivo->prison->prison_location }}
-                                                    </p>
-                                                    <strong>PAÍS - ESTADO - CIUDAD:</strong>
-                                                    <p>{{ $preventivo->prison->country->country_name }} -
-                                                        {{ $preventivo->prison->state->state_name }} -
-                                                        {{ $preventivo->prison->city->city_name }}</p>
-                                                    <p><strong>Fecha de Entrada:</strong>
-                                                        {{ $preventivo->prison_entry_date }}
-                                                    </p>
-                                                    <p><strong>Fecha de Salida:</strong>
-                                                        {{ $preventivo->prison_release_date }}
-                                                    </p>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    @endif
-                                    @if ($history->extraditions->isNotEmpty())
-                                        <div class="tools-list">
-                                            @foreach ($history->extraditions as $extradicion)
-                                                <div class="tool-item">
-                                                    </p>
-                                                    <strong>PAÍS - CIUDAD:</strong>
-                                                    <p>{{ $extradicion->country->country_name }} -
-                                                        {{ $extradicion->state->state_name }}</p>
-                                                    <p><strong>Fecha de Extradición:</strong>
-                                                        {{ $extradicion->extradition_date }}</p>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    @endif
-                                    @if ($history->houseArrests->isNotEmpty())
-                                        <div class="tools-list">
-                                            @foreach ($history->houseArrests as $harrest)
-                                                <div class="tool-item">
-                                                    <p><strong>Dirección de Arresto Domiciliario:</strong>
-                                                        {{ $harrest->house_arrest_address }}
-                                                    </p>
-                                                    <strong>PAÍS - ESTADO - CIUDAD:</strong>
-                                                    <p>{{ $harrest->country->country_name }} -
-                                                        {{ $harrest->state->state_name }} -
-                                                        {{ $harrest->city->city_name }}</p>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    @endif
-                                    @if ($history->liberties->isNotEmpty())
-                                        <div class="tools-list">
-                                            @foreach ($history->liberties as $liberty)
-                                                <div class="tool-item">
-                                                    <p><strong>Dirección:</strong>
-                                                        {{ $liberty->house_address }}
-                                                    </p>
-                                                    <strong>PAÍS - ESTADO - CIUDAD:</strong>
-                                                    <p>{{ $liberty->country->country_name }} -
-                                                        {{ $liberty->state->state_name }} -
-                                                        {{ $liberty->city->city_name }}</p>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                @else
-                    <p>No hay registros de arresto disponibles para este criminal.</p>
-                @endif
-            </div>
-        </div>
-    </div>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var connectors = ["es", "la", "y", "o", "u", "que", "de", "en", "con", "a", "el", "los", "las"];
-            var paragraphs = document.querySelectorAll("p");
-            var footer = document.createElement("div");
-            paragraphs.forEach(function(paragraph) {
-                var words = paragraph.innerText.split(" ");
-                var formattedText = words.map(function(word) {
-                    return connectors.includes(word.toLowerCase()) ? word.toLowerCase() : word
-                        .charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-                }).join(" ");
-                paragraph.innerText = formattedText;
-            });
-            footer.className = "footer";
-            footer.innerText = "GENERADO EL " + new Date().toLocaleString() + " DACI ORURO";
-            document.body.appendChild(footer);
-        });
-    </script>
+                                    @endforeach
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        @endforeach
+        <tr>
+            <td colspan="6" class="signature-cell">
+                <div class="signature-line"></div>
+                <span>FIRMA DIRECTOR DEL DACI:</span>
+            </td>
+            <td colspan="6" class="seal-cell">
+                <span>SELLO DACI</span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="12" class="text-justify">
+                <span>Generado a las {{ \Carbon\Carbon::now('America/La_Paz')->format('H:i:s') }} del {{ \Carbon\Carbon::now('America/La_Paz')->translatedFormat('l d \d\e F \d\e Y') }}</span>
+                <span style="float: right;">D.A.C.I. - ORURO</span>
+            </td>
+        </tr>
+        
+        
+        
+        
+    </table>
 </body>
 
 </html>

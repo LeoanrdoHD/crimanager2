@@ -352,8 +352,8 @@
                         <div class="tools-list">
                             @foreach ($history->phoneNumber as $phone)
                                 <div class="tool-item">
-                                    <p><strong>Compañia:</strong> {{ $phone->phone_number }}</p>
-                                    <p><strong>Nro. Celular:</strong> {{ $phone->company->companies_name }}</p>
+                                    <p><strong>Nro. Celular:</strong>{{ $phone->phone_number }} </p>
+                                    <p><strong>Compañia:</strong>{{ $phone->company->companies_name }} </p>
                                     <p><strong>Nro. IMEI:</strong> {{ $phone->imei_number }}</p>
                                     <hr class="separator"> <!-- Línea separadora -->
                                 </div>

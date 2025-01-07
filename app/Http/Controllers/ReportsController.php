@@ -11,6 +11,7 @@ use App\Models\criminal_vehicle;
 use App\Models\photograph;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Dompdf\Options;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -105,6 +106,10 @@ class ReportsController extends Controller
 
     public function generatePDF($criminal_id) {
         // ... tu código aquí
+        
+
+$options = new Options();
+$options->set('isRemoteEnabled', true);
         $criminal = Criminal::with([
             'civilState',
             'country',
@@ -132,6 +137,7 @@ class ReportsController extends Controller
     
         // Descargar el PDF
         return $pdf->download('criminal.pdf');
+
     }
     
     public function showFileHistory($criminal_id, $history_id)

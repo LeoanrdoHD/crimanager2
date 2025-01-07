@@ -55,13 +55,13 @@ class UserController extends Controller
                 'escalafon' => 'nullable|string|max:15',
                 'grade' => 'string|max:20',
             ]);
-    
+
             // Generar la contraseña con el formato CI + 'daci'
             $password = preg_replace('/\D/', '', $request->ci_police) . 'daci';
-    
+
             // Asignar el valor de 'estado'. Si no se envía, se asigna 0 por defecto.
             $estado = $request->has('estado') ? $request->estado : 0;
-    
+
             // Guardar usuario
             $user = User::create([
                 'name' => $request->name,
@@ -73,19 +73,19 @@ class UserController extends Controller
                 'escalafon' => $request->escalafon,
                 'grade' => $request->grade,
             ]);
-    
+
             // Guardar foto de perfil si existe
             if ($request->hasFile('profile_photo')) {
                 $path = $request->file('profile_photo')->store('profile_photos', 'public');
                 $user->profile_photo_path = $path;
                 $user->save();
             }
-    
+
             // Asignar roles
             if ($request->roles) {
                 $user->roles()->sync($request->roles);
             }
-    
+
             // Redireccionar con mensaje de éxito
             return redirect()->route('admin.users.index')->with('success', 'Usuario creado exitosamente.');
         } catch (\Exception $e) {
@@ -93,7 +93,7 @@ class UserController extends Controller
             return redirect()->back()->withInput()->withErrors(['error' => 'Ocurrió un error al crear el usuario: ' . $e->getMessage()]);
         }
     }
-    
+
 
 
     /**
@@ -139,6 +139,14 @@ class UserController extends Controller
         $user->phone = $request->phone;
         $user->escalafon = $request->escalafon;
         $user->grade = $request->grade;
+        // Verificar si se necesita actualizar la contraseña
+        if ($request->has('reestablecer_password') && $request->reestablecer_password == true) {
+            // Generar la contraseña con el formato CI + 'daci'
+            $password = preg_replace('/\D/', '', $request->ci_police) . 'daci';
+
+            // Actualizar la contraseña del usuario
+            $user->password = Hash::make($password);
+        }
 
         // Verifica si se ha subido una nueva foto de perfil
         if ($request->hasFile('profile_photo')) {

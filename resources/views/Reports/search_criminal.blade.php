@@ -5,7 +5,7 @@
 
 @section('content_header')
     <h1 class="text-center">
-        IMPRIMIR HISTORIAL COMPLETO</h1>
+        DESCARGAR HISTORIAL COMPLETO</h1>
     <link rel="stylesheet" href="{{ asset('css/search.css') }}">
 @stop
 

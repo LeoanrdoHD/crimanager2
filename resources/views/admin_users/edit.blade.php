@@ -6,7 +6,7 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('admin.users.update',$user->id) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.users.update', $user->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
@@ -63,6 +63,42 @@
                                     readonly>
                             </div>
                         </div>
+<!-- Contraseña -->
+<div class="row mb-2">
+    <div class="col-md-4 col-12">
+        <label for="password" class="form-label">Contraseña:</label>
+    </div>
+    <div class="col-md-8 col-12 d-flex align-items-center">
+        <input type="text" id="password" name="password" class="form-control me-2" readonly
+            placeholder="***********">
+        <button type="button" class="btn btn-warning btn-sm" onclick="confirmPasswordReset()">Reestablecer Contraseña</button>
+    </div>
+</div>
+
+<input type="hidden" name="reestablecer_password" id="reestablecer_password" value="false">
+
+<script>
+    function confirmPasswordReset() {
+        // Mostrar un mensaje de confirmación
+        const confirmation = confirm("¿Está seguro que desea reestablecer la contraseña del usuario?");
+        
+        // Si el usuario confirma, genera la nueva contraseña
+        if (confirmation) {
+            generatePassword();
+        }
+    }
+
+    function generatePassword() {
+        const ci = document.getElementById('ciPolice').value;
+        const passwordField = document.getElementById('password');
+        // Extraer solo la parte numérica de ciPolice
+        const numericCi = ci.replace(/\D/g, '');
+        passwordField.value = numericCi ? `${numericCi}daci` : '';
+        // Cambiar el valor del campo oculto a true
+        document.getElementById('reestablecer_password').value = 'true';
+    }
+</script>
+
                         <div class="row mb-2">
                             <!-- Teléfono -->
                             <div class="col-md-4 col-12">
@@ -92,8 +128,8 @@
                                     @foreach ($roles as $role)
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="checkbox" name="roles[]"
-                                                   value="{{ $role->id }}" id="role_{{ $role->id }}"
-                                                   {{ in_array($role->id, $user->roles->pluck('id')->toArray()) ? 'checked' : '' }}>
+                                                value="{{ $role->id }}" id="role_{{ $role->id }}"
+                                                {{ in_array($role->id, $user->roles->pluck('id')->toArray()) ? 'checked' : '' }}>
                                             <label class="form-check-label" for="role_{{ $role->id }}">
                                                 {{ $role->name }}
                                             </label>
@@ -156,7 +192,7 @@
     </script>
 
     <style>
-          input:-webkit-autofill {
+        input:-webkit-autofill {
             -webkit-box-shadow: 0 0 0px 1000px #333 inset !important;
             /* Color de fondo oscuro */
             -webkit-text-fill-color: #fff !important;
@@ -171,6 +207,7 @@
             /* Color de fondo al hover o focus */
             -webkit-text-fill-color: #fff !important;
         }
+
         .switch {
             position: relative;
             display: inline-block;

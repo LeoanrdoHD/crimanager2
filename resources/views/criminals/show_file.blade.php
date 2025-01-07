@@ -95,6 +95,7 @@
             text-transform: uppercase;
             /* Convierte a mayúsculas */
         }
+
         strong {
             text-transform: uppercase;
             font-weight: bold;
@@ -427,8 +428,8 @@
                                         <div class="tools-list">
                                             @foreach ($history->phoneNumber as $phone)
                                                 <div class="tool-item">
-                                                    <p><strong>Compañía:</strong> {{ $phone->company->companies_name }}</p>
-                                                    <p><strong>Nro. Celular:</strong> {{ $phone->phone_number }}</p>
+                                                    <p><strong>Nro. Celular:</strong>{{ $phone->phone_number }} </p>
+                                                    <p><strong>Compañia:</strong>{{ $phone->company->companies_name }} </p>
                                                     <p><strong>Nro. IMEI:</strong> {{ $phone->imei_number }}</p>
                                                     <hr class="separator"> <!-- Línea separadora -->
                                                 </div>
@@ -671,6 +672,7 @@
                 text-decoration: none;
                 border-radius: 5px;
             }
+
             .btn-imprimir {
                 background-color: rgb(64, 131, 232);
                 color: white;
