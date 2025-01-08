@@ -61,9 +61,15 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
     public function adminlte_image()
-    {
-        return url($this->profile_photo_url);
+{
+    if ($this->profile_photo_path) {
+        // Si el usuario tiene una foto de perfil, retornar la URL completa
+        return asset('storage/' . $this->profile_photo_path);
+    } else {
+        // Si no tiene foto, retornar una imagen genérica o usar un fallback
+        return asset('images/default-avatar.png'); // Cambia 'default-avatar.png' por la ruta de tu imagen predeterminada
     }
+}
     public function adminlte_profile_url()
     {
         return url('user/profile');

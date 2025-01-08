@@ -144,7 +144,7 @@
                 <td style="width: 20.66%; text-align: left; border: none;">
                     <img src="{{ public_path('storage/logo-pol.jpeg') }}" alt="Logo" style="height: 80px;">
                 </td>
-
+                
                 <!-- Texto centrado (8 columnas) -->
                 <td style="width: 66.66%; text-align: center; border: none;">
                     <span style="font-weight: bold; font-size: 14px;">
@@ -153,7 +153,7 @@
                         DIRECCIÓN DE ANÁLISIS CRIMINAL E INTELIGENCIA
                     </span>
                 </td>
-
+                
                 <!-- Logo derecho (2 columnas) -->
                 <td style="width: 20.66%; text-align: right; border: none;">
                     <img src="{{ public_path('storage/logo_daci.png') }}" alt="Logo" style="height: 80px;">
@@ -166,7 +166,8 @@
     <table>
         <!-- Fila de título de sección -->
         <tr>
-            <td colspan="12" class="section-title">PERFIL DEL DELINCUENTE</td>
+            <td colspan="12" class="section-title">PERFIL DEL DELINCUENTE <br>
+            (Reporte Rapido)</td>
         </tr>
         <!-- Fila de Datos Generales -->
         <tr>
@@ -303,15 +304,13 @@
         <tr>
             <td colspan="12">
         <tr>
-            <th colspan="2">MEDIO CUERPO</th>
-            <th colspan="2">PERFIL IZQ</th>
-            <th colspan="2">PERFIL DERECHO</th>
-            <th colspan="2">CUERPO COMPLETO</th>
-            <th colspan="2">FOTO EXTRA</th>
-            <th colspan="2">EN BARRA</th>
+            <th colspan="3">MEDIO CUERPO</th>
+            <th colspan="3">PERFIL IZQ</th>
+            <th colspan="3">PERFIL DERECHO</th>
+            <th colspan="3">CUERPO COMPLETO</th>
         </tr>
         <tr>
-            <td colspan="2" class="photo-cell" style="text-align: center;">
+            <td colspan="3" class="photo-cell" style="text-align: center;">
                 @if ($criminal->photographs->first())
                     <img src="{{ public_path($criminal->photographs->first()->frontal_photo) }}"
                         alt="Foto Frontal de {{ $criminal->first_name }}" class="img-fluid1 img-thumbnail1"
@@ -320,7 +319,7 @@
                     <p>No hay fotografía de Rostro disponible.</p>
                 @endif
             </td>
-            <td colspan="2" class="photo-cell" style="text-align: center;">
+            <td colspan="3" class="photo-cell" style="text-align: center;">
                 @if ($criminal->photographs->first())
                     <img src="{{ public_path($criminal->photographs->first()->profile_izq_photo) }}"
                         alt="Foto Frontal de {{ $criminal->first_name }}" class="img-fluid1 img-thumbnail1"
@@ -329,7 +328,7 @@
                     <p>No hay fotografía de Rostro disponible.</p>
                 @endif
             </td>
-            <td colspan="2" class="photo-cell" style="text-align: center;">
+            <td colspan="3" class="photo-cell" style="text-align: center;">
                 @if ($criminal->photographs->first())
                     <img src="{{ public_path($criminal->photographs->first()->profile_der_photo) }}"
                         alt="Foto Frontal de {{ $criminal->first_name }}" class="img-fluid1 img-thumbnail1"
@@ -338,27 +337,9 @@
                     <p>No hay fotografía de Rostro disponible.</p>
                 @endif
             </td>
-            <td colspan="2" class="photo-cell" style="text-align: center;">
+            <td colspan="3" class="photo-cell" style="text-align: center;">
                 @if ($criminal->photographs->first())
                     <img src="{{ public_path($criminal->photographs->first()->full_body_photo) }}"
-                        alt="Foto Frontal de {{ $criminal->first_name }}" class="img-fluid1 img-thumbnail1"
-                        style="width:80%; height: auto; max-width: 150px; object-fit: cover;">
-                @else
-                    <p>No hay fotografía de Rostro disponible.</p>
-                @endif
-            </td>
-            <td colspan="2" class="photo-cell" style="text-align: center;">
-                @if ($criminal->photographs->first())
-                    <img src="{{ public_path($criminal->photographs->first()->frontal_photo) }}"
-                        alt="Foto Frontal de {{ $criminal->first_name }}" class="img-fluid1 img-thumbnail1"
-                        style="width:80%; height: auto; max-width: 150px; object-fit: cover;">
-                @else
-                    <p>No hay fotografía de Rostro disponible.</p>
-                @endif
-            </td>
-            <td colspan="2" class="photo-cell" style="text-align: center;">
-                @if ($criminal->photographs->first())
-                    <img src="{{ public_path($criminal->photographs->first()->frontal_photo) }}"
                         alt="Foto Frontal de {{ $criminal->first_name }}" class="img-fluid1 img-thumbnail1"
                         style="width:80%; height: auto; max-width: 150px; object-fit: cover;">
                 @else
@@ -427,187 +408,7 @@
 
             </td>
         </tr>
-        <!-- Historial de Arrestos -->
-        <tr>
-            <td colspan="12" class="section-title">HISTORIAL DE CAPTURAS</td>
-        </tr>
-
-        @foreach ($criminal->arrestHistories as $index => $history)
-            <tr>
-                <td colspan="12">
-                    <p class="text-center">
-                        @php
-                            $formattedDate = \Carbon\Carbon::parse($history->arrest_date)->translatedFormat(
-                                'l d \d\e F \d\e Y',
-                            );
-                            $formattedTime = \Carbon\Carbon::parse($history->arrest_time)->format('H:i'); // 24-hour format
-                        @endphp
-                        <strong class="listah">Nro. {{ $index + 1 }} del {{ $formattedDate }} a las
-                            {{ $formattedTime }}</strong>
-                    </p>
-                </td>
-            </tr>
-
-            <!-- Detalles de Captura -->
-            <tr>
-                <td colspan="12">
-                    <div class="info-item">
-                        <span class="label-bold">Situación Legal:</span>
-                        <span
-                            class="text-uppercase">{{ $history->legalStatus->status_name ?? 'No especificado' }}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="label-bold">Tipo de Captura:</span>
-                        <span
-                            class="text-uppercase">{{ $history->apprehensionType->type_name ?? 'No especificado' }}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="label-bold">Número de CUD:</span>
-                        <span class="text-uppercase">{{ $history->cud_number ?? 'No especificado' }}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="label-bold">Lugar de Captura:</span>
-                        <span class="text-uppercase">{{ $history->arrest_location ?? 'No especificado' }}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="label-bold">Especialidad o Motivo de Captura:</span>
-                        <span
-                            class="text-uppercase">{{ $history->criminalSpecialty->specialty_name ?? 'No especificado' }}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="label-bold">Detalles de Captura:</span>
-                        <span class="text-uppercase">{{ $history->arrest_details ?? 'No especificado' }}</span>
-                    </div>
-                </td>
-            </tr>
-
-            <!-- Objetos, Teléfonos, Otras Identidades -->
-            <tr>
-                <th colspan="4">OBJETOS, ARMAS O HERRAMIENTAS</th>
-                <th colspan="4">NÚMEROS DE TELÉFONOS USADOS</th>
-                <th colspan="4">OTRAS IDENTIDADES</th>
-            </tr>
-            <tr>
-                <td colspan="4">
-                    @foreach ($history->criminalTools as $tool)
-                        <div class="info-item">
-                            <span class="label-bold">Tipo:</span>
-                            <span
-                                class="text-uppercase">{{ $tool->toolType->tool_type_name ?? 'No especificado' }}</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="label-bold">Descripción:</span>
-                            <span class="text-uppercase">{{ $tool->tool_details ?? 'No especificado' }}</span>
-                        </div>
-                    @endforeach
-                </td>
-                <td colspan="4">
-                    @foreach ($history->phoneNumber as $phone)
-                        <div class="info-item">
-                            <span class="label-bold">Nro. Celular:</span>
-                            <span class="text-uppercase">{{ $phone->phone_number }}</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="label-bold">Compañía:</span>
-                            <span class="text-uppercase">{{ $phone->company->companies_name }}</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="label-bold">Nro. IMEI:</span>
-                            <span class="text-uppercase">{{ $phone->imei_number }}</span>
-                        </div>
-                    @endforeach
-                </td>
-                <td colspan="4">
-                    @foreach ($history->criminalAliase as $aliase)
-                        <div class="info-item">
-                            <span class="label-bold">Nombres y Apellidos:</span>
-                            <span class="text-uppercase">{{ $aliase->alias_name }}</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="label-bold">Nro de Identidad:</span>
-                            <span class="text-uppercase">{{ $aliase->alias_identity_number }}</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="label-bold">Nacionalidad:</span>
-                            <span class="text-uppercase">{{ $aliase->nationality->nationality_name }}</span>
-                        </div>
-                    @endforeach
-                </td>
-            </tr>
-
-            <!-- Cómplices y Organizaciones -->
-            <tr>
-                <th colspan="6">COMPLICES</th>
-                <th colspan="6">ORGANIZACIONES</th>
-            </tr>
-            <tr>
-                <td colspan="6">
-                    @foreach ($history->criminalComplice as $complice)
-                        <div class="info-item">
-                            <span class="label-bold">Nombres y Apellidos:</span>
-                            <span class="text-uppercase">{{ $complice->complice_name }}</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="label-bold">Nro. de Identidad:</span>
-                            <span class="text-uppercase">{{ $complice->CI_complice }}</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="label-bold">Otros detalles:</span>
-                            <span class="text-uppercase">{{ $complice->detail_complice }}</span>
-                        </div>
-                    @endforeach
-                </td>
-                <td colspan="6">
-                    @foreach ($history->criminalOrganization as $group)
-                        <div class="info-item">
-                            <span class="label-bold">Nombre:</span>
-                            <span class="text-uppercase">{{ $group->organization->organization_name }}</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="label-bold">Especialidad:</span>
-                            <span
-                                class="text-uppercase">{{ $group->organization->Criminal_Organization_Specialty }}</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="label-bold">Rol en la Organización:</span>
-                            <span class="text-uppercase">{{ $group->criminal_rol }}</span>
-                        </div>
-                    @endforeach
-                </td>
-            </tr>
-
-            <!-- Vehículo usado en el hecho -->
-            <tr>
-                <td colspan="12" class="section-title">VEHÍCULO USADO EN EL HECHO</td>
-            </tr>
-            <tr>
-                <td colspan="12">
-                    @foreach ($history->criminalVehicle as $vehicle)
-                        <div class="info-item">
-                            <span class="label-bold">Color:</span>
-                            <span class="text-uppercase">{{ $vehicle->vehicleColor->color_name }}</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="label-bold">Tipo:</span>
-                            <span class="text-uppercase">{{ $vehicle->vehicleType->vehicle_type_name }}</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="label-bold">Año:</span>
-                            <span class="text-uppercase">{{ $vehicle->year }}</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="label-bold">Marca:</span>
-                            <span class="text-uppercase">{{ $vehicle->brandVehicle->brand_name }}</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="label-bold">Placa:</span>
-                            <span class="text-uppercase">{{ $vehicle->license_plate }}</span>
-                        </div>
-                    @endforeach
-                </td>
-            </tr>
-        @endforeach
-
+        
         <tr>
             <td colspan="6" class="signature-cell">
                 <div class="signature-line"></div>
@@ -619,15 +420,14 @@
         </tr>
         <tr>
             <td colspan="12" class="text-justify">
-                <span>Generado a las {{ \Carbon\Carbon::now('America/La_Paz')->format('H:i:s') }} del
-                    {{ \Carbon\Carbon::now('America/La_Paz')->translatedFormat('l d \d\e F \d\e Y') }}</span>
+                <span>Generado a las {{ \Carbon\Carbon::now('America/La_Paz')->format('H:i:s') }} del {{ \Carbon\Carbon::now('America/La_Paz')->translatedFormat('l d \d\e F \d\e Y') }}</span>
                 <span style="float: right;">D.A.C.I. - ORURO</span>
             </td>
         </tr>
-
-
-
-
+        
+        
+        
+        
     </table>
 </body>
 

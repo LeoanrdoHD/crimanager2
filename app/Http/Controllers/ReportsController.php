@@ -104,12 +104,10 @@ class ReportsController extends Controller
         return view('criminals.show_file', compact('criminal', 'history'));
     }
 
-    public function generatePDF($criminal_id) {
-        // ... tu código aquí
-        
-
-$options = new Options();
-$options->set('isRemoteEnabled', true);
+    public function generatePDF($criminal_id)
+    {
+        $options = new Options();
+        $options->set('isRemoteEnabled', true);
         $criminal = Criminal::with([
             'civilState',
             'country',
@@ -134,12 +132,44 @@ $options->set('isRemoteEnabled', true);
             ->findOrFail($criminal_id);
         // Cargar la vista
         $pdf = PDF::loadView('exportar.pdf_todo', compact('criminal'));
-    
-        // Descargar el PDF
-        return $pdf->download('criminal.pdf');
 
+        // Descargar el PDF
+        return $pdf->download('tarjeta_todo.pdf');
     }
     
+    public function generatePDFfast($criminal_id)
+    {
+        $options = new Options();
+        $options->set('isRemoteEnabled', true);
+        $criminal = Criminal::with([
+            'civilState',
+            'country',
+            'state',
+            'city',
+            'nationality',
+            'occupation',
+            'photographs',
+            'arrestHistories',
+            'criminalAddresses.country',
+            'criminalAddresses.state',
+            'criminalAddresses.city',
+            'physicalCharacteristics.earType',
+            'physicalCharacteristics.eyeType',
+            'physicalCharacteristics.lipType',
+            'physicalCharacteristics.noseType',
+            'physicalCharacteristics.skinColor',
+            'physicalCharacteristics.Confleccion',
+            'physicalCharacteristics.criminalGender',
+            'criminalPartner.relationshipType'
+        ])
+            ->findOrFail($criminal_id);
+        // Cargar la vista
+        $pdf = PDF::loadView('exportar.pdf_rapido', compact('criminal'));
+
+        // Descargar el PDF
+        return $pdf->download('tarjeta_rapida.pdf');
+    }
+
     public function showFileHistory($criminal_id, $history_id)
     {
         // Cargar el criminal con todas sus relaciones

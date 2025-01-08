@@ -1,4 +1,6 @@
 @extends('adminlte::page')
+@vite(['resources/js/app.js', 'resources/css/app.css'])
+
 @section('content_header')
     <h1 class="text-center">
         DETALLES DEL USUARIO</h1>
@@ -20,10 +22,15 @@
     <div class="card-body">
         <div class="row mb-2 justify-content-center">
             <!-- Foto del usuario centrada -->
-            <div class="col-12 text-center mb-2">
-                <img src="{{ asset($user->profile_photo_url) }}" width="150" alt="Foto de Perfil"
-                    class="rounded-circle border border-secondary">
+            <div class="col-12 text-center mb-3">
+                <label for="profile_photo" style="cursor: pointer;">
+                    <img src="{{ asset('storage/' . $user->profile_photo_path) }}" width="150" alt="Foto de Perfil"
+                        class="rounded-circle border border-secondary mb-2" id="profilePhotoPreview">
+                </label>
+                <input type="file" id="profile_photo" name="profile_photo" class="d-none" accept="image/*"
+                    onchange="previewProfilePhoto(event)">
             </div>
+
             <!-- Información del usuario -->
             <div class="col-10">
                 <div class="row mb-2">

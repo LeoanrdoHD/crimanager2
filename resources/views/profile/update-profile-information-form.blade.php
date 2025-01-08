@@ -26,8 +26,17 @@
 
                 <!-- Current Profile Photo -->
                 <div class="mt-2" x-show="!photoPreview">
-                    <img src="{{ $this->user->profile_photo_url }}" alt="{{ $this->user->name }}"
-                        class="rounded-full h-20 w-20 object-cover">
+                    @if ($this->user->profile_photo_path)
+                        <!-- Mostrar la imagen de perfil personalizada -->
+                        <img src="{{ asset('storage/' . $this->user->profile_photo_path) }}" 
+                            alt="{{ $this->user->name }}" 
+                            class="rounded-full h-20 w-20 object-cover">
+                    @else
+                        <!-- Mostrar una imagen genérica o usar iniciales como fallback -->
+                        <div class="flex items-center justify-center rounded-full h-20 w-20 bg-gray-300 text-gray-700 font-bold text-lg">
+                            {{ strtoupper(substr($this->user->name, 0, 1)) }}
+                        </div>
+                    @endif
                 </div>
 
                 <!-- New Profile Photo Preview -->

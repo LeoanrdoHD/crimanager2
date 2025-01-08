@@ -1,5 +1,6 @@
 @extends('adminlte::page')
-@vite('resources/css/app.css')
+@vite(['resources/js/app.js', 'resources/css/app.css'])
+
 
 @section('title', 'Crimanager')
 
@@ -117,9 +118,17 @@
                         <td>{{ ucwords(strtolower($users->grade)) }}. {{ ucwords(strtolower($users->name)) }}</td>
                         <td>{{ $users->ci_police }}</td>
                         <td>
-                            <img src="{{ asset($users->profile_photo_url) }}" width="75" alt="Foto de Perfil"
-                                style="border-radius: 40%; object-fit: cover;">
+                            @if ($users->profile_photo_path)
+                                <!-- Mostrar imagen desde el almacenamiento -->
+                                <img src="{{ asset('storage/' . $users->profile_photo_path) }}" width="75" alt="Foto de Perfil"
+                                    style="border-radius: 40%; object-fit: cover;">
+                            @else
+                                <!-- Mostrar imagen genérica -->
+                                <img src="{{ asset($users->profile_photo_url) }}" width="75" alt="Foto de Perfil"
+                                    style="border-radius: 40%; object-fit: cover;">
+                            @endif
                         </td>
+                        
                         <td>{{ $users->email }}</td>
                         <td>{{ $users->phone }}</td>
                         <td>

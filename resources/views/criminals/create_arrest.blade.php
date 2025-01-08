@@ -112,34 +112,39 @@
                     }, 3000);
                 });
             </script>
-
-            <div class="container">
+            <div class="container mx-auto px-4">
                 <form class="form-arrest" action="{{ route('criminals.store_arrest') }}" method="POST">
                     @csrf
-                    <h2 class="class text-center text-lg ">PERFIL DEL DELINCUENTE</h2>
-                    <div class="grid grid-cols-3 gap-10">
+                    <h2 class="text-center text-lg font-semibold mb-4">PERFIL DEL DELINCUENTE</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Nombres y Apellidos -->
                         <div class="form-group">
-                            <label>Nombres y Apellidos:</label>
-                            <input type="text" class="form-control" name="nom_apell"
-                                value="{{ $criminal->first_name }} {{ $criminal->last_name }}" disabled>
+                            <label for="nom_apell" class="block text-sm font-medium">Nombres y Apellidos:</label>
+                            <input type="text" id="nom_apell" class="form-control w-full p-2 border rounded"
+                                name="nom_apell" value="{{ $criminal->first_name }} {{ $criminal->last_name }}" disabled>
                         </div>
+
+                        <!-- Foto del criminal -->
                         <div class="flex justify-center items-center"> <!-- Centrado con flexbox -->
                             @foreach ($fotos as $photographs)
                                 @if ($photographs->criminal_id === $criminal->id)
                                     <img src="{{ asset($photographs->frontal_photo) }}" width="100" alt="Foto Frontal"
-                                        style="border-radius: 50%; object-fit: cover;">
+                                        style="border-radius: 70%; object-fit: cover;">
                                 @endif
                             @endforeach
                         </div>
+
+                        <!-- Cédula de Identidad/DNI -->
                         <div class="form-group">
-                            <label>Cédula de Identidad/DNI:</label>
-                            <input type="text" class="form-control" name="identity_number"
-                                value="{{ $criminal->identity_number }}" disabled>
+                            <label for="identity_number" class="block text-sm font-medium">Cédula de Identidad/DNI:</label>
+                            <input type="text" id="identity_number" class="form-control w-full p-2 border rounded"
+                                name="identity_number" value="{{ $criminal->identity_number }}" disabled>
                         </div>
                     </div>
-                    <hr style="border: 1px solid rgba(244, 244, 244, 0.478); width: 100%;">
+                    <hr class="my-6 border-t border-gray-300">
                 </form>
             </div>
+
             @include('criminals.partials.section1_situacion')
             <hr style="border: 1px solid rgba(244, 244, 244, 0.347); width: 100%;">
             <h2 class="class text-center text-lg ">Seleccione los Campos a LLenar</h2>

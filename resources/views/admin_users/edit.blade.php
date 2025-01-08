@@ -1,4 +1,6 @@
 @extends('adminlte::page')
+@vite(['resources/js/app.js', 'resources/css/app.css'])
+
 @section('content_header')
     <h1 class="text-center">
         EDITAR INFORMACIÓN DEL USUARIO</h1>
@@ -14,7 +16,7 @@
                     <!-- Foto del usuario centrada -->
                     <div class="col-12 text-center mb-3">
                         <label for="profile_photo" style="cursor: pointer;">
-                            <img src="{{ asset($user->profile_photo_url) }}" width="150" alt="Foto de Perfil"
+                            <img src="{{ asset('storage/' . $user->profile_photo_path) }}" width="150" alt="Foto de Perfil"
                                 class="rounded-circle border border-secondary mb-2" id="profilePhotoPreview">
                         </label>
                         <input type="file" id="profile_photo" name="profile_photo" class="d-none" accept="image/*"
@@ -63,41 +65,42 @@
                                     readonly>
                             </div>
                         </div>
-<!-- Contraseña -->
-<div class="row mb-2">
-    <div class="col-md-4 col-12">
-        <label for="password" class="form-label">Contraseña:</label>
-    </div>
-    <div class="col-md-8 col-12 d-flex align-items-center">
-        <input type="text" id="password" name="password" class="form-control me-2" readonly
-            placeholder="***********">
-        <button type="button" class="btn btn-warning btn-sm" onclick="confirmPasswordReset()">Reestablecer Contraseña</button>
-    </div>
-</div>
+                        <!-- Contraseña -->
+                        <div class="row mb-2">
+                            <div class="col-md-4 col-12">
+                                <label for="password" class="form-label">Contraseña:</label>
+                            </div>
+                            <div class="col-md-8 col-12 d-flex align-items-center">
+                                <input type="text" id="password" name="password" class="form-control me-2" readonly
+                                    placeholder="***********">
+                                <button type="button" class="btn btn-warning btn-sm"
+                                    onclick="confirmPasswordReset()">Reestablecer Contraseña</button>
+                            </div>
+                        </div>
 
-<input type="hidden" name="reestablecer_password" id="reestablecer_password" value="false">
+                        <input type="hidden" name="reestablecer_password" id="reestablecer_password" value="false">
 
-<script>
-    function confirmPasswordReset() {
-        // Mostrar un mensaje de confirmación
-        const confirmation = confirm("¿Está seguro que desea reestablecer la contraseña del usuario?");
-        
-        // Si el usuario confirma, genera la nueva contraseña
-        if (confirmation) {
-            generatePassword();
-        }
-    }
+                        <script>
+                            function confirmPasswordReset() {
+                                // Mostrar un mensaje de confirmación
+                                const confirmation = confirm("¿Está seguro que desea reestablecer la contraseña del usuario?");
 
-    function generatePassword() {
-        const ci = document.getElementById('ciPolice').value;
-        const passwordField = document.getElementById('password');
-        // Extraer solo la parte numérica de ciPolice
-        const numericCi = ci.replace(/\D/g, '');
-        passwordField.value = numericCi ? `${numericCi}daci` : '';
-        // Cambiar el valor del campo oculto a true
-        document.getElementById('reestablecer_password').value = 'true';
-    }
-</script>
+                                // Si el usuario confirma, genera la nueva contraseña
+                                if (confirmation) {
+                                    generatePassword();
+                                }
+                            }
+
+                            function generatePassword() {
+                                const ci = document.getElementById('ciPolice').value;
+                                const passwordField = document.getElementById('password');
+                                // Extraer solo la parte numérica de ciPolice
+                                const numericCi = ci.replace(/\D/g, '');
+                                passwordField.value = numericCi ? `${numericCi}daci` : '';
+                                // Cambiar el valor del campo oculto a true
+                                document.getElementById('reestablecer_password').value = 'true';
+                            }
+                        </script>
 
                         <div class="row mb-2">
                             <!-- Teléfono -->

@@ -408,7 +408,7 @@ return [
             'icon' => 'fas fa-fw fa-share',
             'submenu' => [
                 [
-                    'text' => 'Ficha Delincuente',
+                    'text' => 'Descargar Reportes',
                     'url' => 'reports/search_criminal',
                 ],
                 [
@@ -432,7 +432,7 @@ return [
             'icon' => 'fas fa-fw fa-share',
             'submenu' => [
                 [
-                    'text' => 'FELCC',
+                    'text' => 'ITV',
                     'url' => 'https://inf.policiadnfr.gob.bo/login',
                 ],
                 [
@@ -442,6 +442,10 @@ return [
                 [
                     'text' => 'SEGIP',
                     'url' => 'https://consulta.segip.gob.bo/Autenticacion/Autenticacion ',
+                ],
+                [
+                    'text' => 'ANTECEDENTES',
+                    'url' => 'http://a.query.policia.bo/index0.php?dato=CONSULTA&dato2=SINARAP',
                 ],
             ],
         ],

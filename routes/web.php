@@ -66,6 +66,7 @@ Route::middleware(['auth', CheckUserStatus::class])->group(function () {
     Route::get('/criminals/search_fast/{file}', [ReportsController::class, 'show_fast']);
     
     Route::get('generate-pdf/{criminalId}', [ReportsController::class, 'generatePDF'])->name('generate-pdf');
+    Route::get('generate-pdf-rapido/{criminalId}', [ReportsController::class, 'generatePDFfast'])->name('generate-pdf-rapido');
 
     // Vehículos y organizaciones
     Route::get('/vehicles', [VehicleController::class, 'new']);

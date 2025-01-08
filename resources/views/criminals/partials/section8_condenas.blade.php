@@ -5,21 +5,23 @@
         @csrf
         <input type="hidden" name="criminal_id" value="{{ $criminal->id }}">
 
-        <div class="grid grid-cols-2 gap-10">
-            <div>
+        <div class="grid grid-cols-1 gap-10">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label>Tipo de Pena:</label>
-                    <select class="form-control" name="detention_type_id" id="detentionType" onchange="mostrarCampos()">
+                    <select class="form-control w-full" name="detention_type_id" id="detentionType"
+                        onchange="mostrarCampos()">
                         <option value="">Seleccionar</option>
                         @foreach ($tcondena as $detention_type)
-                            <option value="{{ $detention_type->id }}">{{ $detention_type->detention_name }}
-                            </option>
+                            <option value="{{ $detention_type->id }}">{{ $detention_type->detention_name }}</option>
                         @endforeach
                     </select>
                 </div>
+
                 <div id="camposDetencionPreventiva" style="display: none;">
                     <label>Prisión:</label>
-                    <select class="form-control" name="prison_name" id="prisonSelect" onchange="llenarCamposPrision()">
+                    <select class="form-control w-full" name="prison_name" id="prisonSelect"
+                        onchange="llenarCamposPrision()">
                         <option value="">Seleccionar</option>
                         @foreach ($prision as $prison)
                             <option value="{{ $prison->id }}" data-direccion="{{ $prison->prison_location }}"
@@ -32,18 +34,18 @@
                         <option value="otro">Otro</option>
                     </select>
 
-                    <!-- Campos de dirección de la prisión (solo si se selecciona "Otro") -->
                     <div id="camposOtraPrision" style="display: none; margin-top: 10px;">
                         <label>Nombre de la Prisión:</label>
-                        <input type="text" class="form-control" name="otra_prision_nombre"
+                        <input type="text" class="form-control w-full" name="otra_prision_nombre"
                             placeholder="Nombre de la prisión">
                         <label>Dirección de la Prisión:</label>
-                        <input type="text" class="form-control" name="prison_location" placeholder="Dirección">
+                        <input type="text" class="form-control w-full" name="prison_location"
+                            placeholder="Dirección">
 
-                        <div class="grid grid-cols-3 gap-10">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div class="form-group">
                                 <label for="country_p">País:</label>
-                                <select id="country_p" name="country_id_p" class="form-control">
+                                <select id="country_p" name="country_id_p" class="form-control w-full">
                                     <option value="">Seleccionar</option>
                                     @foreach ($pais as $country)
                                         <option value="{{ $country->id }}"
@@ -54,16 +56,15 @@
                                     <option value="otro" {{ old('country_id_p') == 'otro' ? 'selected' : '' }}>Otro
                                     </option>
                                 </select>
-                                <input type="text" id="newCountryField_p" class="form-control"
+                                <input type="text" id="newCountryField_p" class="form-control w-full"
                                     name="new_country_name_p" placeholder="Nombre del nuevo país"
                                     style="display: {{ old('country_id_p') == 'otro' ? 'block' : 'none' }}; margin-top: 5px;"
                                     value="{{ old('new_country_name_p') }}">
                             </div>
 
-                            <!-- Selección de Estado -->
                             <div class="form-group">
                                 <label for="state_p">Estado/Departamento:</label>
-                                <select id="state_p" name="province_id_p" class="form-control">
+                                <select id="state_p" name="province_id_p" class="form-control w-full">
                                     <option value="">Seleccionar</option>
                                     @foreach ($provincia as $state)
                                         <option value="{{ $state->id }}"
@@ -74,16 +75,15 @@
                                     <option value="otro" {{ old('province_id_p') == 'otro' ? 'selected' : '' }}>Otro
                                     </option>
                                 </select>
-                                <input type="text" id="newStateField_p" class="form-control" name="new_state_name_p"
-                                    placeholder="Nombre del nuevo estado"
+                                <input type="text" id="newStateField_p" class="form-control w-full"
+                                    name="new_state_name_p" placeholder="Nombre del nuevo estado"
                                     style="display: {{ old('province_id_p') == 'otro' ? 'block' : 'none' }}; margin-top: 5px;"
                                     value="{{ old('new_state_name_p') }}">
                             </div>
 
-                            <!-- Selección de Ciudad -->
                             <div class="form-group">
                                 <label for="citySelect_p">Ciudad/Municipio:</label>
-                                <select id="citySelect_p" name="city_id_p" class="form-control">
+                                <select id="citySelect_p" name="city_id_p" class="form-control w-full">
                                     <option value="">Seleccionar</option>
                                     @foreach ($ciudad as $city)
                                         <option value="{{ $city->id }}"
@@ -94,8 +94,8 @@
                                     <option value="otro" {{ old('city_id_p') == 'otro' ? 'selected' : '' }}>Otro
                                     </option>
                                 </select>
-                                <input type="text" id="newCityField_p" class="form-control" name="new_city_name_p"
-                                    placeholder="Nombre de la nueva ciudad"
+                                <input type="text" id="newCityField_p" class="form-control w-full"
+                                    name="new_city_name_p" placeholder="Nombre de la nueva ciudad"
                                     style="display: {{ old('city_id_p') == 'otro' ? 'block' : 'none' }}; margin-top: 5px;"
                                     value="{{ old('new_city_name_p') }}">
                             </div>
@@ -251,12 +251,12 @@
                 <!-- Campos para Detención Domiciliaria -->
                 <div id="camposDetencionDomiciliaria" style="display: none;">
                     <label>Dirección de Detención Domiciliaria:</label>
-                    <input type="text" class="form-control" name="house_arrest_address"
+                    <input type="text" class="form-control w-full" name="house_arrest_address"
                         placeholder="Ingrese una dirección">
-                    <div class="grid grid-cols-3 gap-10">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div class="form-group">
                             <label for="country_d">País:</label>
-                            <select id="country_d" name="country_id_d" class="form-control">
+                            <select id="country_d" name="country_id_d" class="form-control w-full">
                                 <option value="">Seleccionar</option>
                                 @foreach ($pais as $country)
                                     <option value="{{ $country->id }}"
@@ -267,7 +267,7 @@
                                 <option value="otro" {{ old('country_id_d') == 'otro' ? 'selected' : '' }}>Otro
                                 </option>
                             </select>
-                            <input type="text" id="newCountryField_d" class="form-control"
+                            <input type="text" id="newCountryField_d" class="form-control w-full"
                                 name="new_country_name_d" placeholder="Nombre del nuevo país"
                                 style="display: {{ old('country_id_d') == 'otro' ? 'block' : 'none' }}; margin-top: 5px;"
                                 value="{{ old('new_country_name_d') }}">
@@ -276,7 +276,7 @@
                         <!-- Selección de Estado -->
                         <div class="form-group">
                             <label for="state_d">Estado/Departamento:</label>
-                            <select id="state_d" name="province_id_d" class="form-control">
+                            <select id="state_d" name="province_id_d" class="form-control w-full">
                                 <option value="">Seleccionar</option>
                                 @foreach ($provincia as $state)
                                     <option value="{{ $state->id }}"
@@ -287,8 +287,8 @@
                                 <option value="otro" {{ old('province_id_d') == 'otro' ? 'selected' : '' }}>Otro
                                 </option>
                             </select>
-                            <input type="text" id="newStateField_d" class="form-control" name="new_state_name_d"
-                                placeholder="Nombre del nuevo estado"
+                            <input type="text" id="newStateField_d" class="form-control w-full"
+                                name="new_state_name_d" placeholder="Nombre del nuevo estado"
                                 style="display: {{ old('province_id_d') == 'otro' ? 'block' : 'none' }}; margin-top: 5px;"
                                 value="{{ old('new_state_name_d') }}">
                         </div>
@@ -296,7 +296,7 @@
                         <!-- Selección de Ciudad -->
                         <div class="form-group">
                             <label for="citySelect_d">Ciudad/Municipio:</label>
-                            <select id="citySelect_d" name="city_id_d" class="form-control">
+                            <select id="citySelect_d" name="city_id_d" class="form-control w-full">
                                 <option value="">Seleccionar</option>
                                 @foreach ($ciudad as $city)
                                     <option value="{{ $city->id }}"
@@ -307,8 +307,8 @@
                                 <option value="otro" {{ old('city_id_d') == 'otro' ? 'selected' : '' }}>Otro
                                 </option>
                             </select>
-                            <input type="text" id="newCityField_d" class="form-control" name="new_city_name_d"
-                                placeholder="Nombre de la nueva ciudad"
+                            <input type="text" id="newCityField_d" class="form-control w-full"
+                                name="new_city_name_d" placeholder="Nombre de la nueva ciudad"
                                 style="display: {{ old('city_id_d') == 'otro' ? 'block' : 'none' }}; margin-top: 5px;"
                                 value="{{ old('new_city_name_d') }}">
                         </div>
@@ -394,15 +394,15 @@
                         });
                     </script>
                 </div>
-
                 <!-- Campos para Extradición -->
                 <div id="camposExtradicion" style="display: none;">
                     <label>Fecha de Extradición:</label>
-                    <input type="date" class="form-control" name="extradition_date">
-                    <div class="grid grid-cols-3 gap-10">
+                    <input type="date" class="form-control w-full" name="extradition_date">
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div class="form-group">
                             <label for="country_e">País:</label>
-                            <select id="country_e" name="country_id_e" class="form-control">
+                            <select id="country_e" name="country_id_e" class="form-control w-full">
                                 <option value="">Seleccionar</option>
                                 @foreach ($pais as $country)
                                     <option value="{{ $country->id }}"
@@ -413,7 +413,7 @@
                                 <option value="otro" {{ old('country_id_e') == 'otro' ? 'selected' : '' }}>Otro
                                 </option>
                             </select>
-                            <input type="text" id="newCountryField_e" class="form-control"
+                            <input type="text" id="newCountryField_e" class="form-control w-full"
                                 name="new_country_name_e" placeholder="Nombre del nuevo país"
                                 style="display: {{ old('country_id_e') == 'otro' ? 'block' : 'none' }}; margin-top: 5px;"
                                 value="{{ old('new_country_name_e') }}">
@@ -422,7 +422,7 @@
                         <!-- Selección de Estado -->
                         <div class="form-group">
                             <label for="state_e">Estado/Departamento:</label>
-                            <select id="state_e" name="province_id_e" class="form-control">
+                            <select id="state_e" name="province_id_e" class="form-control w-full">
                                 <option value="">Seleccionar</option>
                                 @foreach ($provincia as $state)
                                     <option value="{{ $state->id }}"
@@ -433,8 +433,8 @@
                                 <option value="otro" {{ old('province_id_e') == 'otro' ? 'selected' : '' }}>Otro
                                 </option>
                             </select>
-                            <input type="text" id="newStateField_e" class="form-control" name="new_state_name_e"
-                                placeholder="Nombre del nuevo estado"
+                            <input type="text" id="newStateField_e" class="form-control w-full"
+                                name="new_state_name_e" placeholder="Nombre del nuevo estado"
                                 style="display: {{ old('province_id_e') == 'otro' ? 'block' : 'none' }}; margin-top: 5px;"
                                 value="{{ old('new_state_name_e') }}">
                         </div>
@@ -442,7 +442,7 @@
                         <!-- Selección de Ciudad -->
                         <div class="form-group">
                             <label for="citySelect_e">Ciudad/Municipio:</label>
-                            <select id="citySelect_e" name="city_id_e" class="form-control">
+                            <select id="citySelect_e" name="city_id_e" class="form-control w-full">
                                 <option value="">Seleccionar</option>
                                 @foreach ($ciudad as $city)
                                     <option value="{{ $city->id }}"
@@ -453,8 +453,8 @@
                                 <option value="otro" {{ old('city_id_e') == 'otro' ? 'selected' : '' }}>Otro
                                 </option>
                             </select>
-                            <input type="text" id="newCityField_e" class="form-control" name="new_city_name_e"
-                                placeholder="Nombre de la nueva ciudad"
+                            <input type="text" id="newCityField_e" class="form-control w-full"
+                                name="new_city_name_e" placeholder="Nombre de la nueva ciudad"
                                 style="display: {{ old('city_id_e') == 'otro' ? 'block' : 'none' }}; margin-top: 5px;"
                                 value="{{ old('new_city_name_e') }}">
                         </div>
@@ -540,16 +540,16 @@
                         });
                     </script>
                 </div>
-
                 <!-- Campos para Libertad -->
                 <div id="camposLibertad" style="display: none;">
                     <label>Dirección:</label>
-                    <input type="text" class="form-control" name="house_address"
+                    <input type="text" class="form-control w-full" name="house_address"
                         placeholder="Ingrese una dirección">
-                    <div class="grid grid-cols-3 gap-10">
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div class="form-group">
                             <label for="country_l">País:</label>
-                            <select id="country_l" name="country_id_l" class="form-control">
+                            <select id="country_l" name="country_id_l" class="form-control w-full">
                                 <option value="">Seleccionar</option>
                                 @foreach ($pais as $country)
                                     <option value="{{ $country->id }}"
@@ -560,7 +560,7 @@
                                 <option value="otro" {{ old('country_id_l') == 'otro' ? 'selected' : '' }}>Otro
                                 </option>
                             </select>
-                            <input type="text" id="newCountryField_l" class="form-control"
+                            <input type="text" id="newCountryField_l" class="form-control w-full"
                                 name="new_country_name_l" placeholder="Nombre del nuevo país"
                                 style="display: {{ old('country_id_l') == 'otro' ? 'block' : 'none' }}; margin-top: 5px;"
                                 value="{{ old('new_country_name_l') }}">
@@ -569,7 +569,7 @@
                         <!-- Selección de Estado -->
                         <div class="form-group">
                             <label for="state_l">Estado/Departamento:</label>
-                            <select id="state_l" name="province_id_l" class="form-control">
+                            <select id="state_l" name="province_id_l" class="form-control w-full">
                                 <option value="">Seleccionar</option>
                                 @foreach ($provincia as $state)
                                     <option value="{{ $state->id }}"
@@ -580,8 +580,8 @@
                                 <option value="otro" {{ old('province_id_l') == 'otro' ? 'selected' : '' }}>Otro
                                 </option>
                             </select>
-                            <input type="text" id="newStateField_l" class="form-control" name="new_state_name_l"
-                                placeholder="Nombre del nuevo estado"
+                            <input type="text" id="newStateField_l" class="form-control w-full"
+                                name="new_state_name_l" placeholder="Nombre del nuevo estado"
                                 style="display: {{ old('province_id_l') == 'otro' ? 'block' : 'none' }}; margin-top: 5px;"
                                 value="{{ old('new_state_name_l') }}">
                         </div>
@@ -589,7 +589,7 @@
                         <!-- Selección de Ciudad -->
                         <div class="form-group">
                             <label for="citySelect_l">Ciudad/Municipio:</label>
-                            <select id="citySelect_l" name="city_id_l" class="form-control">
+                            <select id="citySelect_l" name="city_id_l" class="form-control w-full">
                                 <option value="">Seleccionar</option>
                                 @foreach ($ciudad as $city)
                                     <option value="{{ $city->id }}"
@@ -600,8 +600,8 @@
                                 <option value="otro" {{ old('city_id_l') == 'otro' ? 'selected' : '' }}>Otro
                                 </option>
                             </select>
-                            <input type="text" id="newCityField_l" class="form-control" name="new_city_name_l"
-                                placeholder="Nombre de la nueva ciudad"
+                            <input type="text" id="newCityField_l" class="form-control w-full"
+                                name="new_city_name_l" placeholder="Nombre de la nueva ciudad"
                                 style="display: {{ old('city_id_l') == 'otro' ? 'block' : 'none' }}; margin-top: 5px;"
                                 value="{{ old('new_city_name_l') }}">
                         </div>
@@ -687,8 +687,11 @@
                         });
                     </script>
                 </div>
+
+
             </div>
         </div>
+        <br>
         <div>
             <button class="btn btn-primary" type="submit">GUARDAR</button>
         </div>

@@ -4,38 +4,38 @@
     <form class="ajax-form" action="{{ route('criminals.store_arrest4') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="criminal_id" value="{{ $criminal->id }}">
-        <div class="class text-center"><label>Alias y otras identidades:</label></div>
+        <div class="text-center"><label>Alias y otras identidades:</label></div>
         <div>
-            <div class="grid grid-cols-2 gap-5">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-10">
                 <div>
                     <label>OTRAS IDENTIDADES</label>
                     <div class="form-group">
                         <label>Otros Nombre:</label>
-                        <input type="text" class="form-control" name="alias_name" placeholder="Nombre y Apellidos">
+                        <input type="text" class="form-control w-full" name="alias_name" placeholder="Nombre y Apellidos">
                     </div>
                     <div class="form-group">
-                        <label>Otros Numeros de Identidad::</label>
-                        <input type="text" class="form-control" name="alias_identity_number"
+                        <label>Otros Numeros de Identidad:</label>
+                        <input type="text" class="form-control w-full" name="alias_identity_number"
                             placeholder="Ingresar CI/DNI">
                     </div>
                 </div>
                 <div>
+                    <br>
                     <div class="form-group">
                         <label>Otras Nacionalidades</label>
-                        <select class="form-control" name="nationality_id" id="nationalitySelect">
+                        <select class="form-control w-full" name="nationality_id" id="nationalitySelect">
                             <option value="">Seleccione Nacionalidad</option>
                             @foreach ($nacionalidad as $nationality)
-                                <option value="{{ $nationality->id }}">{{ $nationality->nationality_name }}
-                                </option>
+                                <option value="{{ $nationality->id }}">{{ $nationality->nationality_name }}</option>
                             @endforeach
                             <option value="otro">Otro</option>
                         </select>
                     </div>
-
+                    
                     <!-- Campo de texto para nueva nacionalidad (inicialmente oculto) -->
                     <div class="form-group" id="otherNationalityDiv" style="display: none;">
                         <label>Ingrese Nueva Nacionalidad</label>
-                        <input type="text" class="form-control" name="otra_nacionalidad"
+                        <input type="text" class="form-control w-full" name="otra_nacionalidad"
                             placeholder="Especifique la nacionalidad">
                     </div>
                     <script>
@@ -48,26 +48,25 @@
                             }
                         });
                     </script>
-                    <br>
+                    
                     <div class="form-group">
                         <label>Otros Direcciones de Residencia:</label>
-                        <input type="text" class="form-control" name="street" placeholder="Ingresar Direccion">
+                        <input type="text" class="form-control w-full" name="street" placeholder="Ingresar Direccion">
                     </div>
                     <label>Lugar de residencia:</label>
                     <!-- Selección de País -->
                     <div class="form-group">
                         <label for="country">País:</label>
-                        <select id="country" name="country_id" class="form-control">
+                        <select id="country" name="country_id" class="form-control w-full">
                             <option value="">Seleccionar</option>
                             @foreach ($pais as $country)
-                                <option value="{{ $country->id }}"
-                                    {{ old('country_id') == $country->id ? 'selected' : '' }}>
+                                <option value="{{ $country->id }}" {{ old('country_id') == $country->id ? 'selected' : '' }}>
                                     {{ $country->country_name }}
                                 </option>
                             @endforeach
                             <option value="otro" {{ old('country_id') == 'otro' ? 'selected' : '' }}>Otro</option>
                         </select>
-                        <input type="text" id="newCountryField" class="form-control" name="new_country_name"
+                        <input type="text" id="newCountryField" class="form-control w-full" name="new_country_name"
                             placeholder="Nombre del nuevo país"
                             style="display: {{ old('country_id') == 'otro' ? 'block' : 'none' }}; margin-top: 5px;"
                             value="{{ old('new_country_name') }}">
@@ -76,17 +75,16 @@
                     <!-- Selección de Estado -->
                     <div class="form-group">
                         <label for="state">Estado/Departamento:</label>
-                        <select id="state" name="state_id" class="form-control">
+                        <select id="state" name="state_id" class="form-control w-full">
                             <option value="">Seleccionar</option>
                             @foreach ($provincia as $state)
-                                <option value="{{ $state->id }}"
-                                    {{ old('state_id') == $state->id ? 'selected' : '' }}>
+                                <option value="{{ $state->id }}" {{ old('state_id') == $state->id ? 'selected' : '' }}>
                                     {{ $state->state_name }}
                                 </option>
                             @endforeach
                             <option value="otro" {{ old('state_id') == 'otro' ? 'selected' : '' }}>Otro</option>
                         </select>
-                        <input type="text" id="newStateField" class="form-control" name="new_state_name"
+                        <input type="text" id="newStateField" class="form-control w-full" name="new_state_name"
                             placeholder="Nombre del nuevo estado"
                             style="display: {{ old('state_id') == 'otro' ? 'block' : 'none' }}; margin-top: 5px;"
                             value="{{ old('new_state_name') }}">
@@ -95,22 +93,20 @@
                     <!-- Selección de Ciudad -->
                     <div class="form-group">
                         <label>Ciudad/Municipio:</label>
-                        <select id="citySelect" name="city_id" class="form-control">
+                        <select id="citySelect" name="city_id" class="form-control w-full">
                             <option value="">Seleccionar</option>
                             @foreach ($ciudad as $city)
-                                <option value="{{ $city->id }}"
-                                    {{ old('city_id') == $city->id ? 'selected' : '' }}>
+                                <option value="{{ $city->id }}" {{ old('city_id') == $city->id ? 'selected' : '' }}>
                                     {{ $city->city_name }}
                                 </option>
                             @endforeach
                             <option value="otro" {{ old('city_id') == 'otro' ? 'selected' : '' }}>Otro</option>
                         </select>
-                        <input type="text" id="newCityField" class="form-control" name="new_city_name"
+                        <input type="text" id="newCityField" class="form-control w-full" name="new_city_name"
                             placeholder="Nombre de la nueva ciudad"
                             style="display: {{ old('city_id') == 'otro' ? 'block' : 'none' }}; margin-top: 5px;"
                             value="{{ old('new_city_name') }}">
                     </div>
-
 
                     <script>
                         document.addEventListener("DOMContentLoaded", function() {
@@ -192,7 +188,7 @@
                         });
                     </script>
                 </div>
-                <div>
+                <div class="flex justify-center">
                     <button class="btn btn-primary" type="submit">GUARDAR</button>
                 </div>
             </div>

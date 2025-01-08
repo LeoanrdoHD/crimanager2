@@ -585,7 +585,7 @@
                                             @endforeach
                                         </div>
                                     @else
-                                        <p>No se encontraron complices relacionados para este historial.</p>
+                                        <p>No se encontraron condenas relacionados para este historial.</p>
                                     @endif
                                     @if ($history->preventiveDetentions->isNotEmpty())
                                         <div class="tools-list">

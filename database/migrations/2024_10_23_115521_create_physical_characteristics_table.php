@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('criminal_id')->unsigned();
             $table->float('height');
-            $table->float('weight');
+            $table->float('weight')->nullable();
             $table->string('sex', 50);
             $table->unsignedBigInteger('confleccion_id')->nullable();
             $table->unsignedBigInteger('criminal_gender_id')->nullable();

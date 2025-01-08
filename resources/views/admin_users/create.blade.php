@@ -1,4 +1,6 @@
 @extends('adminlte::page')
+@vite(['resources/js/app.js', 'resources/css/app.css'])
+
 @section('content_header')
     <h1 class="text-center">
         CREAR NUEVO USUARIO</h1>
