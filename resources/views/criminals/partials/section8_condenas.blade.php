@@ -4,7 +4,6 @@
     <form class="ajax-form" action="{{ route('criminals.store_arrest8') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="criminal_id" value="{{ $criminal->id }}">
-
         <div class="grid grid-cols-1 gap-10">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>

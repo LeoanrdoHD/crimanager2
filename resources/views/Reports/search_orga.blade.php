@@ -57,12 +57,17 @@
                         <td>{{ $criminals->identity_number }}</td>
                         <td>{{ $criminals->alias_name }}</td>
                         <td>
-                            @foreach ($fotos as $photographs)
-                                @if ($photographs->criminal_id === $criminals->id)
-                                    <img src="{{ asset($photographs->face_photo) }}" width="75" alt="Foto Frontal"
-                                        style="border-radius: 50%; object-fit: cover;">
-                                @endif
-                            @endforeach
+                            @php
+                                $ultimaFoto = $fotos->where('criminal_id', $criminals->id)->last();
+                            @endphp
+
+                            @if ($ultimaFoto)
+                                <img src="{{ asset($ultimaFoto->face_photo) }}" width="80" alt="Foto Frontal"
+                                    style="border-radius: 50%; object-fit: cover;">
+                            @else
+                                <p>No hay fotografía disponible.</p>
+                            @endif
+
                         </td>
                         <td>
                             @foreach ($history_cri as $arrest_and_apprehension_histories)

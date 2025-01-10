@@ -3,12 +3,28 @@
 
 @section('title', 'Crimanager')
 @section('content_header')
+    @if (session('success'))
+        <div id="success-alert"
+            style="position: fixed; top: 20px; right: 20px; z-index: 9999; padding: 10px 20px; background-color: #4caf50; color: white; border-radius: 5px;">
+            {{ session('success') }}
+        </div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                setTimeout(() => {
+                    document.getElementById('success-alert').style.display = 'none';
+                }, 3000);
+            });
+        </script>
+    @endif
     <h1 class="text-center">
         Registro de Captura de: {{ $criminal->first_name }} {{ $criminal->last_nameP }} {{ $criminal->last_nameM }}
     </h1>
 @endsection
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/print.css') }}" media="print">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLR3r3YY6uCZp3Ku8m5Q4fZxLShw5uoLqeUjOMq3k5" crossorigin="anonymous">
+
     <style>
         h3 {
             color: #28a745;
@@ -214,9 +230,10 @@
                         <p><strong>Ocupación:</strong> {{ $criminal->occupation->ocupation_name ?? 'No especificado' }}</p>
                     </div>
 
+                    <!-- Imagen más reciente del rostro -->
                     <div class="col-md-3">
-                        @if ($criminal->photographs->first())
-                            <img src="{{ asset($criminal->photographs->first()->face_photo) }}"
+                        @if ($criminal->photographs->last())
+                            <img src="{{ asset($criminal->photographs->last()->face_photo) }}"
                                 alt="Foto Frontal de {{ $criminal->first_name }}" class="img-fluid1 img-thumbnail1"
                                 style="width: 100%; max-width: 225px; border-radius: 20%; object-fit: cover;">
                             <p><strong>Fotografía Rostro</strong></p>
@@ -225,48 +242,49 @@
                         @endif
                     </div>
 
-                    <!-- Galería de Fotografías Restantes (5/12 columnas) -->
+                    <!-- Galería de Fotografías Restantes -->
                     <div class="col-md-5"
                         style="border: 1px solid #dddddd3b; border-radius: 10px; background-color: #24242492;">
                         <h5>Otras Fotografías:</h5>
                         <div class="row g-3">
-                            <!-- Fotografía de cuerpo completo -->
+                            <!-- Fotografía Frontal -->
                             <div class="col-6 col-sm-4">
-                                <img src="{{ asset($criminal->photographs->first()->frontal_photo) }}"
-                                    class="img-fluid img-thumbnail" alt="Foto de Barra"
+                                <img src="{{ asset($criminal->photographs->last()->frontal_photo) }}"
+                                    class="img-fluid img-thumbnail" alt="Fotografía Frontal"
                                     style="width: 50%; max-width: 125px; border-radius: 20%; object-fit: cover;">
                                 <p><strong>Fotografía Frontal</strong></p>
                             </div>
+                            <!-- Fotografía de cuerpo completo -->
                             <div class="col-6 col-sm-4">
-                                <img src="{{ asset($criminal->photographs->first()->full_body_photo) }}"
-                                    class="img-fluid img-thumbnail" alt="Foto de Cuerpo Completo"
+                                <img src="{{ asset($criminal->photographs->last()->full_body_photo) }}"
+                                    class="img-fluid img-thumbnail" alt="Cuerpo Completo"
                                     style="width: 50%; max-width: 125px; border-radius: 20%; object-fit: cover;">
                                 <p class="text-center"><strong>Cuerpo Completo</strong></p>
                             </div>
                             <!-- Fotografía de Perfil Izquierdo -->
                             <div class="col-6 col-sm-4">
-                                <img src="{{ asset($criminal->photographs->first()->profile_izq_photo) }}"
+                                <img src="{{ asset($criminal->photographs->last()->profile_izq_photo) }}"
                                     class="img-fluid img-thumbnail" alt="Perfil Izquierdo"
                                     style="width: 50%; max-width: 125px; border-radius: 20%; object-fit: cover;">
                                 <p><strong>Perfil Izquierdo</strong></p>
                             </div>
                             <!-- Fotografía de Perfil Derecho -->
                             <div class="col-6 col-sm-4">
-                                <img src="{{ asset($criminal->photographs->first()->profile_der_photo) }}"
+                                <img src="{{ asset($criminal->photographs->last()->profile_der_photo) }}"
                                     class="img-fluid img-thumbnail" alt="Perfil Derecho"
                                     style="width: 50%; max-width: 125px; border-radius: 20%; object-fit: cover;">
                                 <p><strong>Perfil Derecho</strong></p>
                             </div>
                             <!-- Fotografía Adicional -->
                             <div class="col-6 col-sm-4">
-                                <img src="{{ asset($criminal->photographs->first()->aditional_photo) }}"
+                                <img src="{{ asset($criminal->photographs->last()->aditional_photo) }}"
                                     class="img-fluid img-thumbnail" alt="Foto Adicional"
                                     style="width: 50%; max-width: 125px; border-radius: 20%; object-fit: cover;">
                                 <p><strong>Fotografía Adicional</strong></p>
                             </div>
                             <!-- Fotografía de Barra -->
                             <div class="col-6 col-sm-4">
-                                <img src="{{ asset($criminal->photographs->first()->barra_photo) }}"
+                                <img src="{{ asset($criminal->photographs->last()->barra_photo) }}"
                                     class="img-fluid img-thumbnail" alt="Foto de Barra"
                                     style="width: 50%; max-width: 125px; border-radius: 20%; object-fit: cover;">
                                 <p><strong>Fotografía de Barra</strong></p>
@@ -274,10 +292,8 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-md-4">
-
                         <label>Direccion de Residencia:</label>
                         @forelse ($criminal->criminalAddresses as $address)
                             <p><strong></strong> {{ $address->country->country_name ?? 'No especificado' }} -
@@ -301,7 +317,7 @@
                     </div>
 
                     <div class="col-md-5">
-                        <label>Caracteristicas Fisicas:</label>
+                        <label>CARACTERISTICAS FÍSICAS:</label>
                         @forelse ($criminal->physicalCharacteristics as $characteristic)
                             <div class="row">
                                 <!-- Columna 1 -->
@@ -337,6 +353,12 @@
                         @empty
                             <p>No hay características físicas disponibles para este criminal.</p>
                         @endforelse
+                        <br>
+                        <div class="d-flex justify-content-center">
+                            <a href="{{ route('criminals.edit', $criminal->id) }}"
+                                class="btn btn-success btn-sm w-20 mb-2">Editar</a>
+                        </div>
+
                     </div>
                 </div>
             </div>

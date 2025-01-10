@@ -256,12 +256,17 @@
                         <td>{{ $criminals->identity_number }}</td>
                         <td>{{ $criminals->alias_name }}</td>
                         <td>
-                            @foreach ($fotos as $photographs)
-                                @if ($photographs->criminal_id === $criminals->id)
-                                    <img src="{{ asset($photographs->face_photo) }}" width="80" alt="Foto Frontal"
-                                        style="border-radius: 50%; object-fit: cover;">
-                                @endif
-                            @endforeach
+                            @php
+                                $ultimaFoto = $fotos->where('criminal_id', $criminals->id)->last();
+                            @endphp
+
+                            @if ($ultimaFoto)
+                                <img src="{{ asset($ultimaFoto->face_photo) }}" width="80" alt="Foto Frontal"
+                                    style="border-radius: 50%; object-fit: cover;">
+                            @else
+                                <p>No hay fotografía disponible.</p>
+                            @endif
+
                         </td>
                         <td>
                             @foreach ($history_cri as $arrest_and_apprehension_histories)
@@ -284,9 +289,12 @@
                         </td>
                         <td>
                             <div class="d-flex flex-column align-items-start">
-                                <a href="/criminals/search_cri/{{ $criminals->id }}" class="btn btn-primary btn-sm w-100 mb-2">Ver</a>
-                                <a href="{{ route('generate-pdf', $criminals->id) }}" class="btn btn-warning btn-sm w-100 mb-2">Descargar 1</a>
-                                <a href="{{ route('generate-pdf-rapido', $criminals->id) }}" class="btn btn-success btn-sm w-100">Descargar 2</a>
+                                <a href="/criminals/search_cri/{{ $criminals->id }}"
+                                    class="btn btn-primary btn-sm w-100 mb-2">Ver</a>
+                                <a href="{{ route('generate-pdf', $criminals->id) }}"
+                                    class="btn btn-warning btn-sm w-100 mb-2">Descargar 1</a>
+                                <a href="{{ route('generate-pdf-rapido', $criminals->id) }}"
+                                    class="btn btn-success btn-sm w-100">Descargar 2</a>
                             </div>
                         </td>
                         <!-- Columnas adicionales con datos vacíos si no están disponibles -->

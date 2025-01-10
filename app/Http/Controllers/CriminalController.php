@@ -308,4 +308,137 @@ class CriminalController extends Controller
             return redirect()->back()->withInput()->with('error', 'Ocurrió un error: ' . $e->getMessage());
         }
     }
+    public function edit($criminal_id)
+    {
+        // Obtén el criminal correspondiente
+        $criminal = Criminal::with([
+            'civilState',
+            'country',
+            'state',
+            'city',
+            'nationality',
+            'occupation',
+            'photographs',
+            'arrestHistories',
+            'criminalAddresses.country',
+            'criminalAddresses.state',
+            'criminalAddresses.city',
+            'physicalCharacteristics.earType',
+            'physicalCharacteristics.eyeType',
+            'physicalCharacteristics.lipType',
+            'physicalCharacteristics.noseType',
+            'physicalCharacteristics.skinColor',
+            'physicalCharacteristics.Confleccion',
+            'physicalCharacteristics.criminalGender',
+            'criminalPartner.relationshipType'
+        ])
+            ->findOrFail($criminal_id);
+        $conflexion = confleccion::all();
+        $color = skin_color::all();
+        $genero = criminal_gender::all();
+        $ojos = eye_type::all();
+        $naris = nose_type::all();
+        $labios = lip_type::all();
+        $orejas = ear_type::all();
+
+        // Redirige a la vista con los datos
+        return view('criminals.edit_fisico', compact('criminal', 'conflexion', 'color', 'genero', 'ojos', 'naris', 'labios', 'orejas'));
+    }
+    public function update(Request $request, $criminal_id)
+    {
+        // Validar los datos del formulario
+        $validatedData = $request->validate([
+            'weight' => 'required|numeric|min:1',
+            'height' => 'required|numeric|min:1',
+            'confleccion_id' => 'required',
+            'skin_color_id' => 'nullable|exists:skin_colors,id',
+            'sex' => 'required|in:MASCULINO,FEMENINO', // 'male' o 'female', ajusta según los valores posibles
+            'criminal_gender_id' => 'nullable|exists:criminal_genders,id',
+            'eye_type_id' => 'nullable|exists:eye_types,id',
+            'ear_type_id' => 'nullable|exists:ear_types,id',
+            'lip_type_id' => 'nullable|exists:lip_types,id',
+            'nose_type_id' => 'nullable|exists:nose_types,id',
+            'distinctive_marks' => 'nullable|string|max:500', // Ajusta el tamaño según el campo
+            // Agregar las validaciones para las imágenes si es necesario
+            'face_photo' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048',
+            'frontal_photo' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048',
+            'full_body_photo' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048',
+            'profile_izq_photo' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048',
+            'profile_der_photo' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048',
+            'aditional_photo' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048',
+            'barra_photo' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048',
+        ]);
+
+        // Encontrar el criminal
+        $criminal = Criminal::findOrFail($criminal_id);
+
+        // Actualizar los campos básicos
+        $criminal->update($validatedData);
+
+        // Actualizar características físicas
+        $physicalCharacteristics = physical_characteristic::where('criminal_id', $criminal_id)->first();
+        if ($physicalCharacteristics) {
+            $physicalCharacteristics->update([
+                'weight' => $request->weight,
+                'height' => $request->height,
+                'confleccion_id' => $request->confleccion_id,
+                'skin_color_id' => $request->skin_color_id,
+                'sex' => $request->sex,
+                'criminal_gender_id' => $request->criminal_gender_id,
+                'eye_type_id' => $request->eye_type_id,
+                'ear_type_id' => $request->ear_type_id,
+                'lip_type_id' => $request->lip_type_id,
+                'nose_type_id' => $request->nose_type_id,
+                'distinctive_marks' => $request->distinctive_marks,
+            ]);
+        }
+        // Manejo de imágenes
+        $imagenes = [
+            'face_photo' => $request->file('face_photo'),
+            'frontal_photo' => $request->file('frontal_photo'),
+            'full_body_photo' => $request->file('full_body_photo'),
+            'profile_izq_photo' => $request->file('profile_izq_photo'),
+            'profile_der_photo' => $request->file('profile_der_photo'),
+            'aditional_photo' => $request->file('aditional_photo'),
+            'barra_photo' => $request->file('barra_photo')
+        ];
+
+        $destino_img = 'fotos_criminal';
+        $rutas = [];
+        $nuevaImagenCargada = false; // Bandera para verificar si se cargó al menos una imagen
+
+        foreach ($imagenes as $key => $imagen) {
+            if ($imagen) {
+                $nuevaImagenCargada = true; // Se detecta que el usuario cargó una imagen
+                $filename = time() . '-' . $imagen->getClientOriginalName();
+
+                // Guarda en el disco `public` para que esté accesible en `storage/app/public/fotos_criminal`
+                $path = $imagen->storeAs($destino_img, $filename, 'public');
+
+                // Genera una URL pública para acceder a la imagen
+                $rutas[$key] = Storage::url($path);
+            } else {
+                // Si no hay imagen, no se incluye en las rutas
+                $rutas[$key] = null;
+            }
+        }
+
+        // Crear un nuevo registro de las fotografías solo si se cargó al menos una imagen
+        if ($nuevaImagenCargada) {
+            Photograph::create([
+                'criminal_id' => $criminal->id,
+                'face_photo' => $rutas['face_photo'],
+                'frontal_photo' => $rutas['frontal_photo'],
+                'full_body_photo' => $rutas['full_body_photo'],
+                'profile_izq_photo' => $rutas['profile_izq_photo'],
+                'profile_der_photo' => $rutas['profile_der_photo'],
+                'aditional_photo' => $rutas['aditional_photo'],
+                'barra_photo' => $rutas['barra_photo'],
+            ]);
+        }
+
+        // Redirigir con un mensaje de éxito
+        return redirect("/criminals/search_cri/{$criminal_id}")
+            ->with('success', 'Los datos del criminal se han actualizado correctamente.');
+    }
 }

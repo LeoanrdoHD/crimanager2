@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('criminal_partners', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('criminal_id')->unsigned();
+            $table->unsignedBigInteger('criminal_id')->nullable();
             $table->string('partner_name')->nullable();
-            $table->unsignedBigInteger('relationship_type_id');
+            $table->unsignedBigInteger('relationship_type_id')->nullable();
             $table->string('partner_address')->nullable();
             $table->timestamps();
 
