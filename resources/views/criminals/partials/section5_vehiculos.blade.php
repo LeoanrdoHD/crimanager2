@@ -39,12 +39,13 @@
 
                     <div class="form-group" id="other_vehicle_type_group" style="display: none;">
                         <label>Otro tipo de vehículo:</label>
-                        <input type="text" class="form-control" name="other_vehicle_type" placeholder="Ingrese otro tipo">
+                        <input type="text" class="form-control" name="other_vehicle_type"
+                            placeholder="Ingrese otro tipo">
                     </div>
                 </div>
 
                 <script>
-                    document.getElementById('type_id').addEventListener('change', function () {
+                    document.getElementById('type_id').addEventListener('change', function() {
                         var otherVehicleTypeGroup = document.getElementById('other_vehicle_type_group');
                         if (this.value === 'other') {
                             otherVehicleTypeGroup.style.display = 'block';
@@ -57,7 +58,8 @@
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
                     <div class="form-group">
                         <label>Año de Fabricación:</label>
-                        <input type="number" class="form-control" name="year" placeholder="Año" min="1950" max="2124">
+                        <input type="number" class="form-control" name="year" placeholder="Año" min="1950"
+                            max="2124">
                     </div>
 
                     <div class="form-group">
@@ -89,7 +91,8 @@
 
                     <div class="form-group">
                         <label>Número de Placa:</label>
-                        <input type="text" class="form-control" name="license_plate" placeholder="Ingrese Número de Placa">
+                        <input type="text" class="form-control" name="license_plate"
+                            placeholder="Ingrese Número de Placa">
                     </div>
                 </div>
 
@@ -107,6 +110,97 @@
                     <label>Detalles del Vehículo:</label>
                     <input type="text" class="form-control" name="details" placeholder="Descripción de detalles">
                 </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                    <div>
+                        <div class="form-group">
+                            <label>Foto Frontal: (*)</label>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" name="front_photo" id="front_photo"
+                                    onchange="previewImage(this, 'previewFront')">
+                                <label class="custom-file-label" for="front_photo">Seleccionar...</label>
+                            </div>
+                            <div class="center-image-container">
+                                <img id="previewFront"
+                                    src="{{ asset('vendor/adminlte/dist/img/Add_Image_icon-icons.png') }}"
+                                    alt="Vista previa"
+                                    style="width: 100%; max-width: 100px; margin-top: 10px; cursor: pointer;"
+                                    onclick="document.getElementById('front_photo').click();">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Foto Trasera: (*)</label>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" name="rear_photo" id="rear_photo"
+                                    onchange="previewImage(this, 'previewRear')">
+                                <label class="custom-file-label" for="rear_photo">Seleccionar...</label>
+                            </div>
+                            <div class="center-image-container">
+                                <img id="previewRear"
+                                    src="{{ asset('vendor/adminlte/dist/img/Add_Image_icon-icons.png') }}"
+                                    alt="Vista previa"
+                                    style="width: 100%; max-width: 100px; margin-top: 10px; cursor: pointer;"
+                                    onclick="document.getElementById('rear_photo').click();">
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="form-group">
+                            <label>Foto Lateral Izquierda: (*)</label>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" name="left_side_photo"
+                                    id="left_side_photo" onchange="previewImage(this, 'previewLeftSide')">
+                                <label class="custom-file-label" for="left_side_photo">Seleccionar...</label>
+                            </div>
+                            <div class="center-image-container">
+                                <img id="previewLeftSide"
+                                    src="{{ asset('vendor/adminlte/dist/img/Add_Image_icon-icons.png') }}"
+                                    alt="Vista previa"
+                                    style="width: 100%; max-width: 100px; margin-top: 10px; cursor: pointer;"
+                                    onclick="document.getElementById('left_side_photo').click();">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Foto Lateral Derecha: (*)</label>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" name="right_side_photo"
+                                    id="right_side_photo" onchange="previewImage(this, 'previewRightSide')">
+                                <label class="custom-file-label" for="right_side_photo">Seleccionar...</label>
+                            </div>
+                            <div class="center-image-container">
+                                <img id="previewRightSide"
+                                    src="{{ asset('vendor/adminlte/dist/img/Add_Image_icon-icons.png') }}"
+                                    alt="Vista previa"
+                                    style="width: 100%; max-width: 100px; margin-top: 10px; cursor: pointer;"
+                                    onclick="document.getElementById('right_side_photo').click();">
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        function previewImage(input, previewId) {
+                            let file = input.files[0];
+                            let label = input.nextElementSibling;
+
+                            // Actualizar el nombre del archivo en el label
+                            label.innerText = file ? file.name : "Seleccionar...";
+
+                            // Mostrar vista previa si es una imagen
+                            if (file && file.type.startsWith("image/")) {
+                                let reader = new FileReader();
+                                reader.onload = function(e) {
+                                    let preview = document.getElementById(previewId);
+                                    preview.src = e.target.result;
+                                }
+                                reader.readAsDataURL(file);
+                            } else {
+                                // Restablecer a la imagen predeterminada si el archivo no es válido
+                                let preview = document.getElementById(previewId);
+                                preview.src = "{{ asset('vendor/adminlte/dist/img/Add_Image_icon-icons.png') }}";
+                            }
+                        }
+                    </script>
+                </div>
             </div>
 
             <!-- Columna: Datos de ITV -->
@@ -119,7 +213,8 @@
                     <label>¿El vehículo tiene ITV?</label>
                     <div class="custom-control custom-switch">
                         <input type="hidden" name="itv_valid" value="0">
-                        <input type="checkbox" class="custom-control-input" id="itvSwitch" name="itv_valid" value="1" onchange="toggleITVFields()">
+                        <input type="checkbox" class="custom-control-input" id="itvSwitch" name="itv_valid"
+                            value="1" onchange="toggleITVFields()">
                         <label class="custom-control-label" for="itvSwitch">Sí</label>
                     </div>
                 </div>
@@ -140,7 +235,8 @@
                         <select class="form-control" name="relationship_with_owner_id" id="relationshipSelect">
                             <option value="">Seleccionar</option>
                             @foreach ($relusuario as $relationship_with_owner)
-                                <option value="{{ $relationship_with_owner->id }}">{{ $relationship_with_owner->relationship_name }}</option>
+                                <option value="{{ $relationship_with_owner->id }}">
+                                    {{ $relationship_with_owner->relationship_name }}</option>
                             @endforeach
                             <option value="other">Otro</option>
                         </select>
@@ -148,11 +244,12 @@
 
                     <div class="form-group mt-4" id="otherRelationshipField" style="display: none;">
                         <label>Especifique la nueva relación:</label>
-                        <input type="text" class="form-control" name="other_relationship" placeholder="Ingrese otra relación">
+                        <input type="text" class="form-control" name="other_relationship"
+                            placeholder="Ingrese otra relación">
                     </div>
 
                     <script>
-                        document.getElementById('relationshipSelect').addEventListener('change', function () {
+                        document.getElementById('relationshipSelect').addEventListener('change', function() {
                             const otherField = document.getElementById('otherRelationshipField');
                             if (this.value === 'other') {
                                 otherField.style.display = 'block';
@@ -164,12 +261,14 @@
 
                     <div class="form-group mt-4">
                         <label>Otras Observaciones:</label>
-                        <input type="text" class="form-control" name="observations" placeholder="Ingrese observaciones">
+                        <input type="text" class="form-control" name="observations"
+                            placeholder="Ingrese observaciones">
                     </div>
 
                     <div class="form-group mt-4">
                         <label>Nombre del Conductor:</label>
-                        <input type="text" class="form-control" name="driver_name" placeholder="Ingrese nombre del conductor">
+                        <input type="text" class="form-control" name="driver_name"
+                            placeholder="Ingrese nombre del conductor">
                     </div>
                 </div>
 

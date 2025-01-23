@@ -9,7 +9,7 @@
 
     <x-slot name="content">
         <div class="max-w-xl text-sm text-gray-600 dark:text-gray-400">
-            {{ __('Si es necesario, puede cerrar la sesión de todas las demás sesiones del navegador en todos sus dispositivos. A continuación se enumeran algunas de sus sesiones recientes; sin embargo, es posible que esta lista no sea exhaustiva. Si cree que su cuenta ha sido vulnerada, también debe actualizar su contraseña.') }}
+            {{ __('Si es necesario, puede cerrar la sesión de todas las demás sesiones del navegador en todos sus dispositivos. A continuación se enumeran algunas de sus sesiones recientes; sin embargo, es posible que esta lista no sea exhaustiva. Si cree que su cuenta ha sido vulnerada, también debe actualizar su .') }}
         </div>
 
         @if (count($this->sessions) > 0)

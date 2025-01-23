@@ -24,7 +24,12 @@ class criminal_vehicle extends Model
         'relationship_with_owner_id',
         'observations',
         'driver_name',
+        'front_photo',        // Foto de frente
+        'left_side_photo',    // Foto lateral izquierda
+        'right_side_photo',   // Foto lateral derecha
+        'rear_photo',         // Foto trasera
     ];
+
     public function criminal()
     {
         return $this->belongsTo(Criminal::class, 'criminal_id');

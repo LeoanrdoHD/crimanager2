@@ -103,7 +103,7 @@ class ReportsController extends Controller
         // Redirige a la vista con los datos
         return view('criminals.show_file', compact('criminal', 'history'));
     }
-
+   
     public function generatePDF($criminal_id)
     {
         $options = new Options();

@@ -37,6 +37,8 @@ use App\Models\skin_color;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PhpParser\Node\Stmt\Return_;
+use Illuminate\Support\Arr;
+
 
 class CriminalController extends Controller
 {
@@ -77,9 +79,9 @@ class CriminalController extends Controller
                 'identity_number' => [
                     'required',
                     'string',
-                    'max:20',
-                    'unique:criminals,identity_number',
-                    'regex:/^\d{1,15}-[A-Z]{1,3}$/',
+                    'max:23', // Máximo de 23 caracteres para considerar "20 dígitos + guion + 3 letras".
+                    'regex:/^\d{1,20}(-[A-Z]{1,3})?$/',
+                    'unique_identity_number', // Regla personalizada
                 ],
                 'date_of_birth' => 'required|date|before:today',
                 'age' => 'nullable|integer|min:0|max:120',
@@ -90,7 +92,7 @@ class CriminalController extends Controller
                 'civil_state_id' => 'required|exists:civil_states,id',
                 'alias_name' => 'nullable|string|min:3|max:60',
                 'ocupation_id' => 'required',
-                'street' => 'string|max:255',
+                'street' => 'required|string|max:255',
                 'partner_name' => 'nullable|string|min:5|max:120',
                 'relationship_type_id' => 'nullable|exists:relationship_types,id',
                 'partner_address' => 'nullable|string|min:5|max:255',
@@ -105,13 +107,13 @@ class CriminalController extends Controller
                 'lip_type_id' => 'required',
                 'ear_type_id' => 'required',
                 'distinctive_marks' => 'required|string|max:255',
-                'face_photo' => 'required|image|mimes:jpg,jpeg,png|max:4000',
-                'profile_izq_photo' => 'required|image|mimes:jpg,jpeg,png|max:4000',
-                'full_body_photo' => 'required|image|mimes:jpg,jpeg,png|max:4000',
-                'frontal_photo' => 'required|image|mimes:jpg,jpeg,png|max:4000',
-                'profile_der_photo' => 'required|image|mimes:jpg,jpeg,png|max:4000',
-                'aditional_photo' => 'nullable|image|mimes:jpg,jpeg,png|max:4000',
-                'barra_photo' => 'nullable|image|mimes:jpg,jpeg,png|max:4000',
+                'face_photo' => 'required|image|mimes:jpg,jpeg,png|max:6000',
+                'profile_izq_photo' => 'required|image|mimes:jpg,jpeg,png|max:6000',
+                'full_body_photo' => 'required|image|mimes:jpg,jpeg,png|max:6000',
+                'frontal_photo' => 'required|image|mimes:jpg,jpeg,png|max:6000',
+                'profile_der_photo' => 'required|image|mimes:jpg,jpeg,png|max:6000',
+                'aditional_photo' => 'nullable|image|mimes:jpg,jpeg,png|max:6000',
+                'barra_photo' => 'nullable|image|mimes:jpg,jpeg,png|max:6000',
                 'otra_ocupacion' => 'nullable|string',
             ]);
             DB::beginTransaction();
@@ -299,13 +301,28 @@ class CriminalController extends Controller
 
             // Confirmar la transacción
             DB::commit();
-            return redirect()->route('criminals.search_cri')->with('success', 'Perfil creado con éxito');
-            // Confirmar la transacción
+
+            // Redirigir con mensaje de éxito
+            return redirect()
+                ->route('criminals.search_cri')
+                ->with('success', 'Perfil creado con éxito.');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            DB::rollBack();
+
+            // Redirigir con errores de validación
+            return redirect()
+                ->back()
+                ->withInput()
+                ->withErrors($e->errors())
+                ->with('error', 'Ocurrió un error de validación: ' . implode(', ', Arr::flatten($e->errors())));
         } catch (\Exception $e) {
             DB::rollBack();
 
-            // Redirigir de vuelta con el mensaje de error
-            return redirect()->back()->withInput()->with('error', 'Ocurrió un error: ' . $e->getMessage());
+            // Redirigir con mensaje de error genérico
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'Ocurrió un error: ' . $e->getMessage());
         }
     }
     public function edit($criminal_id)
@@ -360,12 +377,12 @@ class CriminalController extends Controller
             'nose_type_id' => 'nullable|exists:nose_types,id',
             'distinctive_marks' => 'nullable|string|max:500', // Ajusta el tamaño según el campo
             // Agregar las validaciones para las imágenes si es necesario
-            'face_photo' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048',
-            'frontal_photo' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048',
-            'full_body_photo' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048',
-            'profile_izq_photo' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048',
-            'profile_der_photo' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048',
-            'aditional_photo' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048',
+            'face_photo' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:6048',
+            'frontal_photo' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:6048',
+            'full_body_photo' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:6048',
+            'profile_izq_photo' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:6048',
+            'profile_der_photo' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:6048',
+            'aditional_photo' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:6048',
             'barra_photo' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048',
         ]);
 

@@ -115,7 +115,7 @@
                 @foreach ($usuarios as $users)
                     <tr>
                         <td>{{ $users->id }}</td>
-                        <td>{{ ucwords(strtolower($users->grade)) }}. {{ ucwords(strtolower($users->name)) }}</td>
+                        <td>{{ ucwords(strtolower($users->grade)) }} {{ ucwords(strtolower($users->name)) }}</td>
                         <td>{{ $users->ci_police }}</td>
                         <td>
                             @if ($users->profile_photo_path)

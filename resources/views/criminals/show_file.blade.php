@@ -126,13 +126,6 @@
             font-size: 14px;
         }
 
-        .img-thumbnail {
-            border-radius: 10%;
-            /* Ajusta redondez de las imágenes */
-            object-fit: cover;
-            max-width: 100%;
-        }
-
         .g-3 .col-6 {
             margin-bottom: 10px;
             /* Reduce espacio entre imágenes */
@@ -235,7 +228,7 @@
                         @if ($criminal->photographs->last())
                             <img src="{{ asset($criminal->photographs->last()->face_photo) }}"
                                 alt="Foto Frontal de {{ $criminal->first_name }}" class="img-fluid1 img-thumbnail1"
-                                style="width: 100%; max-width: 225px; border-radius: 20%; object-fit: cover;">
+                                style="width: 100%; max-width: 225px; border-radius: 10%; object-fit: cover;">
                             <p><strong>Fotografía Rostro</strong></p>
                         @else
                             <p>No hay fotografía de Rostro disponible.</p>
@@ -249,43 +242,43 @@
                         <div class="row g-3">
                             <!-- Fotografía Frontal -->
                             <div class="col-6 col-sm-4">
-                                <img src="{{ asset($criminal->photographs->last()->frontal_photo) }}"
-                                    class="img-fluid img-thumbnail" alt="Fotografía Frontal"
+                                <img src="{{ asset($criminal->photographs->last()->frontal_photo) }}" class="img-fluid"
+                                    alt="Fotografía Frontal"
                                     style="width: 50%; max-width: 125px; border-radius: 20%; object-fit: cover;">
                                 <p><strong>Fotografía Frontal</strong></p>
                             </div>
                             <!-- Fotografía de cuerpo completo -->
                             <div class="col-6 col-sm-4">
-                                <img src="{{ asset($criminal->photographs->last()->full_body_photo) }}"
-                                    class="img-fluid img-thumbnail" alt="Cuerpo Completo"
+                                <img src="{{ asset($criminal->photographs->last()->full_body_photo) }}" class="img-fluid"
+                                    alt="Cuerpo Completo"
                                     style="width: 50%; max-width: 125px; border-radius: 20%; object-fit: cover;">
                                 <p class="text-center"><strong>Cuerpo Completo</strong></p>
                             </div>
                             <!-- Fotografía de Perfil Izquierdo -->
                             <div class="col-6 col-sm-4">
-                                <img src="{{ asset($criminal->photographs->last()->profile_izq_photo) }}"
-                                    class="img-fluid img-thumbnail" alt="Perfil Izquierdo"
+                                <img src="{{ asset($criminal->photographs->last()->profile_izq_photo) }}" class="img-fluid"
+                                    alt="Perfil Izquierdo"
                                     style="width: 50%; max-width: 125px; border-radius: 20%; object-fit: cover;">
                                 <p><strong>Perfil Izquierdo</strong></p>
                             </div>
                             <!-- Fotografía de Perfil Derecho -->
                             <div class="col-6 col-sm-4">
-                                <img src="{{ asset($criminal->photographs->last()->profile_der_photo) }}"
-                                    class="img-fluid img-thumbnail" alt="Perfil Derecho"
+                                <img src="{{ asset($criminal->photographs->last()->profile_der_photo) }}" class="img-fluid"
+                                    alt="Perfil Derecho"
                                     style="width: 50%; max-width: 125px; border-radius: 20%; object-fit: cover;">
                                 <p><strong>Perfil Derecho</strong></p>
                             </div>
                             <!-- Fotografía Adicional -->
                             <div class="col-6 col-sm-4">
-                                <img src="{{ asset($criminal->photographs->last()->aditional_photo) }}"
-                                    class="img-fluid img-thumbnail" alt="Foto Adicional"
+                                <img src="{{ asset($criminal->photographs->last()->aditional_photo) }}" cl"
+                                    alt="Foto Adicional"
                                     style="width: 50%; max-width: 125px; border-radius: 20%; object-fit: cover;">
                                 <p><strong>Fotografía Adicional</strong></p>
                             </div>
                             <!-- Fotografía de Barra -->
                             <div class="col-6 col-sm-4">
-                                <img src="{{ asset($criminal->photographs->last()->barra_photo) }}"
-                                    class="img-fluid img-thumbnail" alt="Foto de Barra"
+                                <img src="{{ asset($criminal->photographs->last()->barra_photo) }}" class="img-fluid"
+                                    alt="Foto de Barra"
                                     style="width: 50%; max-width: 125px; border-radius: 20%; object-fit: cover;">
                                 <p><strong>Fotografía de Barra</strong></p>
                             </div>
@@ -354,11 +347,12 @@
                             <p>No hay características físicas disponibles para este criminal.</p>
                         @endforelse
                         <br>
-                        <div class="d-flex justify-content-center">
-                            <a href="{{ route('criminals.edit', $criminal->id) }}"
-                                class="btn btn-success btn-sm w-20 mb-2">Editar</a>
-                        </div>
-
+                        @can('agregar.criminal')
+                            <div class="d-flex justify-content-center">
+                                <a href="{{ route('criminals.edit', $criminal->id) }}"
+                                    class="btn btn-success btn-sm w-20 mb-2">Editar</a>
+                            </div>
+                        @endcan
                     </div>
                 </div>
             </div>
@@ -474,7 +468,8 @@
                                                         {{ $aliase->alias_identity_number }}
                                                     </p>
                                                     <p><strong>Nacionalidad:</strong>
-                                                        {{ $aliase->nationality->nationality_name }}</p>
+                                                        {{ $aliase->nationality->nationality_name ?? 'No especificada' }}
+                                                    </p>
                                                     <hr class="separator"> <!-- Línea separadora -->
                                                 </div>
                                             @endforeach
@@ -589,8 +584,71 @@
                                                 </div>
                                             @endforeach
                                         </div>
+                                        @php
+                                            // Verificamos si al menos un vehículo tiene alguna fotografía registrada
+                                            $hasPhotos = $history->criminalVehicle->some(function ($vehicle) {
+                                                return $vehicle->front_photo ||
+                                                    $vehicle->left_side_photo ||
+                                                    $vehicle->right_side_photo ||
+                                                    $vehicle->rear_photo;
+                                            });
+                                        @endphp
+
+                                        @if ($hasPhotos)
+                                            <!-- Muestra la sección solo si hay fotos -->
+                                            <h4 class="section-title text-center">Fotografías del Vehículo:</h4>
+                                            <div class="row">
+                                                @foreach ($history->criminalVehicle as $vehicle)
+                                                    @if ($vehicle->front_photo || $vehicle->left_side_photo || $vehicle->right_side_photo || $vehicle->rear_photo)
+                                                        @if ($vehicle->front_photo)
+                                                            <div class="col-6 col-sm-3 mb-4">
+                                                                <!-- 2 columnas en móviles, 4 columnas en pantallas más grandes -->
+                                                                <div class="tool-item text-center">
+                                                                    <img src="{{ asset($vehicle->front_photo) }}"
+                                                                        class="img-fluid" alt="Frontal"
+                                                                        style="width: 50%; max-width: 125px; border-radius: 10%; border: 1px solid #ddd; object-fit: cover;">
+                                                                    <p><strong>Frontal</strong></p>
+                                                                </div>
+                                                            </div>
+                                                        @endif
+
+                                                        @if ($vehicle->left_side_photo)
+                                                            <div class="col-6 col-sm-3 mb-4">
+                                                                <div class="tool-item text-center">
+                                                                    <img src="{{ asset($vehicle->left_side_photo) }}"
+                                                                        class="img-fluid" alt="Lateral Izquierda"
+                                                                        style="width: 50%; max-width: 125px; border-radius: 10%; border: 1px solid #ddd; object-fit: cover;">
+                                                                    <p><strong>Lateral Izquierda</strong></p>
+                                                                </div>
+                                                            </div>
+                                                        @endif
+
+                                                        @if ($vehicle->right_side_photo)
+                                                            <div class="col-6 col-sm-3 mb-4">
+                                                                <div class="tool-item text-center">
+                                                                    <img src="{{ asset($vehicle->right_side_photo) }}"
+                                                                        class="img-fluid" alt="Lateral Derecha"
+                                                                        style="width: 50%; max-width: 125px; border-radius: 10%; border: 1px solid #ddd; object-fit: cover;">
+                                                                    <p><strong>Lateral Derecha</strong></p>
+                                                                </div>
+                                                            </div>
+                                                        @endif
+                                                        @if ($vehicle->rear_photo)
+                                                            <div class="col-6 col-sm-3 mb-4">
+                                                                <div class="tool-item text-center">
+                                                                    <img src="{{ asset($vehicle->rear_photo) }}"
+                                                                        class="img-fluid" alt="Trasera"
+                                                                        style=" width: 50%; max-width: 125px; border-radius: 10%; border: 1px solid #ddd; object-fit: cover;">
+                                                                    <p><strong>Trasera</strong></p>
+                                                                </div>
+                                                            </div>
+                                                        @endif
+                                                    @endif
+                                                @endforeach
+                                            </div>
+                                        @endif
                                     @else
-                                        <p>No se encontraron Identidades relacionadas para este historial.</p>
+                                        <p>No se encontraron vehiculos relacionadas para este historial.</p>
                                     @endif
                                 </div>
 
@@ -613,7 +671,8 @@
                                         <div class="tools-list">
                                             @foreach ($history->preventiveDetentions as $preventivo)
                                                 <div class="tool-item">
-                                                    <p><strong>Prisión:</strong> {{ $preventivo->prison->prison_name }}</p>
+                                                    <p><strong>Prisión:</strong> {{ $preventivo->prison->prison_name }}
+                                                    </p>
                                                     <p><strong>Dirección de la Prisión:</strong>
                                                         {{ $preventivo->prison->prison_location }}
                                                     </p>

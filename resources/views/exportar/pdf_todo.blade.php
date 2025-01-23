@@ -6,9 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil del Delincuente</title>
     <style>
+        @page {
+            background: transparent;
+        }
+
         body {
             font-family: Arial, sans-serif;
             margin: 5px;
+            position: relative;
+            height: 100%;
         }
 
         table {
@@ -133,10 +139,70 @@
             /* Ajusta el ancho de la línea según sea necesario */
             margin: 0 auto;
         }
+
+        .watermark {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 180%;
+            height: 180%;
+            z-index: -1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: rgba(0, 0, 0, 0.1);
+            /* Color gris claro con opacidad */
+            font-size: 150px;
+            /* Tamaño del texto */
+            font-weight: bold;
+            /* Texto grueso */
+            transform: rotate(-45deg);
+            /* Girar todo el contenedor de texto */
+            pointer-events: none;
+            /* No afecta la interacción con el contenido */
+            overflow: hidden;
+        }
+
+        .watermark-text {
+            position: absolute;
+            font-size: 150px;
+            /* Tamaño ajustado para repetición */
+            color: rgba(0, 0, 0, 0.1);
+            /* Color claro para la marca */
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        /* Repetición uniforme sin superposición */
+        .watermark-text:nth-child(1) {
+            top: 0%;
+            left: 10%;
+        }
+
+        .watermark-text:nth-child(2) {
+            top: 12%;
+            left: -20%;
+        }
+
+        .watermark-text:nth-child(3) {
+            top: 24%;
+            left: -40%;
+        }
+
+        .watermark-text:nth-child(4) {
+            top: 36%;
+            left: -60%;
+        }
     </style>
 </head>
 
 <body>
+    <div class="watermark">
+        <div class="watermark-text">D.A.C.D.A.C.I. D.A.C.I.</div>
+        <div class="watermark-text">D.A.C.I D.A.C.I. D.A.C.I. </div>
+        <div class="watermark-text">D.A.C.I. D.A.C.I. D.A.C.I.</div>
+        <div class="watermark-text">D.A.C.I. D.A.C.I D.A.C.I.</div>
+    </div>
     <div class="header-title">
         <table style="width: 100%; table-layout: fixed; border: none;">
             <tr>
@@ -149,8 +215,8 @@
                 <td style="width: 66.66%; text-align: center; border: none;">
                     <span style="font-weight: bold; font-size: 14px;">
                         POLICÍA BOLIVIANA<br>
-                        FUERZA ESPECIAL DE LUCHA CONTRA EL CRIMEN<br>
-                        DIRECCIÓN DE ANÁLISIS CRIMINAL E INTELIGENCIA
+                        DIRECCIÓN DEPARTAMENTAL DE LA FUERZA ESPECIAL DE LUCHA CONTRA EL CRIMEN<br>
+                        DEPARTAMENTO DE ANÁLISIS CRIMINAL E INTELIGENCIA
                     </span>
                 </td>
 
@@ -171,7 +237,7 @@
         <!-- Fila de Datos Generales -->
         <tr>
             <th colspan="5">DATOS GENERALES</th>
-            <th colspan="2">FOTO DE PERFIL</th>
+            <th colspan="2">FOTOGRAFIA ROSTRO</th>
             <th colspan="5">RASGOS FÍSICOS</th>
         </tr>
         <tr>
@@ -226,8 +292,8 @@
                 </div>
             </td>
             <td colspan="2" class="photo-cell" style="text-align: center;">
-                @if ($criminal->photographs->first())
-                    <img src="{{ public_path($criminal->photographs->first()->face_photo) }}"
+                @if ($criminal->photographs->last())
+                    <img src="{{ public_path($criminal->photographs->last()->face_photo) }}"
                         alt="Foto Frontal de {{ $criminal->first_name }}" class="img-fluid1 img-thumbnail1"
                         style="width:80%; height: auto; max-width: 150px; object-fit: cover;">
                 @else
@@ -312,59 +378,74 @@
         </tr>
         <tr>
             <td colspan="2" class="photo-cell" style="text-align: center;">
-                @if ($criminal->photographs->first())
-                    <img src="{{ public_path($criminal->photographs->first()->frontal_photo) }}"
+                @if ($criminal->photographs->last())
+                    <img src="{{ public_path($criminal->photographs->last()->frontal_photo) }}"
                         alt="Foto Frontal de {{ $criminal->first_name }}" class="img-fluid1 img-thumbnail1"
-                        style="width:80%; height: auto; max-width: 150px; object-fit: cover;">
+                        style="width:80%; height:auto; max-width:150px; object-fit:cover;">
                 @else
                     <p>No hay fotografía de Rostro disponible.</p>
                 @endif
             </td>
             <td colspan="2" class="photo-cell" style="text-align: center;">
-                @if ($criminal->photographs->first())
-                    <img src="{{ public_path($criminal->photographs->first()->profile_izq_photo) }}"
-                        alt="Foto Frontal de {{ $criminal->first_name }}" class="img-fluid1 img-thumbnail1"
-                        style="width:80%; height: auto; max-width: 150px; object-fit: cover;">
+                @if ($criminal->photographs->last())
+                    <img src="{{ public_path($criminal->photographs->last()->profile_izq_photo) }}"
+                        alt="Foto de Perfil Izquierdo de {{ $criminal->first_name }}"
+                        class="img-fluid1 img-thumbnail1"
+                        style="width:80%; height:auto; max-width:150px; object-fit:cover;">
                 @else
-                    <p>No hay fotografía de Rostro disponible.</p>
+                    <p>No hay fotografía de Perfil Izquierdo disponible.</p>
                 @endif
             </td>
             <td colspan="2" class="photo-cell" style="text-align: center;">
-                @if ($criminal->photographs->first())
-                    <img src="{{ public_path($criminal->photographs->first()->profile_der_photo) }}"
-                        alt="Foto Frontal de {{ $criminal->first_name }}" class="img-fluid1 img-thumbnail1"
-                        style="width:80%; height: auto; max-width: 150px; object-fit: cover;">
+                @if ($criminal->photographs->last())
+                    <img src="{{ public_path($criminal->photographs->last()->profile_der_photo) }}"
+                        alt="Foto de Perfil Derecho de {{ $criminal->first_name }}" class="img-fluid1 img-thumbnail1"
+                        style="width:80%; height:auto; max-width:150px; object-fit:cover;">
                 @else
-                    <p>No hay fotografía de Rostro disponible.</p>
+                    <p>No hay fotografía de Perfil Derecho disponible.</p>
                 @endif
             </td>
             <td colspan="2" class="photo-cell" style="text-align: center;">
-                @if ($criminal->photographs->first())
-                    <img src="{{ public_path($criminal->photographs->first()->full_body_photo) }}"
-                        alt="Foto Frontal de {{ $criminal->first_name }}" class="img-fluid1 img-thumbnail1"
-                        style="width:80%; height: auto; max-width: 150px; object-fit: cover;">
+                @if ($criminal->photographs->last())
+                    <img src="{{ public_path($criminal->photographs->last()->full_body_photo) }}"
+                        alt="Foto de Cuerpo Completo de {{ $criminal->first_name }}"
+                        class="img-fluid1 img-thumbnail1"
+                        style="width:80%; height:auto; max-width:150px; object-fit:cover;">
                 @else
-                    <p>No hay fotografía de Rostro disponible.</p>
+                    <p>No hay fotografía de Cuerpo Completo disponible.</p>
                 @endif
             </td>
             <td colspan="2" class="photo-cell" style="text-align: center;">
-                @if ($criminal->photographs->first())
-                    <img src="{{ public_path($criminal->photographs->first()->frontal_photo) }}"
-                        alt="Foto Frontal de {{ $criminal->first_name }}" class="img-fluid1 img-thumbnail1"
-                        style="width:80%; height: auto; max-width: 150px; object-fit: cover;">
+                @php
+                    $lastPhoto = $criminal->photographs->last(); // Obtener el último registro de fotografía
+                    $photoPath = $lastPhoto ? public_path($lastPhoto->aditional_photo) : null; // Generar la ruta absoluta
+                @endphp
+
+                @if ($lastPhoto && file_exists($photoPath))
+                    <img src="{{ asset($lastPhoto->aditional_photo) }}" alt=""
+                        class="img-fluid1 img-thumbnail1"
+                        style="width:80%; height:auto; max-width:150px; object-fit:cover;">
                 @else
-                    <p>No hay fotografía de Rostro disponible.</p>
+                    <p>VACIO</p>
                 @endif
             </td>
+
             <td colspan="2" class="photo-cell" style="text-align: center;">
-                @if ($criminal->photographs->first())
-                    <img src="{{ public_path($criminal->photographs->first()->frontal_photo) }}"
-                        alt="Foto Frontal de {{ $criminal->first_name }}" class="img-fluid1 img-thumbnail1"
-                        style="width:80%; height: auto; max-width: 150px; object-fit: cover;">
+                @php
+                    $lastPhoto = $criminal->photographs->last(); // Obtener el último registro de fotografía
+                    $photoPath = $lastPhoto ? public_path($lastPhoto->barra_photo) : null; // Generar la ruta absoluta
+                @endphp
+
+                @if ($lastPhoto && file_exists($photoPath))
+                    <img src="{{ asset($lastPhoto->barra_photo) }}" alt="" class="img-fluid1 img-thumbnail1"
+                        style="width:80%; height:auto; max-width:150px; object-fit:cover;">
                 @else
-                    <p>No hay fotografía de Rostro disponible.</p>
+                    <p>VACIO.</p>
                 @endif
             </td>
+
+
+
         </tr>
         <!-- Domicilio y Referencias -->
         <tr>
@@ -470,7 +551,7 @@
                         <span class="text-uppercase">{{ $history->arrest_location ?? 'No especificado' }}</span>
                     </div>
                     <div class="info-item">
-                        <span class="label-bold">Especialidad o Motivo de Captura:</span>
+                        <span class="label-bold">Especialidad:</span>
                         <span
                             class="text-uppercase">{{ $history->criminalSpecialty->specialty_name ?? 'No especificado' }}</span>
                     </div>
@@ -525,11 +606,11 @@
                         </div>
                         <div class="info-item">
                             <span class="label-bold">Nro de Identidad:</span>
-                            <span class="text-uppercase">{{ $aliase->alias_identity_number }}</span>
+                            <span class="text-uppercase">{{ $aliase->alias_identity_number ?? 'No especificado' }}</span>
                         </div>
                         <div class="info-item">
                             <span class="label-bold">Nacionalidad:</span>
-                            <span class="text-uppercase">{{ $aliase->nationality->nationality_name }}</span>
+                            <span class="text-uppercase">{{ $aliase->nationality->nationality_name ?? 'No especificado' }}</span>
                         </div>
                     @endforeach
                 </td>
@@ -611,7 +692,7 @@
         <tr>
             <td colspan="6" class="signature-cell">
                 <div class="signature-line"></div>
-                <span>FIRMA DIRECTOR DEL DACI:</span>
+                <span>JEFE DE DIVISIÓN:</span>
             </td>
             <td colspan="6" class="seal-cell">
                 <span>SELLO DACI</span>
@@ -621,12 +702,12 @@
             <td colspan="12" class="text-justify">
                 <span>Generado a las {{ \Carbon\Carbon::now('America/La_Paz')->format('H:i:s') }} del
                     {{ \Carbon\Carbon::now('America/La_Paz')->translatedFormat('l d \d\e F \d\e Y') }}</span>
-                <span style="float: right;">D.A.C.I. - ORURO</span>
+                <span style="float: right;"> Usuario:
+                    {{ Auth::user()->name ?? 'Usuario desconocido' }}
+                </span>
+
             </td>
         </tr>
-
-
-
 
     </table>
 </body>

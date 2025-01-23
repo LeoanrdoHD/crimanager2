@@ -32,7 +32,7 @@
                 @csrf
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-10">
                     <div>
-                        <label>DATOS GENERALES DE LEY</label>
+                        <label>DATOS GENERALES DE LEY (Llenar todo en Mayusculas)</label>
                         <div class="form-group">
                             <label>Nombres:</label>
                             <input type="text" class="form-control w-full" name="first_name"
@@ -470,13 +470,13 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Persona de referencia</label>
+                            <label>Persona de referencia (*)</label>
                             <input type="text" class="form-control" name="partner_name"
                                 value="{{ old('partner_name') }}" placeholder="Nombre y Apellido">
                         </div>
 
                         <div class="form-group">
-                            <label>Relacion con el delincuente</label>
+                            <label>Relacion con el delincuente (*)</label>
                             <select class="form-control" name="relationship_type_id">
                                 <option value="">Seleccionar</option>
                                 @foreach ($t_relacion as $relationship_type)
@@ -489,7 +489,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Domicilio de la referencia:</label>
+                            <label>Domicilio de la referencia: (*)</label>
                             <input type="text" class="form-control" name="partner_address"
                                 value="{{ old('partner_address') }}" placeholder="Ingrese la direccion">
                         </div>
@@ -510,7 +510,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Peso (kg):</label>
+                                    <label>Peso (kg): (*)</label>
                                     <input type="number" class="form-control @error('weight') is-invalid @enderror"
                                         name="weight" placeholder="Peso" min="35" max="120"
                                         value="{{ old('weight') }}">
@@ -759,7 +759,7 @@
                                         onclick="document.getElementById('profile_der_photo').click();">
                                 </div>
 
-                                <label>Foto Adicional:</label>
+                                <label>Foto Adicional: (*)</label>
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input" name="aditional_photo"
                                         id="aditional_photo" onchange="previewImage(this, 'previewaditional')">
@@ -774,7 +774,7 @@
                             </div>
                         </div>
 
-                        <label>Foto en Barra:</label>
+                        <label>Foto en Barra: (*)</label>
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" name="barra_photo" id="barra_photo"
                                 onchange="previewImage(this, 'previewBarra')">
@@ -823,7 +823,6 @@
                         CANCELAR
                     </button>
                 </div>
-
                 <br>
             </form>
         </div>

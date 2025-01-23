@@ -391,7 +391,34 @@ class HistorialController extends Controller
                 'observations' => 'nullable|string|max:500',
                 'driver_name' => 'nullable|string|max:255',
                 'other_vehicle_type' => 'nullable||string|max:30',
+                'front_photo' => 'nullable|image|max:15360', // Máximo 15 MB (15360 KB)
+                'left_side_photo' => 'nullable|image|max:15360',
+                'right_side_photo' => 'nullable|image|max:15360',
+                'rear_photo' => 'nullable|image|max:15360',
             ]);
+            $imagenes = [
+                'front_photo' => $request->file('front_photo'),
+                'left_side_photo' => $request->file('left_side_photo'),
+                'right_side_photo' => $request->file('right_side_photo'),
+                'rear_photo' => $request->file('rear_photo')
+            ];
+            
+            $destino_img = 'vehicle_photographs';
+            $rutas = [];
+            
+            foreach ($imagenes as $key => $imagen) {
+                if ($imagen) {
+                    $filename = time() . '-' . $imagen->getClientOriginalName();
+            
+                    // Guarda en el disco `public` para que esté accesible en `storage/app/public/vehicle_photographs`
+                    $path = $imagen->storeAs($destino_img, $filename, 'public');
+            
+                    // Genera una URL pública para acceder a la imagen
+                    $rutas[$key] = Storage::url($path);
+                } else {
+                    $rutas[$key] = null;
+                }
+            }
 
             // Crear registro en la tabla `criminals`
             criminal_vehicle::create([
@@ -412,6 +439,10 @@ class HistorialController extends Controller
                 'relationship_with_owner_id' => $relationshipWithOwnerId,
                 'observations' => !empty($request->observations) ? $request->observations : null,
                 'driver_name' => !empty($request->driver_name) ? $request->driver_name : null,
+                'front_photo' => $rutas['front_photo'],
+                'left_side_photo' => $rutas['left_side_photo'],
+                'right_side_photo' => $rutas['right_side_photo'],
+                'rear_photo' => $rutas['rear_photo']
             ]);
 
             // Confirmar la transacción
@@ -441,15 +472,22 @@ class HistorialController extends Controller
                     ->where('criminal_id', '!=', $request->criminal_id)
                     ->first();
             }
-            // Crear registro en la tabla `criminals`
-            criminal_complice::create([
-                'criminal_id' => $request->criminal_id,
-                'arrest_and_apprehension_history_id' => $existingHistory ? null : $arrestAndApprehensionHistoryId,
-                'complice_name' => $request->complice_name,
-                'CI_complice' => $request->CI_complice,
-                'detail_complice' => $request->detail_complice,
 
-            ]);
+            // Recorrer los arrays de cómplices y registrar cada uno de ellos
+            $compliceNames = $request->complice_name;
+            $compliceCIs = $request->CI_complice;
+            $compliceDetails = $request->detail_complice;
+
+            for ($i = 0; $i < count($compliceNames); $i++) {
+                // Crear registro para cada cómplice
+                criminal_complice::create([
+                    'criminal_id' => $request->criminal_id,
+                    'arrest_and_apprehension_history_id' => $existingHistory ? null : $arrestAndApprehensionHistoryId,
+                    'complice_name' => $compliceNames[$i],
+                    'CI_complice' => $compliceCIs[$i],
+                    'detail_complice' => $compliceDetails[$i],
+                ]);
+            }
 
             // Confirmar la transacción
             DB::commit();
@@ -987,7 +1025,6 @@ class HistorialController extends Controller
                 'criminal_id' => $criminal_id,
                 'history_id' => $history_id
             ])->with('success', 'Se agrego correctamente.');
-            
         } catch (\Exception $e) {
             // Rollback en caso de error
             DB::rollBack();

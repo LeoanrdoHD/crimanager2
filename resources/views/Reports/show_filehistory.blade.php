@@ -175,60 +175,190 @@
                     </div>
 
                     <div class="col-md-3">
-                        @if ($criminal->photographs->first())
-                            <img src="{{ asset($criminal->photographs->first()->face_photo) }}"
-                                alt="Foto Frontal de {{ $criminal->first_name }}" class="img-fluid1 img-thumbnail1"
+                        @php
+                            // Convertir la fecha del arresto a un formato comparable con la fecha de las fotos (si es necesario)
+                            $arrestDate = \Carbon\Carbon::parse($history->arrest_date)->format('Y-m-d'); // O ajusta el formato según cómo estén almacenadas las fechas de las fotos
+                        @endphp
+
+                        @php
+                            // Buscar la fotografía que coincida con la fecha del arresto
+                            $photo = $criminal->photographs->firstWhere(function ($photo) use ($arrestDate) {
+                                return \Carbon\Carbon::parse($photo->created_at)->format('Y-m-d') === $arrestDate;
+                            });
+
+                            // Si no se encuentra una foto que coincida, obtener la última foto
+                            if (!$photo) {
+                                $photo = $criminal->photographs->last();
+                            }
+                        @endphp
+
+                        @if ($photo)
+                            <img src="{{ asset($photo->face_photo) }}" alt="Foto Frontal de {{ $criminal->first_name }}"
+                                class="img-fluid1 img-thumbnail1"
                                 style="width: 100%; max-width: 225px; border-radius: 20%; object-fit: cover;">
                             <p><strong>Fotografía Rostro</strong></p>
                         @else
                             <p>No hay fotografía de Rostro disponible.</p>
                         @endif
                     </div>
-
                     <!-- Galería de Fotografías Restantes (5/12 columnas) -->
                     <div class="col-md-5">
                         <h5>Otras Fotografías:</h5>
                         <div class="row g-3">
+                            <!-- Fotografía Frontal -->
+                            <div class="col-6 col-sm-4">
+                                @php
+                                    // Buscar la fotografía frontal que coincida con la fecha del arresto
+                                    $frontalPhoto = $criminal->photographs->firstWhere(function ($photo) use (
+                                        $arrestDate,
+                                    ) {
+                                        return \Carbon\Carbon::parse($photo->created_at)->format('Y-m-d') ===
+                                            $arrestDate;
+                                    });
+
+                                    // Si no se encuentra una foto frontal que coincida, obtener la última
+                                    if (!$frontalPhoto) {
+                                        $frontalPhoto = $criminal->photographs->last();
+                                    }
+                                @endphp
+                                @if ($frontalPhoto)
+                                    <img src="{{ asset($frontalPhoto->frontal_photo) }}" class="img-fluid img-thumbnail"
+                                        alt="Foto Frontal"
+                                        style="width: 50%; max-width: 125px; border-radius: 20%; object-fit: cover;">
+                                    <p><strong>Fotografía Frontal</strong></p>
+                                @else
+                                    <p>No hay fotografía Frontal disponible.</p>
+                                @endif
+                            </div>
+
                             <!-- Fotografía de cuerpo completo -->
                             <div class="col-6 col-sm-4">
-                                <img src="{{ asset($criminal->photographs->first()->frontal_photo) }}"
-                                    class="img-fluid img-thumbnail" alt="Foto de Barra"
-                                    style="width: 50%; max-width: 125px; border-radius: 20%; object-fit: cover;">
-                                <p><strong>Fotografía Frontal</strong></p>
+                                @php
+                                    // Buscar la fotografía de cuerpo completo que coincida con la fecha del arresto
+                                    $fullBodyPhoto = $criminal->photographs->firstWhere(function ($photo) use (
+                                        $arrestDate,
+                                    ) {
+                                        return \Carbon\Carbon::parse($photo->created_at)->format('Y-m-d') ===
+                                            $arrestDate;
+                                    });
+
+                                    // Si no se encuentra una foto de cuerpo completo que coincida, obtener la última
+                                    if (!$fullBodyPhoto) {
+                                        $fullBodyPhoto = $criminal->photographs->last();
+                                    }
+                                @endphp
+                                @if ($fullBodyPhoto)
+                                    <img src="{{ asset($fullBodyPhoto->full_body_photo) }}" class="img-fluid img-thumbnail"
+                                        alt="Foto de Cuerpo Completo"
+                                        style="width: 50%; max-width: 125px; border-radius: 20%; object-fit: cover;">
+                                    <p class="text-center"><strong>Cuerpo Completo</strong></p>
+                                @else
+                                    <p>No hay fotografía de Cuerpo Completo disponible.</p>
+                                @endif
                             </div>
-                            <div class="col-6 col-sm-4">
-                                <img src="{{ asset($criminal->photographs->first()->full_body_photo) }}"
-                                    class="img-fluid img-thumbnail" alt="Foto de Cuerpo Completo"
-                                    style="width: 50%; max-width: 125px; border-radius: 20%; object-fit: cover;">
-                                <p class="text-center"><strong>Cuerpo Completo</strong></p>
-                            </div>
+
                             <!-- Fotografía de Perfil Izquierdo -->
                             <div class="col-6 col-sm-4">
-                                <img src="{{ asset($criminal->photographs->first()->profile_izq_photo) }}"
-                                    class="img-fluid img-thumbnail" alt="Perfil Izquierdo"
-                                    style="width: 50%; max-width: 125px; border-radius: 20%; object-fit: cover;">
-                                <p><strong>Perfil Izquierdo</strong></p>
+                                @php
+                                    // Buscar la fotografía de perfil izquierdo que coincida con la fecha del arresto
+                                    $profileIzqPhoto = $criminal->photographs->firstWhere(function ($photo) use (
+                                        $arrestDate,
+                                    ) {
+                                        return \Carbon\Carbon::parse($photo->created_at)->format('Y-m-d') ===
+                                            $arrestDate;
+                                    });
+
+                                    // Si no se encuentra una foto de perfil izquierdo que coincida, obtener la última
+                                    if (!$profileIzqPhoto) {
+                                        $profileIzqPhoto = $criminal->photographs->last();
+                                    }
+                                @endphp
+                                @if ($profileIzqPhoto)
+                                    <img src="{{ asset($profileIzqPhoto->profile_izq_photo) }}"
+                                        class="img-fluid img-thumbnail" alt="Perfil Izquierdo"
+                                        style="width: 50%; max-width: 125px; border-radius: 20%; object-fit: cover;">
+                                    <p><strong>Perfil Izquierdo</strong></p>
+                                @else
+                                    <p>No hay fotografía de Perfil Izquierdo disponible.</p>
+                                @endif
                             </div>
+
                             <!-- Fotografía de Perfil Derecho -->
                             <div class="col-6 col-sm-4">
-                                <img src="{{ asset($criminal->photographs->first()->profile_der_photo) }}"
-                                    class="img-fluid img-thumbnail" alt="Perfil Derecho"
-                                    style="width: 50%; max-width: 125px; border-radius: 20%; object-fit: cover;">
-                                <p><strong>Perfil Derecho</strong></p>
+                                @php
+                                    // Buscar la fotografía de perfil derecho que coincida con la fecha del arresto
+                                    $profileDerPhoto = $criminal->photographs->firstWhere(function ($photo) use (
+                                        $arrestDate,
+                                    ) {
+                                        return \Carbon\Carbon::parse($photo->created_at)->format('Y-m-d') ===
+                                            $arrestDate;
+                                    });
+
+                                    // Si no se encuentra una foto de perfil derecho que coincida, obtener la última
+                                    if (!$profileDerPhoto) {
+                                        $profileDerPhoto = $criminal->photographs->last();
+                                    }
+                                @endphp
+                                @if ($profileDerPhoto)
+                                    <img src="{{ asset($profileDerPhoto->profile_der_photo) }}"
+                                        class="img-fluid img-thumbnail" alt="Perfil Derecho"
+                                        style="width: 50%; max-width: 125px; border-radius: 20%; object-fit: cover;">
+                                    <p><strong>Perfil Derecho</strong></p>
+                                @else
+                                    <p>No hay fotografía de Perfil Derecho disponible.</p>
+                                @endif
                             </div>
+
                             <!-- Fotografía Adicional -->
                             <div class="col-6 col-sm-4">
-                                <img src="{{ asset($criminal->photographs->first()->aditional_photo) }}"
-                                    class="img-fluid img-thumbnail" alt="Foto Adicional"
-                                    style="width: 50%; max-width: 125px; border-radius: 20%; object-fit: cover;">
-                                <p><strong>Fotografía Adicional</strong></p>
+                                @php
+                                    // Buscar la fotografía adicional que coincida con la fecha del arresto
+                                    $aditionalPhoto = $criminal->photographs->firstWhere(function ($photo) use (
+                                        $arrestDate,
+                                    ) {
+                                        return \Carbon\Carbon::parse($photo->created_at)->format('Y-m-d') ===
+                                            $arrestDate;
+                                    });
+
+                                    // Si no se encuentra una foto adicional que coincida, obtener la última
+                                    if (!$aditionalPhoto) {
+                                        $aditionalPhoto = $criminal->photographs->last();
+                                    }
+                                @endphp
+                                @if ($aditionalPhoto)
+                                    <img src="{{ asset($aditionalPhoto->aditional_photo) }}"
+                                        class="img-fluid img-thumbnail" alt="Foto Adicional"
+                                        style="width: 50%; max-width: 125px; border-radius: 20%; object-fit: cover;">
+                                    <p><strong>Fotografía Adicional</strong></p>
+                                @else
+                                    <p>No hay fotografía Adicional disponible.</p>
+                                @endif
                             </div>
+
                             <!-- Fotografía de Barra -->
                             <div class="col-6 col-sm-4">
-                                <img src="{{ asset($criminal->photographs->first()->barra_photo) }}"
-                                    class="img-fluid img-thumbnail" alt="Foto de Barra"
-                                    style="width: 50%; max-width: 125px; border-radius: 20%; object-fit: cover;">
-                                <p><strong>Fotografía de Barra</strong></p>
+                                @php
+                                    // Buscar la fotografía de barra que coincida con la fecha del arresto
+                                    $barraPhoto = $criminal->photographs->firstWhere(function ($photo) use (
+                                        $arrestDate,
+                                    ) {
+                                        return \Carbon\Carbon::parse($photo->created_at)->format('Y-m-d') ===
+                                            $arrestDate;
+                                    });
+
+                                    // Si no se encuentra una foto de barra que coincida, obtener la última
+                                    if (!$barraPhoto) {
+                                        $barraPhoto = $criminal->photographs->last();
+                                    }
+                                @endphp
+                                @if ($barraPhoto)
+                                    <img src="{{ asset($barraPhoto->barra_photo) }}" class="img-fluid img-thumbnail"
+                                        alt="Foto de Barra"
+                                        style="width: 50%; max-width: 125px; border-radius: 20%; object-fit: cover;">
+                                    <p><strong>Fotografía de Barra</strong></p>
+                                @else
+                                    <p>No hay fotografía de Barra disponible.</p>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -297,10 +427,6 @@
                             <p>No hay características físicas disponibles para este criminal.</p>
                         @endforelse
                         <br>
-                        <div class="d-flex justify-content-center">
-                            <a href="{{ route('criminals.edit', $criminal->id) }}"
-                                class="btn btn-success btn-sm w-20 mb-2">Editar</a>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -395,7 +521,8 @@
                                     <div class="tool-item">
                                         <p><strong>Nombres y Apellidos:</strong> {{ $aliase->alias_name }}</p>
                                         <p><strong>Nro de Identidad:</strong> {{ $aliase->alias_identity_number }}</p>
-                                        <p><strong>Nacionalidad:</strong> {{ $aliase->nationality->nationality_name }}</p>
+                                        <p><strong>Nacionalidad:</strong>
+                                            {{ $aliase->nationality->nationality_name ?? 'No especificada' }}</p>
                                         <hr class="separator"> <!-- Línea separadora -->
                                     </div>
                                 @endforeach
@@ -496,8 +623,71 @@
                                     </div>
                                 @endforeach
                             </div>
+                            @php
+                                // Verificamos si al menos un vehículo tiene alguna fotografía registrada
+                                $hasPhotos = $history->criminalVehicle->some(function ($vehicle) {
+                                    return $vehicle->front_photo ||
+                                        $vehicle->left_side_photo ||
+                                        $vehicle->right_side_photo ||
+                                        $vehicle->rear_photo;
+                                });
+                            @endphp
+
+                            @if ($hasPhotos)
+                                <!-- Muestra la sección solo si hay fotos -->
+                                <h4 class="section-title text-center">Fotografías del Vehículo:</h4>
+                                <div class="row">
+                                    @foreach ($history->criminalVehicle as $vehicle)
+                                        @if ($vehicle->front_photo || $vehicle->left_side_photo || $vehicle->right_side_photo || $vehicle->rear_photo)
+                                            @if ($vehicle->front_photo)
+                                                <div class="col-6 col-sm-3 mb-4">
+                                                    <!-- 2 columnas en móviles, 4 columnas en pantallas más grandes -->
+                                                    <div class="tool-item text-center">
+                                                        <img src="{{ asset($vehicle->front_photo) }}" class="img-fluid"
+                                                            alt="Frontal"
+                                                            style="width: 50%; max-width: 125px; border-radius: 10%; border: 1px solid #ddd; object-fit: cover;">
+                                                        <p><strong>Frontal</strong></p>
+                                                    </div>
+                                                </div>
+                                            @endif
+
+                                            @if ($vehicle->left_side_photo)
+                                                <div class="col-6 col-sm-3 mb-4">
+                                                    <div class="tool-item text-center">
+                                                        <img src="{{ asset($vehicle->left_side_photo) }}"
+                                                            class="img-fluid" alt="Lateral Izquierda"
+                                                            style="width: 50%; max-width: 125px; border-radius: 10%; border: 1px solid #ddd; object-fit: cover;">
+                                                        <p><strong>Lateral Izquierda</strong></p>
+                                                    </div>
+                                                </div>
+                                            @endif
+
+                                            @if ($vehicle->right_side_photo)
+                                                <div class="col-6 col-sm-3 mb-4">
+                                                    <div class="tool-item text-center">
+                                                        <img src="{{ asset($vehicle->right_side_photo) }}"
+                                                            class="img-fluid" alt="Lateral Derecha"
+                                                            style="width: 50%; max-width: 125px; border-radius: 10%; border: 1px solid #ddd; object-fit: cover;">
+                                                        <p><strong>Lateral Derecha</strong></p>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                            @if ($vehicle->rear_photo)
+                                                <div class="col-6 col-sm-3 mb-4">
+                                                    <div class="tool-item text-center">
+                                                        <img src="{{ asset($vehicle->rear_photo) }}" class="img-fluid"
+                                                            alt="Trasera"
+                                                            style=" width: 50%; max-width: 125px; border-radius: 10%; border: 1px solid #ddd; object-fit: cover;">
+                                                        <p><strong>Trasera</strong></p>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        @endif
+                                    @endforeach
+                                </div>
+                            @endif
                         @else
-                            <p>No se encontraron Identidades relacionadas para este historial.</p>
+                            <p>No se encontraron Vehículos relacionadas para este historial.</p>
                         @endif
                     </div>
 
@@ -515,9 +705,10 @@
                             </div>
                         @else
                             <p>No se encontraron condenas relacionados para este historial.</p>
-                            <a href="{{ route('criminals.edit_condena', ['criminal' => $criminal->id, 'history' => $history->id]) }}"
-                                class="btn btn-warning btn-sm w-30 mb-2">Agregar Condena</a>
-
+                            @can('agregar.criminal')
+                                <a href="{{ route('criminals.edit_condena', ['criminal' => $criminal->id, 'history' => $history->id]) }}"
+                                    class="btn btn-warning btn-sm w-30 mb-2">Agregar Condena</a>
+                            @endcan
                         @endif
                         @if ($history->preventiveDetentions->isNotEmpty())
                             <div class="tools-list">

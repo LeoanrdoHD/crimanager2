@@ -126,13 +126,19 @@
 
                         <!-- Foto del criminal -->
                         <div class="flex justify-center items-center"> <!-- Centrado con flexbox -->
-                            @foreach ($fotos as $photographs)
-                                @if ($photographs->criminal_id === $criminal->id)
-                                    <img src="{{ asset($photographs->frontal_photo) }}" width="100" alt="Foto Frontal"
-                                        style="border-radius: 70%; object-fit: cover;">
-                                @endif
-                            @endforeach
+                            @php
+                                // Obtener las fotos del criminal y ordenarlas por la fecha de creación, de más reciente a más antigua
+                                $latestPhoto = $criminal->photographs()->latest()->first();
+                            @endphp
+
+                            @if ($latestPhoto)
+                                <img src="{{ asset($latestPhoto->frontal_photo) }}" width="100" alt="Foto Frontal"
+                                    style="border-radius: 10%; object-fit: cover;">
+                            @else
+                                <p>No hay fotografía disponible.</p>
+                            @endif
                         </div>
+
 
                         <!-- Cédula de Identidad/DNI -->
                         <div class="form-group">

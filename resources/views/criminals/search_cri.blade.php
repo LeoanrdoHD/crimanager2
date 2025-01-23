@@ -182,6 +182,30 @@
                                 <label class="form-check-label">Tipo de Condena</label>
                             </div>
                         </div>
+                        <div class="col">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input column-toggle" type="checkbox" data-column="28">
+                                <label class="form-check-label">Otros Nombres</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input column-toggle" type="checkbox" data-column="29">
+                                <label class="form-check-label">Otros CI</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input column-toggle" type="checkbox" data-column="30">
+                                <label class="form-check-label">Otra Nacionalidad</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input column-toggle" type="checkbox" data-column="31">
+                                <label class="form-check-label">Nombre Complice</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input column-toggle" type="checkbox" data-column="32">
+                                <label class="form-check-label">CI Complice</label>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -245,6 +269,11 @@
                     <th scope="col">Situación Legal</th>
                     <th scope="col">Nro. CUD</th>
                     <th scope="col">Tipo de Condena</th>
+                    <th scope="col">Otros Nombres</th>
+                    <th scope="col">Otros CI</th>
+                    <th scope="col">Otra Nacionalidad</th>
+                    <th scope="col">Nombre Complice</th>
+                    <th scope="col">CI Complice</th>
                 </tr>
             </thead>
             <tbody>
@@ -434,6 +463,51 @@
                                 @endif
                             @endforeach
                         </td>
+                        <td>
+                            @foreach ($condena as $conviction)
+                                @if ($conviction->criminal_id === $criminals->id)
+                                    <p>
+                                        {{ $conviction->detentionType->detention_name }}
+                                    </p><br>
+                                @endif
+                            @endforeach
+                        </td>
+                        <td>
+                            @foreach ($condena as $conviction)
+                                @if ($conviction->criminal_id === $criminals->id)
+                                    <p>
+                                        {{ $conviction->detentionType->detention_name }}
+                                    </p><br>
+                                @endif
+                            @endforeach
+                        </td>
+                        <td>
+                            @foreach ($condena as $conviction)
+                                @if ($conviction->criminal_id === $criminals->id)
+                                    <p>
+                                        {{ $conviction->detentionType->detention_name }}
+                                    </p><br>
+                                @endif
+                            @endforeach
+                        </td>
+                        <td>
+                            @foreach ($condena as $conviction)
+                                @if ($conviction->criminal_id === $criminals->id)
+                                    <p>
+                                        {{ $conviction->detentionType->detention_name }}
+                                    </p><br>
+                                @endif
+                            @endforeach
+                        </td>
+                        <td>
+                            @foreach ($condena as $conviction)
+                                @if ($conviction->criminal_id === $criminals->id)
+                                    <p>
+                                        {{ $conviction->detentionType->detention_name }}
+                                    </p><br>
+                                @endif
+                            @endforeach
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
@@ -461,7 +535,7 @@
                     }, // Columnas visibles por defecto
                     {
                         targets: [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26,
-                            27
+                            27, 28, 29, 30, 31, 32
                         ],
                         visible: false
                     } // Columnas opcionales ocultas por defecto
