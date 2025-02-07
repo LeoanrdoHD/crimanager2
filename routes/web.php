@@ -9,6 +9,7 @@ use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Middleware\CheckUserStatus;
+use App\Http\Middleware\SessionTimeout;
 use Illuminate\Support\Facades\Route;
 
 
@@ -17,9 +18,7 @@ Route::get('/', function () {
 });
 
 // Protege todas las rutas con los middlewares auth y check.status
-Route::middleware(['auth', CheckUserStatus::class])->group(function () {
-
-
+Route::middleware(['auth', CheckUserStatus::class, SessionTimeout::class])->group(function () {
     // Rutas protegidas por autenticación
     Route::get('/dashboard', function () {
         return view('dashboard');

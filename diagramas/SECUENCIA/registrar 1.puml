@@ -1,0 +1,35 @@
+@startuml
+' Definición de colores y estilos
+skinparam sequenceArrowColor #4682B4
+skinparam actorBorderColor #8B4513
+skinparam actorBackgroundColor #FFFACD
+skinparam participantBorderColor #4682B4
+skinparam participantBackgroundColor #E6E6FA
+
+actor "Usuario\n(Administrador/Investigador)" as User
+entity "Sistema" as System
+entity "criminals" as Criminals #FFD700
+entity "criminal_addresses" as CriminalAddresses #87CEEB
+entity "criminal_aliases" as CriminalAliases #98FB98
+entity "physical_characteristics" as PhysicalCharacteristics #FFA07A
+entity "criminal_fingerprints" as CriminalFingerprints #DDA0DD
+entity "photographs" as Photographs #FF6347
+
+== Gestión de Datos Personales ==
+User -> System : Registrar datos personales del delincuente
+System -> Criminals : Crear registro del delincuente
+System -> CriminalAddresses : Registrar direcciones
+System -> CriminalAliases : Registrar alias
+
+User -> System : Registrar rasgos físicos del delincuente
+System -> PhysicalCharacteristics : Registrar características físicas
+System -> CriminalFingerprints : Registrar huellas dactilares
+
+User -> System : Subir fotografías del delincuente
+System -> Photographs : Almacenar fotografías
+
+User -> System : Editar información física y fotografías
+System -> PhysicalCharacteristics : Actualizar características físicas
+System -> Photographs : Actualizar fotografías
+
+@enduml

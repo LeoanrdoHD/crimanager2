@@ -365,7 +365,7 @@ class CriminalController extends Controller
     {
         // Validar los datos del formulario
         $validatedData = $request->validate([
-            'weight' => 'required|numeric|min:1',
+            'weight' => 'nullable|numeric|min:1',
             'height' => 'required|numeric|min:1',
             'confleccion_id' => 'required',
             'skin_color_id' => 'nullable|exists:skin_colors,id',

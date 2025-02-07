@@ -37,7 +37,9 @@
 @section('content')
     <strong>Registro de Captura:</strong>
     <span style="font-style: italic;">
-        Fecha: {{ $history->arrest_date }}, Hora: {{ $history->arrest_time }}
+        Fecha: {{ \Carbon\Carbon::parse($history->arrest_date)->format('d/m/Y') }},  
+        Hora: {{ \Carbon\Carbon::parse($history->arrest_time)->format('H:i') }}
+        
     </span>
     </p>
     <div class="card">

@@ -1,0 +1,48 @@
+@startuml
+' Definición de colores y estilos
+skinparam sequenceArrowColor #4682B4
+skinparam actorBorderColor #8B4513
+skinparam actorBackgroundColor #FFFACD
+skinparam participantBorderColor #4682B4
+skinparam participantBackgroundColor #E6E6FA
+
+actor "Usuario\n(Administrador/\nInvestigador/\nInvitado)" as User
+entity "Sistema" as System
+entity "criminals" as Criminals #FFD700
+entity "criminal_vehicles" as CriminalVehicles #87CEEB
+entity "organizations" as Organizations #98FB98
+entity "arrest_and_apprehension_histories" as ArrestHistories #FFA07A
+entity "convictions" as Convictions #DDA0DD
+
+== Búsqueda de Información ==
+User -> System : Seleccionar tipo de búsqueda\n(Delincuentes, Vehículos, Organizaciones)
+activate System
+
+alt Buscar información de delincuentes
+    User -> System : Ingresar filtros de búsqueda\n(Nombre, Apellido, Historial, etc.)
+    System -> Criminals : Buscar delincuentes\nsegún filtros
+    System -> ArrestHistories : Filtrar por historial de arrestos
+    System -> Convictions : Filtrar por condenas
+    System -> User : Mostrar resultados en tabla
+else Buscar información de vehículos
+    User -> System : Ingresar filtros de búsqueda\n(Marca, Modelo, Placa, etc.)
+    System -> CriminalVehicles : Buscar vehículos\nsegún filtros
+    System -> Criminals : Obtener información\ndel delincuente asociado
+    System -> User : Mostrar resultados en tabla
+else Buscar información de organizaciones criminales
+    User -> System : Ingresar filtros de búsqueda\n(Nombre, Tipo, Ubicación, etc.)
+    System -> Organizations : Buscar organizaciones\nsegún filtros
+    System -> Criminals : Obtener información\nde delincuentes asociados
+    System -> User : Mostrar resultados en tabla
+else Personalizar filtros de búsqueda
+    User -> System : Seleccionar y personalizar\nfiltros avanzados
+    System -> Criminals : Aplicar filtros personalizados
+    System -> CriminalVehicles : Aplicar filtros personalizados
+    System -> Organizations : Aplicar filtros personalizados
+    System -> ArrestHistories : Aplicar filtros personalizados
+    System -> Convictions : Aplicar filtros personalizados
+    System -> User : Mostrar resultados en tabla
+end
+
+deactivate System
+@enduml

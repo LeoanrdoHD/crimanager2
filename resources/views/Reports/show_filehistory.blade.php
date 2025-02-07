@@ -159,7 +159,7 @@
                             {{ $criminal->last_nameM }}</p>
                         <p><strong>Alias:</strong> {{ $criminal->alias_name }}</p>
                         <p><strong>Número de Identidad:</strong> {{ $criminal->identity_number }}</p>
-                        <p><strong>Fecha de Nacimiento:</strong> {{ $criminal->date_of_birth }}</p>
+                        <p><strong>Fecha de Nacimiento:</strong> {{ \Carbon\Carbon::parse($criminal->date_of_birth)->format('d/m/Y') }}</p>
                         <p><strong>Edad:</strong> {{ $criminal->age }}</p>
                         <label>Lugar de Nacimiento:</label>
                         <p><strong></strong> {{ $criminal->country->country_name ?? 'No especificado' }} -
@@ -442,7 +442,9 @@
                         <p>
                             <strong>Registro de Captura:</strong>
                             <span style="font-style: italic;">
-                                Fecha: {{ $history->arrest_date }}, Hora: {{ $history->arrest_time }}
+                                Fecha: {{ \Carbon\Carbon::parse($history->arrest_date)->format('d/m/Y') }},  
+                                Hora: {{ \Carbon\Carbon::parse($history->arrest_time)->format('H:i') }}
+                                
                             </span>
                         </p>
 

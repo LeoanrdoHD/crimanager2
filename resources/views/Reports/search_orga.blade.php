@@ -60,25 +60,29 @@
                             @php
                                 $ultimaFoto = $fotos->where('criminal_id', $criminals->id)->last();
                             @endphp
-
+                        
                             @if ($ultimaFoto)
-                                <img src="{{ asset($ultimaFoto->face_photo) }}" width="80" alt="Foto Frontal"
+                                <img src="{{ asset($ultimaFoto->face_photo) }}" 
+                                    width="80" 
+                                    alt="Foto Frontal" 
                                     style="border-radius: 50%; object-fit: cover;">
                             @else
-                                <p>No hay fotografía disponible.</p>
+                                <img src="{{ asset('storage/incognito.jpg') }}" 
+                                    width="80" 
+                                    alt="Foto Incógnito" 
+                                    style="border-radius: 50%; object-fit: cover;">
                             @endif
-
                         </td>
+                        
                         <td>
                             @foreach ($history_cri as $arrest_and_apprehension_histories)
                                 @if ($arrest_and_apprehension_histories->criminal_id === $criminals->id)
-                                    <a
-                                        href="{{ route('criminals.history', ['criminal_id' => $criminals->id, 'history_id' => $arrest_and_apprehension_histories->id]) }}">
-                                        {{ $arrest_and_apprehension_histories->arrest_date }}
+                                    <a href="{{ route('criminals.history', ['criminal_id' => $criminals->id, 'history_id' => $arrest_and_apprehension_histories->id]) }}">
+                                        {{ \Carbon\Carbon::parse($arrest_and_apprehension_histories->arrest_date)->format('d-m-Y') }}
                                     </a><br>
                                 @endif
                             @endforeach
-                        </td>
+                        </td>   
                         <td>
                             @foreach ($orga as $criminal_organization)
                                 @if ($criminal_organization->criminal_id === $criminals->id)

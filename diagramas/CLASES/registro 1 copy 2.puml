@@ -1,0 +1,132 @@
+@startuml
+' Configuración de colores y estilos
+skinparam classBackgroundColor #E6E6FA
+skinparam classBorderColor #4682B4
+skinparam classArrowColor #4682B4
+skinparam classFontColor #000080
+skinparam classAttributeFontColor #000080
+skinparam classFontSize 12
+skinparam noteBackgroundColor #FFFACD
+skinparam noteBorderColor #8B4513
+skinparam layout rectangular
+
+' Clases principales
+class Usuario {
+    + String nombre
+    + String rol
+    + void seleccionarCriminal()
+    + void generarReporte()
+}
+
+class Sistema {
+    + void obtenerInformacionCriminal()
+    + void obtenerHistorialesArrestos()
+    + void obtenerCondenas()
+    + void obtenerVehiculos()
+    + void obtenerComplices()
+    + void obtenerHerramientas()
+    + void obtenerFotografias()
+    + void obtenerCaracteristicasFisicas()
+    + void generarPDF()
+}
+
+' Clases relacionadas con la información del delincuente
+class Criminal {
+    + String nombres
+    + String apellidos
+    + String alias
+    + String numeroIdentidad
+    + Date fechaNacimiento
+    + int edad
+    + String lugarNacimiento
+    + String nacionalidad
+    + String estadoCivil
+    + String ocupacion
+    + String direccionResidencia
+    + void obtenerInformacionBasica()
+}
+
+class ArrestHistories {
+    + Date fechaArresto
+    + Time horaArresto
+    + String lugarCaptura
+    + String motivoCaptura
+    + String detallesCaptura
+    + String situacionLegal
+}
+
+class PhysicalCharacteristics {
+    + float altura
+    + float peso
+    + String sexo
+    + String genero
+    + String complexion
+    + String colorPiel
+    + String tipoOjos
+    + String tipoOidos
+    + String tipoLabios
+    + String tipoNariz
+    + String marcasDistintivas
+}
+
+class Photographs {
+    + String fotoFrontal
+    + String fotoCuerpoCompleto
+    + String fotoPerfilIzquierdo
+    + String fotoPerfilDerecho
+    + String fotoAdicional
+    + String fotoDeBarra
+}
+
+' Clases relacionadas con vehículos, cómplices, herramientas y condenas
+class CriminalVehicles {
+    + String color
+    + String tipoVehiculo
+    + String marca
+    + String modelo
+    + String numeroPlaca
+    + String tipoServicio
+    + String detallesVehiculo
+    + Boolean tieneITV
+}
+
+class CriminalComplices {
+    + String nombreComplice
+    + String relacionConDelincuente
+}
+
+class CriminalTools {
+    + String tipo
+    + String descripcion
+}
+
+class Convictions {
+    + String tipoPena
+    + String prision
+    + Date fechaIngreso
+    + Date fechaSalida
+}
+
+' Relaciones entre clases (más verticales)
+Usuario -down-> Sistema : Usa >
+Sistema -down-> Criminal : Administra >
+Sistema -down-> ArrestHistories : Administra >
+Sistema -down-> PhysicalCharacteristics : Administra >
+Sistema -down-> Photographs : Administra >
+
+Criminal -down-> CriminalVehicles : Asociado con >
+Criminal -down-> CriminalComplices : Tiene cómplices >
+Criminal -down-> CriminalTools : Usa herramientas >
+Criminal -down-> Convictions : Tiene condenas >
+
+' Notas explicativas
+note top of Sistema
+    Gestiona todas las operaciones 
+    relacionadas con los registros
+    y la visualización de información 
+    del delincuente.
+end note
+
+
+
+@enduml

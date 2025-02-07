@@ -209,7 +209,7 @@
                             {{ $criminal->last_nameM }}</p>
                         <p><strong>Alias:</strong> {{ $criminal->alias_name }}</p>
                         <p><strong>Número de Identidad:</strong> {{ $criminal->identity_number }}</p>
-                        <p><strong>Fecha de Nacimiento:</strong> {{ $criminal->date_of_birth }}</p>
+                        <p><strong>Fecha de Nacimiento:</strong> {{ \Carbon\Carbon::parse($criminal->date_of_birth)->format('d/m/Y') }}</p>
                         <p><strong>Edad:</strong> {{ $criminal->age }}</p>
                         <label>Lugar de Nacimiento:</label>
                         <p><strong></strong> {{ $criminal->country->country_name ?? 'No especificado' }} -
@@ -373,16 +373,10 @@
                                         'l d \d\e F \d\e Y',
                                     );
                                     $formattedTime = \Carbon\Carbon::parse($history->arrest_time)->format('H:i');
-
-                                    // Determinar si es mañana o tarde
-                                    $formattedTimePeriod =
-                                        \Carbon\Carbon::parse($history->arrest_time)->format('H') < 12
-                                            ? 'de la mañana'
-                                            : 'de la tarde';
                                 @endphp
 
                                 <strong class="listah">Historial de arresto del {{ $formattedDate }} a las
-                                    {{ $formattedTime }} {{ $formattedTimePeriod }}</strong>
+                                    {{ $formattedTime }}</strong>
 
                             </p>
                             <div class="row">

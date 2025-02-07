@@ -41,5 +41,23 @@
         @stack('modals')
 
         @livewireScripts
+        <script>
+            var timeout = 15 * 60 * 1000; // 15 minutos en milisegundos
+        
+            var logoutTimer = setTimeout(function() {
+                window.location.href = "{{ route('logout') }}";
+            }, timeout);
+        
+            document.addEventListener('mousemove', resetTimer);
+            document.addEventListener('keypress', resetTimer);
+        
+            function resetTimer() {
+                clearTimeout(logoutTimer);
+                logoutTimer = setTimeout(function() {
+                    window.location.href = "{{ route('logout') }}";
+                }, timeout);
+            }
+        </script>
+        
     </body>
 </html>

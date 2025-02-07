@@ -1,0 +1,53 @@
+@startuml
+start
+
+:Inicio del proceso;
+:¿Qué desea realizar?;
+
+if (¿Es usuario invitado?) then (Sí)
+    :Acceso denegado;
+    :Mostrar mensaje: \n"Los usuarios invitados\nno tienen acceso a esta sección.";
+    stop
+else (No)
+    if (Registrar Nuevo Delincuente?) then (Sí)
+        :Registrar datos personales\n del delincuente;
+        :Registrar rasgos físicos\n del delincuente;
+        :Subir fotografías del delincuente;
+        :Editar información física y\n fotografías del delincuente;
+        :Fin del registro de datos personales;
+        --> :Ir a registro de historial delictivo;
+    else (No)
+        if (Registrar historial delictivo\n del delincuente?) then (Sí)
+            :Buscar delincuente;
+            if (¿El delincuente existe?) then (Sí)
+                :Seleccionar delincuente;
+                :Actualizar fotografías y rasgos físicos;
+                --> :Ir a registro de historial delictivo;
+            else (No)
+                :El delincuente no existe;
+                :Redirigir al registro de\n nuevo delincuente;
+                :Volver al inicio;
+            endif
+        else (No)
+            :Acción no válida;
+        endif
+    endif
+endif
+
+:Registrar historial delictivo del delincuente;
+
+if (¿Se requieren detalles adicionales?) then (Sí)
+    :Registrar detalles adicionales\n (armas, teléfonos, cómplices, etc.);
+endif
+
+if (¿Se requieren fotografías de vehículos?) then (Sí)
+    :Subir fotografías de vehículos\n utilizados por el delincuente;
+endif
+
+if (¿Se va registrar condena?) then (Sí)
+    :Registrar condena \n al historial;
+endif
+
+:Fin del registro de historial delictivo;
+stop
+@enduml

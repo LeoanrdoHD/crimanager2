@@ -16,13 +16,15 @@
                     <!-- Foto del usuario centrada -->
                     <div class="col-12 text-center mb-3">
                         <label for="profile_photo" style="cursor: pointer;">
-                            <img src="{{ asset('storage/' . $user->profile_photo_path) }}" width="150" alt="Foto de Perfil"
-                                class="rounded-circle border border-secondary mb-2" id="profilePhotoPreview">
+                            <img src="{{ $user->profile_photo_path ? asset('storage/' . $user->profile_photo_path) : asset('storage/incognito.jpg') }}" 
+                                width="150" 
+                                alt="Foto de Perfil" 
+                                class="rounded-circle border border-secondary mb-2" 
+                                id="profilePhotoPreview">
                         </label>
                         <input type="file" id="profile_photo" name="profile_photo" class="d-none" accept="image/*"
                             onchange="previewProfilePhoto(event)">
                     </div>
-
                     <!-- Información del usuario -->
                     <div class="col-10">
                         <div class="row mb-2">

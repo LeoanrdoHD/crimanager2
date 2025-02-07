@@ -1,0 +1,55 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam usecase {
+    BackgroundColor #F0F8FF
+    BorderColor #4682B4
+    FontColor #000080
+}
+
+skinparam actor {
+    BackgroundColor #FFFACD
+    BorderColor #4682B4
+    FontColor #8B4513
+}
+
+skinparam BorderColor #8A2BE2
+
+' Organización más vertical
+top to bottom direction
+
+actor "Usuario\n(Administrador/Investigador)" as User
+
+rectangle "Gestión de Datos Personales" {
+    usecase "Registrar datos personales\ndel delincuente" as UC1
+    usecase "Registrar rasgos físicos\ndel delincuente" as UC2
+    usecase "Subir fotografías\ndel delincuente" as UC3
+    usecase "Editar información física\ny fotografías del delincuente" as UC4
+}
+
+rectangle "Gestión de Historial Delictivo" {
+    usecase "Registrar historial delictivo\ndel delincuente" as UC5
+    usecase "Registrar detalles adicionales\n(armas, teléfonos, cómplices, etc.)" as UC9
+    usecase "Subir fotografías de vehículos\nutilizados por el delincuente" as UC6
+    usecase "Registrar nuevos historiales\npara delincuentes reincidentes" as UC7
+    usecase "Registrar condenas asociadas\na un historial específico" as UC8
+}
+skinparam BackgroundColor #E6E6FA
+    skinparam BorderColor #8A2BE2
+' Relaciones principales
+User --> UC1
+User --> UC5
+
+' Inclusiones organizadas de manera vertical
+UC1 --> UC2
+UC2 --> UC3
+UC3 --> UC4
+
+UC5 --> UC9
+UC9 --> UC6
+UC6 --> UC7
+UC7 --> UC8
+
+' Relación adicional
+UC7 .> UC4 : <<include>> ' Edición al registrar un nuevo historial
+
+@enduml

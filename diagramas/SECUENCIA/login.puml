@@ -1,0 +1,62 @@
+@startuml
+' Definición de colores
+skinparam sequenceArrowColor #4682B4
+skinparam actorBorderColor #8B4513
+skinparam actorBackgroundColor #FFFACD
+skinparam participantBorderColor #4682B4
+skinparam participantBackgroundColor #E6E6FA
+
+actor "Administrador" as Admin
+entity "Sistema" as System
+entity "users" as Users #FFD700
+entity "roles" as Roles #FFA07A
+entity "model_has_roles" as ModelHasRoles #87CEEB
+entity "permissions" as Permissions #98FB98
+entity "user_sessions" as UserSessions #FFB6C1
+entity "password_reset_tokens" as PasswordResetTokens #DDA0DD
+entity "profile_photo_path" as ProfilePhotoPath #FF6347
+
+== Inicio de sesión ==
+Admin -> System : Ingresar credenciales
+System -> Users : Validar credenciales
+Users -> UserSessions : Registrar sesión
+UserSessions -> System : Confirmar sesión
+
+alt Credenciales válidas y usuario activo
+    System -> UserSessions : Verificar estado activo
+    alt Usuario activo
+        System -> Admin : Redirigir a la pantalla de inicio
+
+        == Gestión de usuarios (Administrador) ==
+        alt Es administrador
+            Admin -> System : Acceso a la gestión de usuarios
+            Admin -> System : Ver lista de usuarios
+            System -> Users : Consultar usuarios registrados
+
+            Admin -> System : Crear/Modificar usuario
+            System -> Users : Crear/Modificar datos de usuario
+
+            Admin -> System : Asignar roles
+            System -> ModelHasRoles : Asignar roles
+
+            Admin -> System : Desactivar usuario
+            System -> Users : Cambiar estado activo/inactivo
+
+            Admin -> System : Restablecer contraseñas
+            System -> PasswordResetTokens : Generar token de restablecimiento
+        else
+            == Acciones de usuario común ==
+            Admin -> System : Permitir cambio de contraseña
+            System -> Users : Cambiar contraseña
+
+            Admin -> System : Subir/editar foto de perfil
+            System -> ProfilePhotoPath : Subir/editar foto de perfil
+        end
+    else
+        System -> Admin : Notificar error: Usuario inactivo
+    end
+else
+    System -> Admin : Notificar error: Credenciales inválidas
+end
+
+@enduml

@@ -1,0 +1,58 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Administrador" as Admin
+actor "Investigador" as Investigator
+actor "Invitado" as Guest
+
+rectangle "Gestión de Usuarios" {
+    usecase "Login al sistema" as UC1
+    usecase "Cambio de contraseña" as UC2
+    usecase "Gestión de usuarios\n(crear, editar, dar de baja)" as UC3
+}
+
+rectangle "Registro de Delincuentes" {
+    usecase "Registrar datos generales\ndel delincuente" as UC4
+    usecase "Registrar rasgos físicos\ndel delincuente" as UC5
+    usecase "Subir fotografías del delincuente" as UC6
+    usecase "Registrar información\nadicional (alias, vehículos,\narmas, organizaciones, cómplices)" as UC7
+    usecase "Editar información del delincuente" as UC8
+}
+
+rectangle "Consulta y Reportes" {
+    usecase "Buscar delincuentes\ncon filtros" as UC9
+    usecase "Ver información completa\ndel delincuente y sus historiales" as UC10
+    usecase "Ver historial específico\npor fecha" as UC11
+    usecase "Agregar condena\na un historial específico" as UC12
+    usecase "Generar reporte PDF\n(completo o perfil)" as UC13
+}
+
+rectangle "Acceso a Sistemas Externos" {
+    usecase "Acceder a sistemas\nexternos mediante links" as UC14
+}
+
+Admin --> UC1
+Admin --> UC2
+Admin --> UC3
+Admin --> UC4
+Admin --> UC5
+Admin --> UC6
+Admin --> UC7
+Admin --> UC8
+Admin --> UC9
+Admin --> UC10
+Admin --> UC11
+Admin --> UC12
+Admin --> UC13
+Admin --> UC14
+
+Investigator --> UC1
+Investigator --> UC9
+Investigator --> UC10
+Investigator --> UC11
+Investigator --> UC13
+
+Guest --> UC9
+Guest --> UC13
+@enduml
