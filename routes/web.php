@@ -26,7 +26,7 @@ Route::middleware(['auth', CheckUserStatus::class, SessionTimeout::class])->grou
 
     // Rutas del controlador de usuarios
     Route::resource('/admin_users', UserController::class)->names('admin.users');
-
+    Route::get('/user_sessions', [UserController::class, 'index_session']);
     Route::get('/states/{countryId}', [LocationController::class, 'getStatesByCountry']);
     Route::get('/cities/{stateId}', [LocationController::class, 'getCitiesByState']);
 

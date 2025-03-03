@@ -449,6 +449,12 @@ return [
                 ],
             ],
         ],
+        [
+            'text' => 'Bitacora',
+            'url' => 'user_sessions',
+           'icon' => 'fas fa-fw fa-clipboard-list',
+            'can' => 'crear.Usuarios',
+        ],
         /*
         [
             'text' => 'multilevel',

@@ -98,7 +98,7 @@ class HistorialController extends Controller
                 'arrest_location' => 'nullable|string|max:255', // Requerido, debe ser una cadena de texto con un máximo de 255 caracteres.
                 'arrest_details' => 'nullable|string', // Opcional, puede ser una cadena de texto.
                 'cud_number' => 'nullable|string|max:50', // Requerido, debe ser una cadena única en la tabla y un máximo de 50 caracteres.
-                'criminal_specialty_id' => 'required|integer' // Requerido, debe ser un número entero y existir en la tabla criminal_specialties.
+                'criminal_specialty_id' => 'required' // Requerido, debe ser un número entero y existir en la tabla criminal_specialties.
             ]);
             $criminal_specialtyID = $request->criminal_specialty_id;
             if ($criminal_specialtyID === 'otro' && $request->filled('otra_especialidad')) {
@@ -107,9 +107,7 @@ class HistorialController extends Controller
                 ]);
                 $criminal_specialtyID = $newSpecialty->id; // Actualiza el ID con el de la nueva nacionalidad
             }
-            // Crear registro en la tabla `criminals`
-
-
+        
             $historial = arrest_and_apprehension_history::create([
                 'criminal_id' => $request->criminal_id,
                 'legal_status_id' => $request->legal_status_id,

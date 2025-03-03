@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('device')->nullable(); // Dispositivo
             $table->string('location')->nullable(); // Localización
             $table->timestamp('login_at')->nullable();
+            $table->timestamp('last_activity')->nullable();
             $table->timestamp('logout_at')->nullable();
             $table->timestamps();
         

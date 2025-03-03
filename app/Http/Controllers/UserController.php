@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use App\Models\UserSession;
 
 
 
@@ -15,6 +16,14 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function index_session()
+    {
+        // Obtener todas las sesiones
+        $sessions = UserSession::all();
+
+        // Pasar las sesiones a la vista
+        return view('admin_users.user_sessions', compact('sessions'));
+    }
     public function index()
     {
         $usuarios = User::all();

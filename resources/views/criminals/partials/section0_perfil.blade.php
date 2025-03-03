@@ -7,22 +7,21 @@
 </style>
 <div class="container">
     <style>
-    
-    .card-body {
-            background: linear-gradient(
-                    rgba(0, 0, 0, 0.874), 
-                    rgba(0, 0, 0, 0.825)
-                ),
+        .card-body {
+            background: linear-gradient(rgba(0, 0, 0, 0.874),
+                    rgba(0, 0, 0, 0.825)),
                 /*url('vendor/adminlte/dist/img/logo_daci.png');*/
-            background-size: cover;
+                background-size: cover;
             background-position: center;
             border-radius: 8px;
-            color: white; /* Texto blanco para contraste */
+            color: white;
+            /* Texto blanco para contraste */
             padding: 20px;
         }
 
         .form-group {
-            margin-bottom: 10px; /* Ajusta el espacio entre los campos */
+            margin-bottom: 10px;
+            /* Ajusta el espacio entre los campos */
         }
     </style>
     <div class="card">
@@ -814,10 +813,13 @@
                     </div>
                 </div>
                 <div class="flex justify-center space-x-4 mt-4">
-                    <button class="btn bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
-                        type="submit">
-                        GUARDAR
-                    </button>
+                    @can('agregar.criminal')
+                        <button class="btn bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
+                            type="submit">
+                            GUARDAR
+                        </button>
+                    @endcan
+
                     <button class="btn bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
                         type="button" onclick="history.back()">
                         CANCELAR
