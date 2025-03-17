@@ -216,7 +216,7 @@
                     <span style="font-weight: bold; font-size: 14px;">
                         POLICÍA BOLIVIANA<br>
                         DIRECCIÓN DEPARTAMENTAL DE LA FUERZA ESPECIAL DE LUCHA CONTRA EL CRIMEN<br>
-                        DEPARTAMENTO DE ANÁLISIS CRIMINAL E INTELIGENCIA
+                        DEPARTAMENTO DE ANÁLISIS CRIMINAL E INTELIGENCIA - ORURO
                     </span>
                 </td>
 
@@ -309,7 +309,7 @@
                                 <span class="label-bold">Altura:</span>
                                 <span>{{ $characteristic->height ?? 'No especificado' }} cm</span>
                                 <span class="label-bold"> Peso:</span>
-                                <span>{{ $characteristic->weight ?? 'No especificado' }} kg</span>
+                                <span>{{ $characteristic->weight ?? '-' }} kg</span>
                             </div>
                             <div class="info-item">
                                 <span class="label-bold">Sexo:</span>
@@ -667,22 +667,28 @@
                         <div class="info-item">
                             <span class="label-bold">Color:</span>
                             <span class="text-uppercase">{{ $vehicle->vehicleColor->color_name }}</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="label-bold">Tipo:</span>
+                            <span class="label-bold">Clase:</span>
                             <span class="text-uppercase">{{ $vehicle->vehicleType->vehicle_type_name }}</span>
                         </div>
                         <div class="info-item">
-                            <span class="label-bold">Año:</span>
+                            <span class="label-bold">Modelo:</span>
                             <span class="text-uppercase">{{ $vehicle->year }}</span>
-                        </div>
-                        <div class="info-item">
                             <span class="label-bold">Marca:</span>
                             <span class="text-uppercase">{{ $vehicle->brandVehicle->brand_name }}</span>
                         </div>
                         <div class="info-item">
+                            <span class="label-bold">Tipo:</span>
+                            <span class="text-uppercase">{{ $vehicle->model}}</span>
+                            <span class="label-bold">Industria:</span>
+                            <span class="text-uppercase">{{ $vehicle->industry->industry_name}}</span>
+                        </div>
+                        <div class="info-item">
                             <span class="label-bold">Placa:</span>
                             <span class="text-uppercase">{{ $vehicle->license_plate }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label-bold">Detalles:</span>
+                            <span class="text-uppercase">{{ $vehicle->details }}</span>
                         </div>
                     @endforeach
                 </td>

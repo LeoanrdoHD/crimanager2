@@ -544,12 +544,12 @@
                                                     <div class="tool-item">
                                                         <p><strong>Color:</strong> {{ $vehicle->vehicleColor->color_name }}
                                                         </p>
-                                                        <p><strong>Tipo:</strong>
+                                                        <p><strong>Clase:</strong>
                                                             {{ $vehicle->vehicleType->vehicle_type_name }}</p>
-                                                        <p><strong>Año:</strong> {{ $vehicle->year }}</p>
+                                                        <p><strong>Modelo:</strong> {{ $vehicle->year }}</p>
                                                         <p><strong>Marca:</strong> {{ $vehicle->brandVehicle->brand_name }}
                                                         </p>
-                                                        <p><strong>Modelo:</strong> {{ $vehicle->model }}</p>
+                                                        <p><strong>Tipo:</strong> {{ $vehicle->model }}</p>
                                                         <p><strong>Industria:</strong>
                                                             {{ $vehicle->industry->industry_name }}
                                                         </p>
@@ -564,13 +564,13 @@
                                                     <div class="tool-item">
                                                         @if ($vehicle->itv_valid)
                                                             <p><strong>ITV válido:</strong> Sí</p>
-                                                            <p><strong>Tipo:</strong> {{ $vehicle->user_name }}</p>
-                                                            <p><strong>Año:</strong> {{ $vehicle->user_ci }}</p>
+                                                            <p><strong>Propietario:</strong> {{ $vehicle->user_name }}</p>
+                                                            <p><strong>CI propietario:</strong> {{ $vehicle->user_ci }}</p>
                                                             <p><strong>Relación con el propietario:</strong>
                                                                 {{ $vehicle->relationshipWithOwner->relationship_name }}
                                                             </p>
-                                                            <p><strong>Marca:</strong> {{ $vehicle->observations }}</p>
-                                                            <p><strong>Modelo:</strong> {{ $vehicle->driver_name }}</p>
+                                                            <p><strong>Observaciones:</strong> {{ $vehicle->observations }}</p>
+                                                            <p><strong>Conductor:</strong> {{ $vehicle->driver_name }}</p>
                                                         @else
                                                             <p>No tiene inspección técnica vehicular (ITV).</p>
                                                         @endif

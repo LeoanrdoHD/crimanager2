@@ -1,238 +1,213 @@
 @extends('adminlte::page')
 
-@section('content_header')
-    <h1 class="class text-center">Estadisticas del Sistema</h1>
-@stop
-
 @section('content')
+    <div class="card"
+        style="
+        width: 100%;
+        min-height: calc(100vh - 60px);
+        display: flex;
+        justify-content: flex-end; /* Alinea el contenido a la derecha */
+        align-items: center; /* Centra verticalmente */
+        overflow: hidden;
+        border-radius: 15px;
+        background: rgba(0, 0, 0, 0.8); /* Fondo más oscuro */
+        padding: 15px;
+        position: relative;
+    ">
+        <!-- Imagen de fondo con animación -->
+        <div class="background-animation"
+            style="
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('{{ asset('storage/FONDO.png') }}') no-repeat center center;
+            background-size: cover;
+            animation: fadeBlur 6s infinite alternate, scale 8s infinite ease-in-out;
+            border-radius: 15px;
+            filter: brightness(0.7); /* Oscurecer la imagen */
+        ">
+        </div>
+        <!-- Destellos de la estrella -->
+        <div class="star-flare"
+            style="
+ position: absolute;
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 100%;
+ background: radial-gradient(
+     circle at 0% 50%,
+     rgba(255, 255, 255, 0.5) 0%,
+     rgba(255, 255, 255, 0) 50% /* Radio más pequeño */
+ );
+ animation: flare 6s infinite ease-in-out; /* Destellos más lentos */
+ opacity: 0;
+ border-radius: 15px;
+">
+        </div>
+        <!-- Contenedor del mensaje -->
+        <div class="user-welcome">
+            <h3>BIENVENIDO A: CRIMANAGER-DACI</h3>
+            <h3>Usuario: {{ Auth::user()->name }}</h3>
+        </div>
 
+        <!-- Contenedor de botones -->
+        <div class="botonnes">
+            @can('agregar.criminal')<a href="{{ url('criminals') }}" class="btn btn-custom-white">Registrar Nuevo</a>@endcan
+            <a href="{{ url('criminals/search_cri') }}" class="btn btn-custom-black">Buscar Registros</a>
+        </div>
+    </div>
+
+    <!-- Copyright -->
+    <div class="text-center mt-3" style="color: white; font-size: 14px;">
+        © <span id="currentYear"></span> LDH84.
+    </div>
+
+    <!-- Animaciones con CSS -->
     <style>
-        .text-center {
-            text-align: center;
+        /* Animación de escalado */
+        @keyframes scale {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
 
-        .card-title {
+        /* Animación de destellos */
+        @keyframes flare {
+            0% {
+                opacity: 0;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(1);
+            }
+        }
+
+        /* Estilos para el mensaje de bienvenida */
+        .user-welcome {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px 20px;
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+            text-align: right;
+            z-index: 2;
+        }
+
+        /* Estilos para el contenedor de botones */
+        .botonnes {
+            position: absolute;
+            top: 50%;
+            /* Centra verticalmente */
+            right: 50px;
+            /* Margen a la derecha en pantallas grandes */
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: row; /* Botones uno al lado del otro */
+            /* Asegura que los botones estén uno debajo del otro */
+            align-items: center;
+            gap: 20px;
+            z-index: 2;
+        }
+
+        /* Estilos específicos para móviles */
+        @media (max-width: 768px) {
+            .user-welcome {
+                top: 10%;
+                left: 50%;
+                transform: translateX(-50%);
+                text-align: center;
+                width: 90%;
+                background: rgba(0, 0, 0, 0.6);
+                padding: 15px;
+                border-radius: 10px;
+            }
+
+            .botonnes {
+                position: absolute;
+                top: 60%;
+                /* Ajusta la posición vertical */
+                left: 50%;
+                transform: translate(-50%, -50%);
+                display: flex;
+                flex-direction: column;
+                /* Mantiene los botones en columna */
+                align-items: center;
+                /* Centra horizontalmente */
+                width: 100%;
+                /* Se extiende en todo el ancho */
+                padding: 20px;
+            }
+
+            .botonnes a {
+                width: 80%;
+                /* Botones más grandes en móviles */
+                text-align: center;
+            }
+        }
+
+        /* Estilos personalizados para los botones */
+        .btn-custom-white {
+            background-color: white;
+            color: black;
+            border: 1px solid #ccc;
+            padding: 12px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            display: block;
             text-align: center;
-            color: #333;
+            font-size: 16px;
             font-weight: bold;
         }
 
-        .row {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        .btn-custom-white:hover {
+            background-color: #f0f0f090;
+            color: rgb(12, 12, 12);
+        }
+
+        .btn-custom-black {
+            background-color: black;
+            color: white;
+            border: 1px solid #727171;
+            padding: 12px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            display: block;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .btn-custom-black:hover {
+            background-color: #333;
+            color: white;
         }
     </style>
-    <!-- Gráficos de Usuarios -->
-    <div class="card">
-        <h3 class="class">Estadistica de Usuarios:</h3>
-        <div class="row">
-            <!-- Gráfico de Usuarios Registrados por Mes -->
-            <div class="col-md-5 col-sm-9">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title text-white">Usuarios Registrados por Mes</h3>
-                    </div>
-                    <div class="card-body">
-                        <canvas id="userMonthlyChart" height="200"></canvas>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Gráfico de Usuarios por Rol -->
-            <div class="col-md-4 col-sm-9">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title text-white">Usuarios por Rol</h3>
-                    </div>
-                    <div class="card-body">
-                        <canvas id="userRolesChart" height="200"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="card">
-        <h3 class="class">Estadistica de Delincuentes:</h3>
-        <!-- Gráficos de Criminales -->
-        <div class="row">
-            <!-- Gráfico de Criminales Registrados por Año -->
-            <div class="col-md-5 col-sm-9">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title text-white">Criminales Registrados por Año</h3>
-                    </div>
-                    <div class="card-body">
-                        <canvas id="criminalYearlyChart" height="200"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Gráfico de Criminales por Tipo de Delito -->
-            <div class="col-md-4 col-sm-9">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title text-white">Criminales por Tipo de Delito</h3>
-                    </div>
-                    <div class="card-body">
-                        <canvas id="criminalTypesChart" height="200"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-@stop
-
-@section('js')
-    <!-- Asegúrate de que Chart.js esté cargado -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+    <!-- Script para actualizar el año automáticamente -->
     <script>
-        // Datos Ficticios
-
-        // Usuarios Registrados por Mes (12 meses)
-        var userMonthlyData = [10, 12, 15, 14, 18, 22, 24, 26, 20, 18, 19, 20];
-
-        // Distribución de Usuarios por Rol
-        var userRoles = [40, 30, 50]; // Admin, Editor, Usuario
-
-        // Criminales Registrados por Año (7 años)
-        var criminalYearlyData = [5, 7, 10, 8, 15, 12, 13];
-
-        // Distribución de Criminales por Tipo de Delito
-        var criminalTypes = [20, 30, 15, 15]; // Robo, Asesinato, Violación, Fraude
-
-        // Gráfico de Usuarios Registrados por Mes
-        var ctx1 = document.getElementById('userMonthlyChart').getContext('2d');
-        var userMonthlyChart = new Chart(ctx1, {
-            type: 'line', // Gráfico de líneas
-            data: {
-                labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre',
-                    'Octubre', 'Noviembre', 'Diciembre'
-                ],
-                datasets: [{
-                    label: 'Usuarios Registrados',
-                    data: userMonthlyData, // Usar los datos mensuales de usuarios
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: 'white' // Cambiar color de las leyendas
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            color: 'white' // Cambiar color de las etiquetas del eje Y
-                        }
-                    },
-                    x: {
-                        ticks: {
-                            color: 'white' // Cambiar color de las etiquetas del eje X
-                        }
-                    }
-                }
-            }
-        });
-
-        // Gráfico de Usuarios por Rol
-        var ctx2 = document.getElementById('userRolesChart').getContext('2d');
-        var userRolesChart = new Chart(ctx2, {
-            type: 'pie', // Gráfico circular
-            data: {
-                labels: ['Administrador', 'Editor', 'Usuario'],
-                datasets: [{
-                    label: 'Usuarios por Rol',
-                    data: userRoles, // Usar la distribución por rol de usuarios
-                    backgroundColor: ['#FF5733', '#33FF57', '#3357FF']
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: 'white' // Cambiar color de las leyendas
-                        }
-                    }
-                }
-            }
-        });
-
-        // Gráfico de Criminales Registrados por Año
-        var ctx3 = document.getElementById('criminalYearlyChart').getContext('2d');
-        var criminalYearlyChart = new Chart(ctx3, {
-            type: 'bar', // Gráfico de barras
-            data: {
-                labels: ['2018', '2019', '2020', '2021', '2022', '2023', '2024'],
-                datasets: [{
-                    label: 'Criminales Registrados',
-                    data: criminalYearlyData, // Usar los datos anuales de criminales
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: 'white' // Cambiar color de las leyendas
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            color: 'white' // Cambiar color de las etiquetas del eje Y
-                        }
-                    },
-                    x: {
-                        ticks: {
-                            color: 'white' // Cambiar color de las etiquetas del eje X
-                        }
-                    }
-                }
-            }
-        });
-
-        // Gráfico de Criminales por Tipo de Delito
-        var ctx4 = document.getElementById('criminalTypesChart').getContext('2d');
-        var criminalTypesChart = new Chart(ctx4, {
-            type: 'pie', // Gráfico circular
-            data: {
-                labels: ['Robo', 'Asesinato', 'Violación', 'Fraude'],
-                datasets: [{
-                    label: 'Tipos de Delitos',
-                    data: criminalTypes, // Usar la distribución por tipo de delito
-                    backgroundColor: ['#FF5733', '#33FF57', '#3357FF', '#FFCC00']
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: 'white' // Cambiar color de las leyendas
-                        }
-                    }
-                }
-            }
-        });
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
     </script>
-@stop
-
-
-@section('js')
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 @stop

@@ -27,7 +27,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Tipo de Vehículo:</label>
+                        <label>Clase:</label>
                         <select class="form-control" name="type_id" id="type_id">
                             <option value="">Seleccionar</option>
                             @foreach ($vtype as $vehicle_type)
@@ -38,9 +38,9 @@
                     </div>
 
                     <div class="form-group" id="other_vehicle_type_group" style="display: none;">
-                        <label>Otro tipo de vehículo:</label>
+                        <label>Otro clase de vehículo:</label>
                         <input type="text" class="form-control" name="other_vehicle_type"
-                            placeholder="Ingrese otro tipo">
+                            placeholder="Ingrese otra clase">
                     </div>
                 </div>
 
@@ -57,7 +57,7 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
                     <div class="form-group">
-                        <label>Año de Fabricación:</label>
+                        <label>Modelo:</label>
                         <input type="number" class="form-control" name="year" placeholder="Año" min="1950"
                             max="2124">
                     </div>
@@ -73,8 +73,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Modelo:</label>
-                        <input type="text" class="form-control" name="model" placeholder="Modelo">
+                        <label>Tipo:</label>
+                        <input type="text" class="form-control" name="model" placeholder="Tipo">
                     </div>
                 </div>
 

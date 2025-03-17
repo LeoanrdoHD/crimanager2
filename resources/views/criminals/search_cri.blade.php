@@ -90,6 +90,10 @@
                                 <input class="form-check-input column-toggle" type="checkbox" data-column="7" checked>
                                 <label class="form-check-label">Pertenece a</label>
                             </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input column-toggle" type="checkbox" data-column="8" checked>
+                                <label class="form-check-label">Botones</label>
+                            </div>
                         </div>
                         <!-- Nuevas columnas -->
                         <div class="col">
@@ -180,6 +184,10 @@
                             <div class="form-check mb-2">
                                 <input class="form-check-input column-toggle" type="checkbox" data-column="27">
                                 <label class="form-check-label">Tipo de Condena</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input column-toggle" type="checkbox" data-column="33">
+                                <label class="form-check-label">Detalle de Captura</label>
                             </div>
                         </div>
                         <div class="col">
@@ -274,6 +282,7 @@
                     <th scope="col">Otra Nacionalidad</th>
                     <th scope="col">Nombre Complice</th>
                     <th scope="col">CI Complice</th>
+                    <th scope="col">Detalle Captura</th>
                 </tr>
             </thead>
             <tbody>
@@ -507,11 +516,17 @@
                                 @endif
                             @endforeach
                         </td>
+                        <td>
+                            @foreach ($history_cri as $arrest_and_apprehension_histories)
+                                @if ($arrest_and_apprehension_histories->criminal_id === $criminals->id)
+                                    {{ $arrest_and_apprehension_histories->arrest_details }}<br>
+                                @endif
+                            @endforeach
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
-
     </div>
 @stop
 
@@ -529,12 +544,12 @@
                 responsive: true,
                 colReorder: true, // Habilita la extensión ColReorder
                 columnDefs: [{
-                        targets: [0, 1, 2, 3, 4, 5, 6, 7],
+                        targets: [0, 1, 2, 3, 4, 5, 6, 7,8],
                         visible: true
                     }, // Columnas visibles por defecto
                     {
                         targets: [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26,
-                            27, 28, 29, 30, 31, 32
+                            27, 28, 29, 30, 31, 32, 33
                         ],
                         visible: false
                     } // Columnas opcionales ocultas por defecto
@@ -582,22 +597,56 @@
                 moveButtonsColumnToEnd(table);
             });
 
-            // Función para mover la columna de botones al final
-            function moveButtonsColumnToEnd(tableInstance) {
-                const allColumns = tableInstance.columns().nodes().length;
-                const buttonsColumnIndex = 8; // Índice fijo para la columna de botones
-
-                // Obtener índices visibles excepto el de la columna de botones
-                const visibleColumns = tableInstance.columns(':visible').indexes().toArray().filter(index =>
-                    index !== buttonsColumnIndex);
-
-                // Reordenar columnas: visibles + columna de botones
-                const newOrder = [...visibleColumns, buttonsColumnIndex];
-                tableInstance.colReorder.order(newOrder);
-            }
-
+            
             // Mover la columna de botones al final al inicializar
             moveButtonsColumnToEnd(table);
+        });
+    </script>
+    <script>
+        document.getElementById('printButton').addEventListener('click', function() {
+            const printContents = document.querySelector('.todo').outerHTML;
+            const originalContents = document.body.innerHTML;
+
+            const printHTML = `
+                    <html>
+                    <head>
+                        <style>
+                            body {
+                                font-family: Arial, sans-serif;
+                                color: #000 !important;
+                                background-color: #fff;
+                            }
+                            .card {
+                                border: 1px solid #ccc;
+                                margin: 10px;
+                                padding: 20px;
+                                border-radius: 10px;
+                                background-color: #fff;
+                            }
+                            .img-thumbnail {
+                                object-fit: cover;
+                                width: 200px;
+                                height: 150px;
+                                margin: 10px;
+                            }
+                            h3,h4, p, strong {
+                                color: #000 !important;
+                                  text-transform: uppercase;
+                            }
+                                  
+                        </style>
+                    </head>
+                    <body>
+                        <h1 class="text-center">Reporte de Criminal</h1>
+                        ${printContents}
+                    </body>
+                    </html>
+                `;
+
+            document.body.innerHTML = printHTML;
+            window.print();
+            document.body.innerHTML = originalContents;
+            window.location.reload();
         });
     </script>
 @stop
