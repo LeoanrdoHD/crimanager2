@@ -1,41 +1,52 @@
 @startuml
-' Definición de colores y estilos
+' Estilos visuales
 skinparam sequenceArrowColor #4682B4
 skinparam actorBorderColor #8B4513
 skinparam actorBackgroundColor #FFFACD
 skinparam participantBorderColor #4682B4
 skinparam participantBackgroundColor #E6E6FA
 
-actor "Usuario\n(Administrador/Investigador)" as User
-entity "Sistema" as System
-entity "arrest_and_apprehension_histories" as ArrestHistories #FFD700
-entity "convictions" as Convictions #87CEEB
-entity "criminal_tools" as CriminalTools #98FB98
-entity "criminal_phone_numbers" as CriminalPhones #FFA07A
-entity "criminal_complices" as CriminalComplices #DDA0DD
-entity "criminal_vehicles" as CriminalVehicles #FF6347
-entity "photographs" as Photographs #FFB6C1
+actor "Usuario" as User
+boundary "search_cri" as SearchView
+boundary "create_arrest" as ArrestView
+control "historialcontroller" as Controller
+entity "criminals" as CriminalsDB #FFD700
+entity "arrest_and_apprehension_histories" as ArrestDB #FFD700
+entity "convictions" as ConvictionsDB #87CEEB
 
-== Gestión de Historial Delictivo ==
-User -> System : Registrar historial delictivo del delincuente
-System -> ArrestHistories : Registrar arrestos y aprehensiones
-System -> Convictions : Registrar condenas
+== Búsqueda de delincuentes ==
+User -> SearchView : accederVista()
+SearchView -> CriminalsDB : obtenerListaDelincuentes()
+CriminalsDB -->> SearchView : listaDelincuentes
+SearchView --> User : mostrarLista()
 
-User -> System : Registrar detalles adicionales (armas, teléfonos, cómplices, etc.)
-System -> CriminalTools : Registrar herramientas/armas
-System -> CriminalPhones : Registrar teléfonos
-System -> CriminalComplices : Registrar cómplices
 
-User -> System : Subir fotografías de vehículos utilizados por el delincuente
-System -> CriminalVehicles : Registrar vehículos
-System -> Photographs : Almacenar fotografías de vehículos
+User -> SearchView : seleccionarDelincuente()
+SearchView -> ArrestView : abrirFormulario("create_arrest")
 
-User -> System : Registrar nuevos historiales para delincuentes reincidentes
-System -> ArrestHistories : Registrar nuevos arrestos
-System -> Convictions : Registrar nuevas condenas
+== Registro de Arresto ==
+User -> ArrestView : llenarFormularioArresto()
+User -> ArrestView : presionarGuardarArresto()
+ArrestView -> Controller : enviarDatosArresto()
 
-User -> System : Registrar condenas asociadas a un historial específico
-System -> Convictions : Registrar condenas
-System -> ArrestHistories : Vincular condenas al historial
+Controller --> Controller : validarArresto()
 
+Controller -> ArrestDB : guardarArresto()
+ArrestDB -->> Controller : confirmación
+
+Controller --> ArrestView : mostrarMensaje("Arresto agregado con éxito")
+ArrestView --> User : mostrarMensaje
+
+== Registro de Condena ==
+User -> ArrestView : llenarFormularioCondena()
+User -> ArrestView : presionarGuardarCondena()
+ArrestView -> Controller : enviarDatosCondena()
+
+Controller --> Controller : validarCondena()
+
+Controller -> ConvictionsDB : guardarCondena()
+ConvictionsDB -->> Controller : confirmación
+
+Controller --> ArrestView : mostrarMensaje("Condena agregada con éxito")
+ArrestView --> User : mostrarMensaje
 @enduml

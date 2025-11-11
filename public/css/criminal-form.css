@@ -1,0 +1,158 @@
+/* resources/css/criminal-form.css */
+
+.card-body {
+    background: linear-gradient(rgba(0, 0, 0, 0.874), rgba(0, 0, 0, 0.825));
+    background-size: cover;
+    background-position: center;
+    border-radius: 8px;
+    color: white;
+    padding: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.section-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #fff;
+    border-bottom: 2px solid #4CAF50;
+    padding-bottom: 5px;
+}
+
+.custom-file-label {
+    cursor: pointer;
+    padding: 6px 12px;
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    color: #495057;
+}
+
+.image-upload-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 1rem;
+    border: 2px dashed #6b7280;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.image-upload-container:hover {
+    border-color: #4CAF50;
+    background-color: rgba(76, 175, 80, 0.1);
+}
+
+.preview-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 0.5rem;
+}
+
+.preview-image:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.required-field::after {
+    content: " *";
+    color: #ff6b6b;
+}
+
+/* Estilos para los botones de cámara */
+.camera-options {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.camera-btn {
+    padding: 0.4rem 0.8rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    min-width: 70px;
+    justify-content: center;
+}
+
+.camera-btn.primary {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.camera-btn.primary:hover {
+    background-color: #45a049;
+    transform: translateY(-1px);
+}
+
+.camera-btn.secondary {
+    background-color: #6b7280;
+    color: white;
+}
+
+.camera-btn.secondary:hover {
+    background-color: #4b5563;
+    transform: translateY(-1px);
+}
+
+.camera-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Indicador de cámara no disponible - REMOVIDO */
+
+/* Responsive para la sección de fotos */
+@media (max-width: 640px) {
+    .image-upload-container {
+        padding: 0.75rem;
+    }
+    
+    .preview-image {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .camera-options {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .camera-btn {
+        width: 100%;
+        min-width: unset;
+    }
+}
+
+/* Estilos específicos para foto en barra */
+.barra-photo-container .preview-image {
+    width: 200px;
+    height: 100px;
+}
+
+@media (max-width: 640px) {
+    .barra-photo-container .preview-image {
+        width: 150px;
+        height: 75px;
+    }
+}
+

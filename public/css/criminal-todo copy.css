@@ -1,0 +1,1828 @@
+/* ========================================
+   CRIMINAL SHOW - CSS COMPLETO
+   ======================================== */
+
+/* ========================================
+   ESTILOS BASE Y CONTENEDOR PRINCIPAL
+   ======================================== */
+
+
+.main-card {
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(210, 25, 25, 0.1);
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.card-header {
+    background: linear-gradient(135deg, #000000 0%, #000000 100%);
+    color: white;
+    padding: 20px;
+    border: none;
+}
+
+.section-title-main {
+    color: #12cb08;
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+  
+}
+
+.card-body {
+    padding: 25px;
+}
+
+/* ========================================
+   FOTOGRAFÍAS PRINCIPALES EXPANDIDAS
+   ======================================== */
+
+.main-photo-container-expanded {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 400px;
+    padding: 10px;
+}
+
+.main-photo-wrapper {
+    width: 100%;
+    max-width: 280px;
+    cursor: pointer;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.main-photo-wrapper:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.main-photo-expanded {
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+}
+
+.main-photo-wrapper:hover .main-photo-expanded {
+    transform: scale(1.05);
+}
+.photo-title-main {
+    text-align: center;
+    font-weight: 600;
+    color: #1e1e1e;
+    margin: 0 auto;
+    font-size: 1.1rem;
+    padding: 4px 10px;
+    background: linear-gradient(135deg, #ffffff, #ffffff);
+    border-radius: 8px;
+    display: inline-block;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.no-photo-expanded {
+    width: 100%;
+    max-width: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: 12px;
+    color: #6c757d;
+    text-align: center;
+    margin-bottom: 15px;
+    min-height: 350px;
+}
+
+.no-photo-expanded i {
+    color: #adb5bd;
+    margin-bottom: 15px;
+}
+
+/* ========================================
+   GALERÍA DE FOTOGRAFÍAS CON TABS
+   ======================================== */
+
+.photo-gallery-expanded {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 400px;
+}
+
+.photo-tabs-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.photo-tabs-custom {
+    border-bottom: 3px solid #383838;
+    margin-bottom: 15px;
+}
+
+.photo-tab-btn {
+    background: #f8f9fa !important;
+    border: 2px solid #e9ecef !important;
+    color: #6c757d !important;
+    font-weight: 500;
+    border-radius: 8px 8px 0 0 !important;
+    margin: 0 2px;
+    transition: all 0.3s ease;
+    padding: 8px 12px;
+}
+
+.photo-tab-btn:hover {
+    background: #e9ecef !important;
+    color: #495057 !important;
+    border-color: #dee2e6 !important;
+}
+
+.photo-tab-btn.active {
+    background: linear-gradient(135deg, #07c954, #03600b) !important;
+    color: white !important;
+    border-color: #000000 !important;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.tab-text {
+    font-size: 0.85rem;
+    margin-left: 5px;
+}
+
+.photo-tab-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+        align-items: center;       /* Centra horizontalmente */
+    justify-content: center;   /* Centra verticalmente */
+}
+
+.tab-pane {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+.tab-photo-container-expanded {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    margin-bottom: 15px;
+    min-height: 250px;
+    max-width: 300px;   /* Limita el ancho máximo */
+    max-height: 350px;  /* Limita el alto máximo */
+}
+
+
+.tab-photo-container-expanded:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.tab-photo-expanded {
+    width: 100%;
+    height: 100%;
+    min-height: 250px;
+    object-fit: cover;
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+}
+
+.tab-photo-container-expanded:hover .tab-photo-expanded {
+    transform: scale(1.03);
+}
+
+.photo-title-secondary {
+    text-align: center;
+    font-weight: 500;
+    color: #495057;
+    margin: 0;
+    font-size: 1rem;
+     padding: 4px 10px;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.no-photos-alert-expanded {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: 12px;
+    color: #6c757d;
+    text-align: center;
+    min-height: 400px;
+}
+
+.no-photos-alert-expanded i {
+    color: #adb5bd;
+    margin-bottom: 15px;
+}
+
+/* ========================================
+   INFORMACIÓN ADICIONAL
+   ======================================== */
+
+.info-group {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 20px;
+    height: 100%;
+}
+.info-group .info-item {
+    margin-bottom: 1px;     /* Menor separación entre ítems */
+    line-height: 1.2;       /* Más compacto el texto */
+}
+
+
+.info-item {
+    margin-bottom: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid #157210;
+}
+
+.info-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.info-item strong {
+    color: #26e508;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn-export:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(220, 53, 69, 0.4);
+    color: white;
+    text-decoration: none;
+}
+
+/* ========================================
+   NOTIFICACIONES DE ÉXITO
+   ======================================== */
+
+.success-notification {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    font-weight: 500;
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+    animation: slideInDown 0.5s ease;
+}
+
+@keyframes slideInDown {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* ========================================
+   RESPONSIVIDAD PARA MÓVILES
+   ======================================== */
+
+@media (max-width: 768px) {
+    .criminal-container {
+        padding: 10px 5px;
+    }
+    
+    .card-body {
+        padding: 15px;
+    }
+    
+    .main-photo-container-expanded {
+        min-height: 300px;
+    }
+    
+    .main-photo-expanded {
+        height: 250px;
+    }
+    
+    .tab-photo-container-expanded {
+        min-height: 180px;
+    }
+    
+    .tab-photo-expanded {
+        min-height: 180px;
+    }
+    
+    .photo-gallery-expanded {
+        min-height: 300px;
+    }
+    
+    .no-photo-expanded,
+    .no-photos-alert-expanded {
+        min-height: 250px;
+        max-width: 100%;
+    }
+    
+    .characteristics-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .arrest-details-grid-enhanced {
+        grid-template-columns: 1fr;
+    }
+    
+    .accordion-header-content-enhanced {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .arrest-status-enhanced {
+        margin-left: 0;
+    }
+    
+    .vehicle-header-enhanced {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .photos-grid-enhanced {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+    
+    .photo-thumb-enhanced {
+        min-height: 60px;
+    }
+    
+    .photo-thumb-enhanced img {
+        height: 60px;
+    }
+    
+    .vehicle-card-enhanced {
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .vehicle-section {
+        padding: 15px;
+    }
+    
+    .special-detail-body {
+        min-height: 150px;
+    }
+    
+    .prison-dates-compact {
+        flex-direction: column;
+        gap: 4px;
+    }
+    
+    .tab-text {
+        display: none;
+    }
+    
+    .photo-tab-btn {
+        padding: 8px;
+    }
+}
+
+@media (max-width: 576px) {
+    .criminal-container {
+        padding: 5px;
+    }
+    
+    .main-card {
+        margin-bottom: 15px;
+        border-radius: 10px;
+    }
+    
+    .card-body {
+        padding: 12px;
+    }
+    
+    .section-title-main {
+        font-size: 1.2rem;
+    }
+    
+    .accordion-item-enhanced {
+        margin-bottom: 15px;
+        border-radius: 10px;
+    }
+    
+    .accordion-button-enhanced {
+        padding: 15px;
+    }
+    
+    .accordion-body-enhanced {
+        padding: 15px;
+    }
+    
+    .arrest-date-enhanced {
+        font-size: 1rem;
+    }
+    
+    .main-photo-container-expanded {
+        min-height: 250px;
+    }
+    
+    .main-photo-expanded {
+        height: 200px;
+    }
+    
+    .tab-photo-container-expanded {
+        min-height: 150px;
+    }
+    
+    .tab-photo-expanded {
+        min-height: 150px;
+    }
+    
+    .photo-gallery-expanded {
+        min-height: 250px;
+    }
+    
+    .photos-grid-enhanced {
+        grid-template-columns: 1fr;
+        gap: 6px;
+    }
+    
+    .photo-thumb-enhanced {
+        min-height: 100px;
+    }
+    
+    .photo-thumb-enhanced img {
+        height: 100px;
+    }
+    
+    .vehicle-detail-item {
+        flex-direction: column;
+        gap: 4px;
+    }
+    
+    .vehicle-value {
+        text-align: left;
+    }
+}
+
+/* ========================================
+   ESTILOS ADICIONALES PARA BOOTSTRAP OVERRIDE
+   ======================================== */
+
+.nav-tabs .nav-link.active {
+    background: linear-gradient(135deg, #667eea, #764ba2) !important;
+    color: white !important;
+    border-color: #667eea #667eea #fff !important;
+}
+
+.nav-tabs .nav-link:hover {
+    border-color: #e9ecef #e9ecef #dee2e6 !important;
+}
+
+.modal-content {
+    border: none;
+    border-radius: 15px;
+}
+
+.modal-header {
+    border-bottom: 2px solid #dee2e6;
+    border-radius: 15px 15px 0 0;
+}
+
+.modal-body img {
+    border-radius: 10px;
+    max-height: 80vh;
+    object-fit: contain;
+}
+
+/* ========================================
+   EFECTOS HOVER ADICIONALES
+   ======================================== */
+
+.info-item:hover {
+    background: rgba(102, 126, 234, 0.05);
+    padding: 8px 10px;
+    border-radius: 6px;
+    margin: 0 -10px 12px -10px;
+}
+
+.char-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.vehicle-detail-item:hover {
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+}
+
+/* ========================================
+   ANIMACIONES ADICIONALES
+   ======================================== */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.accordion-item-enhanced {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+.accordion-item-enhanced:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.accordion-item-enhanced:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.accordion-item-enhanced:nth-child(4) {
+    animation-delay: 0.3s;
+}
+
+/* ========================================
+   ESTILOS PARA CÓDIGOS Y BADGES
+   ======================================== */
+
+code {
+    background: #f8f9fa;
+    padding: 4px 8px;
+    border-radius: 4px;
+    color: #e83e8c;
+    font-size: 0.9em;
+    border: 1px solid #e9ecef;
+}
+
+.badge {
+    font-size: 0.8em;
+    padding: 6px 10px;
+    border-radius: 15px;
+}
+
+.bg-info {
+    background: linear-gradient(135deg, #17a2b8, #138496) !important;
+}
+
+/* ========================================
+   FIX PARA WEBKIT BROWSERS
+   ======================================== */
+
+.vehicle-title-enhanced {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #2c3e50; /* Fallback for non-webkit browsers */
+}
+
+/* Para navegadores que no soporten background-clip: text */
+@supports not (-webkit-background-clip: text) {
+    .vehicle-title-enhanced {
+        color: #2c3e50;
+        -webkit-text-fill-color: initial;
+    }
+}
+
+/* Fragmento posiblemente mal pegado corregido */
+.vehicle-box {
+    display: inline-block;
+    width: 40%;
+    margin-right: 10px;
+}
+
+
+.info-item span {
+    color: #ffffff;
+}
+
+.info-section {
+    background: #03c320;
+    border-radius: 10px;
+    padding: 20px;
+    height: 100%;
+}
+
+.section-subtitle {
+    color: #12cb08;
+    font-weight: 600;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.characteristics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.char-item {
+    padding: 8px;
+    background: white;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+}
+
+.char-item strong {
+    color: #2c3e50;
+    font-size: 0.9rem;
+    display: block;
+}
+
+.char-item span {
+    color: #495057;
+    font-size: 0.85rem;
+}
+
+.no-data {
+    text-align: center;
+    color: #6c757d;
+    font-style: italic;
+    padding: 20px;
+}
+
+.edit-button-container {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.btn-edit {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-edit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+    color: white;
+    text-decoration: none;
+}
+
+/* ========================================
+   ACORDEÓN MEJORADO
+   ======================================== */
+
+.accordion-container-enhanced {
+    margin-top: 20px;
+}
+
+.accordion-item-enhanced {
+    background: #ffffff;
+    border: 2px solid #e9ecef;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.accordion-item-enhanced:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+}
+
+.accordion-header-enhanced {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-bottom: 2px solid #dee2e6;
+}
+
+.accordion-button-enhanced {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 20px 25px;
+    width: 100%;
+    text-align: left;
+    color: #2c3e50;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.accordion-button-enhanced:not(.collapsed) {
+    background: linear-gradient(135deg, #667eea, #764ba2) !important;
+    color: white !important;
+}
+
+.accordion-button-enhanced:focus {
+    box-shadow: none !important;
+}
+
+.accordion-header-content-enhanced {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.arrest-info-enhanced {
+    flex: 1;
+}
+
+.arrest-date-enhanced {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.arrest-specialty-enhanced {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.arrest-status-enhanced {
+    flex-shrink: 0;
+    margin-left: 20px;
+}
+
+.status-badge-enhanced {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+}
+
+.accordion-body-enhanced {
+    padding: 25px;
+    background: #ffffff;
+}
+
+/* ========================================
+   TARJETAS DE DETALLES DEL ARRESTO
+   ======================================== */
+
+.arrest-detail-card {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border: 2px solid #dee2e6;
+    border-radius: 12px;
+    overflow: hidden;
+    height: 100%;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.arrest-detail-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+.detail-card-header {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+    padding: 15px 20px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.detail-card-title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.detail-card-body {
+    padding: 20px;
+    background: #ffffff;
+}
+
+.arrest-details-grid-enhanced {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.detail-item-enhanced {
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #28a745;
+    transition: all 0.3s ease;
+}
+
+.detail-item-enhanced:hover {
+    background: #e9ecef;
+    transform: translateX(3px);
+}
+
+.detail-item-enhanced.full-width {
+    grid-column: 1 / -1;
+}
+
+.detail-label {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+}
+
+.detail-value {
+    color: #495057;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.simple-details-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.detail-separator {
+    border: none;
+    border-top: 2px solid #e9ecef;
+    margin: 15px 0;
+}
+
+.no-data-simple {
+    text-align: center;
+    color: #6c757d;
+    font-style: italic;
+    padding: 30px 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+/* ========================================
+   TARJETAS ESPECIALES (Herramientas, Teléfonos, Cómplices)
+   ======================================== */
+
+.special-detail-card {
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    border: 2px solid #34495e;
+    border-radius: 12px;
+    overflow: hidden;
+    height: 100%;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+}
+
+.special-detail-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.special-detail-header {
+    background: linear-gradient(135deg, #1a252f, #2c3e50);
+    color: #ffffff;
+    padding: 15px 20px;
+    border-bottom: 2px solid #4a5568;
+}
+
+.special-detail-title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.special-detail-body {
+    padding: 20px;
+    background: #2c3e50;
+    color: #ffffff;
+    min-height: 200px;
+}
+
+.special-item {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 12px;
+    transition: all 0.3s ease;
+}
+
+.special-item:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateX(5px);
+}
+
+.special-item:last-child {
+    margin-bottom: 0;
+}
+
+.special-item-type {
+    font-weight: 600;
+    color: #ffffff;
+    font-size: 0.95rem;
+    margin-bottom: 6px;
+}
+
+.special-item-details {
+    color: #cbd5e0;
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.no-data-special {
+    text-align: center;
+    color: #a0aec0;
+    font-style: italic;
+    padding: 30px 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+}
+
+/* ========================================
+   SECCIÓN DE CONDENAS COMPACTA
+   ======================================== */
+
+.legal-status-grid-compact {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.legal-section-compact {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 12px;
+    border-left: 4px solid #28a745;
+}
+
+.legal-type-compact {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.legal-item-compact {
+    background: white;
+    border-radius: 6px;
+    padding: 10px;
+    margin-bottom: 8px;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.legal-item-compact:hover {
+    background: #f8f9fa;
+    transform: translateX(3px);
+}
+
+.legal-item-compact:last-child {
+    margin-bottom: 0;
+}
+
+.prison-name-compact {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 0.9rem;
+}
+
+.prison-details-compact {
+    color: #6c757d;
+    font-size: 0.8rem;
+    margin: 4px 0;
+}
+
+.prison-dates-compact {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6px;
+}
+
+.entry-compact, .exit-compact {
+    font-size: 0.75rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: #e9ecef;
+    color: #495057;
+}
+
+.extradition-date-compact {
+    font-size: 0.8rem;
+    color: #6c757d;
+    margin-top: 4px;
+}
+
+.legal-item-compact.conviction {
+    border-left: 4px solid #dc3545;
+}
+
+.legal-item-compact.detention {
+    border-left: 4px solid #ffc107;
+}
+
+.legal-item-compact.extradition {
+    border-left: 4px solid #fd7e14;
+}
+
+.legal-item-compact.house-arrest {
+    border-left: 4px solid #6f42c1;
+}
+
+.legal-item-compact.liberty {
+    border-left: 4px solid #28a745;
+}
+
+/* ========================================
+   SECCIÓN DE VEHÍCULOS MEJORADA
+   ======================================== */
+
+.vehicle-card-enhanced {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border: 2px solid #dee2e6;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.vehicle-card-enhanced:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.vehicle-header-enhanced {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 3px solid #dee2e6;
+}
+
+.vehicle-title-enhanced {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.vehicle-plate-enhanced {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 1rem;
+    box-shadow: 0 3px 10px rgba(40, 167, 69, 0.3);
+}
+
+.vehicle-section {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    height: 100%;
+    border: 2px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.vehicle-section:hover {
+    border-color: #667eea;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
+}
+
+.vehicle-section-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #e9ecef;
+    display: flex;
+    align-items: center;
+}
+
+.vehicle-section-title::before {
+    content: '';
+    width: 4px;
+    height: 20px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 2px;
+    margin-right: 10px;
+}
+
+.vehicle-details-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.vehicle-detail-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border-left: 3px solid #667eea;
+    transition: all 0.3s ease;
+}
+
+.vehicle-detail-item:hover {
+    background: #e9ecef;
+    transform: translateX(3px);
+}
+
+.vehicle-detail-item.full-width {
+    flex-direction: column;
+}
+
+.vehicle-label {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 0.9rem;
+}
+
+.vehicle-value {
+    color: #495057;
+    font-size: 0.9rem;
+    text-align: right;
+}
+
+.vehicle-detail-item.full-width .vehicle-value {
+    text-align: left;
+    margin-top: 4px;
+}
+
+.itv-status-enhanced {
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-align: center;
+    margin-bottom: 10px;
+    display: inline-block;
+}
+
+.itv-status-enhanced.valid {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+}
+
+.itv-status-enhanced.invalid {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+    color: white;
+    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+}
+
+.no-data-vehicle {
+    text-align: center;
+    color: #6c757d;
+    font-style: italic;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px dashed #dee2e6;
+}
+
+/* ========================================
+   FOTOGRAFÍAS DE VEHÍCULOS
+   ======================================== */
+
+.vehicle-photos-enhanced {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.photos-grid-enhanced {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex: 1;
+}
+
+.photo-thumb-enhanced {
+    position: relative;
+    cursor: pointer;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+    min-height: 80px;
+}
+
+.photo-thumb-enhanced:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+}
+
+.photo-thumb-enhanced img {
+    width: 100%;
+    height: 80px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.photo-thumb-enhanced:hover img {
+    transform: scale(1.1);
+}
+
+.photo-label-enhanced {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    color: white;
+    padding: 8px 6px 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: center;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.photo-count-info {
+    text-align: center;
+    color: #6c757d;
+    background: #f8f9fa;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+}
+
+.no-photos-vehicle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    border-radius: 8px;
+    color: #6c757d;
+    text-align: center;
+    padding: 30px 20px;
+    border: 2px dashed #dee2e6;
+    min-height: 120px;
+}
+
+.no-photos-vehicle i {
+    color: #adb5bd;
+    margin-bottom: 10px;
+}
+
+.vehicle-separator {
+    border: none;
+    border-top: 3px solid #e9ecef;
+    margin: 30px 0;
+    border-radius: 2px;
+}
+
+/* ========================================
+   ALERTAS Y MENSAJES
+   ======================================== */
+
+.no-arrests-alert-enhanced {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: 15px;
+    border: 2px dashed #dee2e6;
+    text-align: center;
+    color: #6c757d;
+}
+
+.no-arrests-alert-enhanced i {
+    margin-right: 20px;
+    color: #adb5bd;
+}
+
+.no-arrests-content h6 {
+    color: #495057;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.no-arrests-content p {
+    color: #6c757d;
+    margin: 0;
+}
+
+/* ========================================
+   BOTÓN DE EXPORTAR
+   ======================================== */
+
+.export-container {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.btn-export {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    box-shadow: 0 6px 20px rgba(220, 53, 69, 0.3);
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn-export:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(220, 53, 69, 0.4);
+    color: white;
+    text-decoration: none;
+}
+
+/* ========================================
+   NOTIFICACIONES DE ÉXITO
+   ======================================== */
+
+.success-notification {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    font-weight: 500;
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+    animation: slideInDown 0.5s ease;
+}
+
+@keyframes slideInDown {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* ========================================
+   RESPONSIVIDAD PARA MÓVILES
+   ======================================== */
+
+@media (max-width: 768px) {
+    .criminal-container {
+        padding: 10px 5px;
+    }
+    
+    .card-body {
+        padding: 15px;
+    }
+    
+    .main-photo-container-expanded {
+        min-height: 300px;
+    }
+    
+    .main-photo-expanded {
+        height: 250px;
+    }
+    
+    .tab-photo-container-expanded {
+        min-height: 180px;
+    }
+    
+    .tab-photo-expanded {
+        min-height: 180px;
+    }
+    
+    .photo-gallery-expanded {
+        min-height: 300px;
+    }
+    
+    .no-photo-expanded,
+    .no-photos-alert-expanded {
+        min-height: 250px;
+        max-width: 100%;
+    }
+    
+    .characteristics-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .arrest-details-grid-enhanced {
+        grid-template-columns: 1fr;
+    }
+    
+    .accordion-header-content-enhanced {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .arrest-status-enhanced {
+        margin-left: 0;
+    }
+    
+    .vehicle-header-enhanced {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .photos-grid-enhanced {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+    
+    .photo-thumb-enhanced {
+        min-height: 60px;
+    }
+    
+    .photo-thumb-enhanced img {
+        height: 60px;
+    }
+    
+    .vehicle-card-enhanced {
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .vehicle-section {
+        padding: 15px;
+    }
+    
+    .special-detail-body {
+        min-height: 150px;
+    }
+    
+    .prison-dates-compact {
+        flex-direction: column;
+        gap: 4px;
+    }
+    
+    .tab-text {
+        display: none;
+    }
+    
+    .photo-tab-btn {
+        padding: 8px;
+    }
+}
+
+@media (max-width: 576px) {
+    .criminal-container {
+        padding: 5px;
+    }
+    
+    .main-card {
+        margin-bottom: 15px;
+        border-radius: 10px;
+    }
+    
+    .card-body {
+        padding: 12px;
+    }
+    
+    .section-title-main {
+        font-size: 1.2rem;
+    }
+    
+    .accordion-item-enhanced {
+        margin-bottom: 15px;
+        border-radius: 10px;
+    }
+    
+    .accordion-button-enhanced {
+        padding: 15px;
+    }
+    
+    .accordion-body-enhanced {
+        padding: 15px;
+    }
+    
+    .arrest-date-enhanced {
+        font-size: 1rem;
+    }
+    
+    .main-photo-container-expanded {
+        min-height: 250px;
+    }
+    
+    .main-photo-expanded {
+        height: 200px;
+    }
+    
+    .tab-photo-container-expanded {
+        min-height: 150px;
+    }
+    
+    .tab-photo-expanded {
+        min-height: 150px;
+    }
+    
+    .photo-gallery-expanded {
+        min-height: 250px;
+    }
+    
+    .photos-grid-enhanced {
+        grid-template-columns: 1fr;
+        gap: 6px;
+    }
+    
+    .photo-thumb-enhanced {
+        min-height: 100px;
+    }
+    
+    .photo-thumb-enhanced img {
+        height: 100px;
+    }
+    
+    .vehicle-detail-item {
+        flex-direction: column;
+        gap: 4px;
+    }
+    
+    .vehicle-value {
+        text-align: left;
+    }
+}
+
+/* ========================================
+   ESTILOS ADICIONALES PARA BOOTSTRAP OVERRIDE
+   ======================================== */
+
+.nav-tabs .nav-link.active {
+    background: linear-gradient(135deg, #667eea, #764ba2) !important;
+    color: white !important;
+    border-color: #667eea #667eea #fff !important;
+}
+
+.nav-tabs .nav-link:hover {
+    border-color: #e9ecef #e9ecef #dee2e6 !important;
+}
+
+.modal-content {
+    border: none;
+    border-radius: 15px;
+}
+
+.modal-header {
+    border-bottom: 2px solid #dee2e6;
+    border-radius: 15px 15px 0 0;
+}
+
+.modal-body img {
+    border-radius: 10px;
+    max-height: 80vh;
+    object-fit: contain;
+}
+
+/* ========================================
+   EFECTOS HOVER ADICIONALES
+   ======================================== */
+
+.info-item:hover {
+    background: rgba(102, 126, 234, 0.05);
+    padding: 8px 10px;
+    border-radius: 6px;
+    margin: 0 -10px 12px -10px;
+}
+
+.char-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.vehicle-detail-item:hover {
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+}
+
+/* ========================================
+   ANIMACIONES ADICIONALES
+   ======================================== */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.accordion-item-enhanced {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+.accordion-item-enhanced:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.accordion-item-enhanced:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.accordion-item-enhanced:nth-child(4) {
+    animation-delay: 0.3s;
+}
+
+/* ========================================
+   ESTILOS PARA CÓDIGOS Y BADGES
+   ======================================== */
+
+code {
+    background: #f8f9fa;
+    padding: 4px 8px;
+    border-radius: 4px;
+    color: #e83e8c;
+    font-size: 0.9em;
+    border: 1px solid #e9ecef;
+}
+
+.badge {
+    font-size: 0.8em;
+    padding: 6px 10px;
+    border-radius: 15px;
+}
+
+.bg-info {
+    background: linear-gradient(135deg, #17a2b8, #138496) !important;
+}
+
+/* ========================================
+   FIX PARA WEBKIT BROWSERS
+   ======================================== */
+
+.vehicle-title-enhanced {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #2c3e50; /* Fallback for non-webkit browsers */
+}
+
+/* Para navegadores que no soporten background-clip: text */
+@supports not (-webkit-background-clip: text) {
+    .vehicle-title-enhanced {
+        color: #2c3e50;
+        -webkit-text-fill-color: initial;
+    }
+}
+
+/* ========================================
+   MEJORAS DE ACCESIBILIDAD
+   ======================================== */
+
+.btn:focus,
+.nav-link:focus,
+.accordion-button-enhanced:focus {
+    outline: 2px solid #667eea;
+    outline-offset: 2px;
+}
+
+.photo-thumb-enhanced:focus,
+.main-photo-wrapper:focus,
+.tab-photo-container-expanded:focus {
+    outline: 3px solid #667eea;
+    outline-offset: 3px;
+}
+
+/* ========================================
+   MEJORAS PARA IMPRESIÓN
+   ======================================== */
+
+@media print {
+    .criminal-container {
+        background: white;
+        padding: 0;
+    }
+    
+    .main-card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+    
+    .accordion-item-enhanced {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        margin-bottom: 10px;
+    }
+    
+    .btn-export {
+        display: none;
+    }
+    
+    .modal {
+        display: none;
+    }
+}
+
+/* ========================================
+   ESTILOS PARA ESTADO DE CARGA
+   ======================================== */
+
+.loading-skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+    border-radius: 8px;
+}
+
+@keyframes loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* ========================================
+   SCROLL PERSONALIZADO
+   ======================================== */
+
+.accordion-body-enhanced::-webkit-scrollbar {
+    width: 8px;
+}
+
+.accordion-body-enhanced::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.accordion-body-enhanced::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 10px;
+}
+
+.accordion-body-enhanced::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #5a67d8, #6b46c1);
+}
+
+/* ========================================
+   ESTILOS DARK MODE (OPCIONAL)
+   ======================================== */
+
+@media (prefers-color-scheme: dark) {
+    .criminal-container {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    }
+    
+    .main-card {
+        background: #2d3748;
+        color: #e2e8f0;
+    }
+    
+    .card-body {
+        background: #2d3748;
+    }
+    
+    .info-group,
+    .info-section {
+        background: #4a5568;
+        color: #e2e8f0;
+    }
+    
+    .info-item strong {
+        color: #07e333;
+    }
+    
+    .detail-card-body {
+        background: #4a5568;
+        color: #e2e8f0;
+    }
+}

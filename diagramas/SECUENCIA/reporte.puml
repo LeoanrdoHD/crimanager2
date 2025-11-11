@@ -1,58 +1,21 @@
 @startuml
-' Definición de colores y estilos
 skinparam sequenceArrowColor #4682B4
 skinparam actorBorderColor #8B4513
 skinparam actorBackgroundColor #FFFACD
 skinparam participantBorderColor #4682B4
 skinparam participantBackgroundColor #E6E6FA
 
-actor "Usuario\n(Administrador/\nInvestigador/\nInvitado)" as User
-entity "Sistema" as System
+actor "Usuario" as User
+boundary "search_cri" as SearchView
+control "ReportsController" as Controller
 entity "criminals" as Criminals #FFD700
-entity "arrest_and_apprehension_histories" as ArrestHistories #87CEEB
-entity "convictions" as Convictions #98FB98
-entity "criminal_vehicles" as CriminalVehicles #FFA07A
-entity "criminal_complices" as CriminalComplices #DDA0DD
-entity "criminal_tools" as CriminalTools #FF6347
-entity "photographs" as Photographs #FFB6C1
-entity "physical_characteristics" as PhysicalCharacteristics #20B2AA
+boundary "show_file" as ShowFileView
 
-== Visualización de Información ==
-User -> System : Seleccionar delincuente
-System -> Criminals : Obtener información\nbásica
-System -> ArrestHistories : Obtener historial\nde arrestos
-System -> Convictions : Obtener condenas
-System -> CriminalVehicles : Obtener vehículos\nasociados
-System -> CriminalComplices : Obtener cómplices
-System -> CriminalTools : Obtener herramientas/\narmas
-System -> Photographs : Obtener fotografías
-System -> PhysicalCharacteristics : Obtener características\nfísicas
-System -> User : Mostrar información\ncompleta
+== Visualización del perfil del delincuente ==
+User -> SearchView : buscarDelincuente(filtros)
+SearchView -> Controller : seleccionarDelincuente(criminal_id)
+Controller -> Criminals : obtenerInformacion(criminal_id)
+Controller -> ShowFileView : mostrarPerfil(completo)
+ShowFileView --> User : visualizarInformación()
 
-alt Visualizar historial\nespecífico por fecha
-    User -> System : Seleccionar historial\npor fecha
-    System -> ArrestHistories : Obtener historial\nespecífico
-    System -> Convictions : Obtener condenas\nasociadas
-    System -> User : Mostrar historial\nespecífico
-end
-
-== Generación de Reportes ==
-alt Generar reporte en PDF\ncon toda la información
-    User -> System : Solicitar reporte\ncompleto
-    System -> Criminals : Obtener información\nbásica
-    System -> ArrestHistories : Obtener historial\nde arrestos
-    System -> Convictions : Obtener condenas
-    System -> CriminalVehicles : Obtener vehículos\nasociados
-    System -> CriminalComplices : Obtener cómplices
-    System -> CriminalTools : Obtener herramientas/\narmas
-    System -> Photographs : Obtener fotografías
-    System -> PhysicalCharacteristics : Obtener características\nfísicas
-    System -> User : Generar y descargar\nPDF completo
-else Generar reporte en PDF\nsolo con el perfil
-    User -> System : Solicitar reporte\nde perfil
-    System -> Criminals : Obtener información\nbásica
-    System -> Photographs : Obtener fotografías
-    System -> PhysicalCharacteristics : Obtener características\nfísicas
-    System -> User : Generar y descargar\nPDF de perfil
-end
 @enduml

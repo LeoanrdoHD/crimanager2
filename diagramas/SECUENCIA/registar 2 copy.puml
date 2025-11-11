@@ -1,0 +1,31 @@
+@startuml
+' Estilos visuales
+skinparam sequenceArrowColor #4682B4
+skinparam actorBorderColor #8B4513
+skinparam actorBackgroundColor #FFFACD
+skinparam participantBorderColor #4682B4
+skinparam participantBackgroundColor #E6E6FA
+
+actor "Usuario" as User
+boundary "create_arrest" as ArrestView
+control "historialcontroller" as Controller
+entity "criminal_vehicles" as VehiclesDB #FF6347
+entity "photographs" as PhotosDB #FFB6C1
+
+== Registro de Vehículos ==
+User -> ArrestView : llenarFormularioVehículos()
+User -> ArrestView : presionarGuardarVehículos()
+ArrestView -> Controller : enviarDatosVehículos()
+Controller --> Controller : validarVehículos()
+Controller -> VehiclesDB : guardarVehículos()
+VehiclesDB --> Controller : confirmación
+Controller --> ArrestView : mostrarMensaje("Vehiculo agregado con éxito")
+ArrestView --> User : mostrarMensaje
+
+== Registro de Fotografías de Vehículos ==
+Controller -> PhotosDB : subirFotosVehículos()
+PhotosDB --> Controller : confirmación
+Controller --> ArrestView : mostrarMensaje("Vehiculo agregado con éxito")
+ArrestView --> User : mostrarMensaje
+
+@enduml

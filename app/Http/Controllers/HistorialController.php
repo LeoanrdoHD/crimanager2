@@ -90,15 +90,15 @@ class HistorialController extends Controller
             DB::beginTransaction();
 
             $request->validate([
-                'criminal_id' => 'required|integer|exists:criminals,id', // Requerido, debe ser un número entero y existir en la tabla criminals.
-                'legal_status_id' => 'required|integer|exists:legal_statuses,id', // Requerido, debe ser un número entero y existir en la tabla legal_statuses.
-                'apprehension_type_id' => 'nullable|integer|exists:apprehension_types,id', // debe ser un número entero y existir en la tabla apprehension_types.
-                'arrest_date' => 'nullable|date', // Requerido, debe ser una fecha válida.
-                'arrest_time' => 'nullable|date_format:H:i', // Requerido, debe estar en el formato de hora HH:MM.
-                'arrest_location' => 'nullable|string|max:255', // Requerido, debe ser una cadena de texto con un máximo de 255 caracteres.
-                'arrest_details' => 'nullable|string', // Opcional, puede ser una cadena de texto.
-                'cud_number' => 'nullable|string|max:50', // Requerido, debe ser una cadena única en la tabla y un máximo de 50 caracteres.
-                'criminal_specialty_id' => 'required' // Requerido, debe ser un número entero y existir en la tabla criminal_specialties.
+                'criminal_id' => 'required|integer|exists:criminals,id', 
+                'legal_status_id' => 'required|integer|exists:legal_statuses,id', 
+                'apprehension_type_id' => 'nullable|integer|exists:apprehension_types,id', 
+                'arrest_date' => 'required|date|after_or_equal:2000-01-01',
+                'arrest_time' => 'nullable|date_format:H:i',
+                'arrest_location' => 'required|string|max:100', 
+                'arrest_details' => 'required|string|max:255',
+                'cud_number' => 'nullable|string|max:20', 
+                'criminal_specialty_id' => 'required' 
             ]);
             $criminal_specialtyID = $request->criminal_specialty_id;
             if ($criminal_specialtyID === 'otro' && $request->filled('otra_especialidad')) {
@@ -793,242 +793,246 @@ class HistorialController extends Controller
     }
 
     public function update_condena(Request $request, $criminal_id, $history_id)
-    {
-        try {
-            DB::beginTransaction();
+{
+    try {
+        DB::beginTransaction();
 
-            // Verificar si el historial de arresto ya está asociado a otro criminal
-            $history_id = session('arrest_and_apprehension_history_id');
-            $existingHistory = null;
+        // Verificar si el historial de arresto ya está asociado a otro criminal
+        $session_history_id = session('arrest_and_apprehension_history_id');
+        $existingHistory = null;
 
-            if ($history_id) {
-                $existingHistory = arrest_and_apprehension_history::where('id', $history_id)
-                    ->where('criminal_id', '!=', $request->criminal_id)
-                    ->first();
+        // Usar el history_id del parámetro de la ruta, no el de la sesión
+        $final_history_id = $history_id;
+
+        if ($session_history_id) {
+            $existingHistory = arrest_and_apprehension_history::where('id', $session_history_id)
+                ->where('criminal_id', '!=', $request->criminal_id)
+                ->first();
+        }
+
+        // Verificar si se han recibido datos esenciales para proceder
+        if (!$request->has('detention_type_id') || !$request->has('criminal_id')) {
+            return response()->json(['success' => false, 'message' => 'Debe proporcionar todos los datos necesarios.']);
+        }
+
+        // Inicializar variables para los datos de la prisión
+        $prisonID = $request->prison_name;
+        if ($prisonID === "otro" && $request->filled('otra_prision_nombre')) {
+            // Manejo de País
+            if ($request->filled('new_country_name_p')) {
+                $country = Country::firstOrCreate(
+                    ['country_name' => $request->new_country_name_p]
+                );
+                $countryId = $country->id;
+            } else {
+                $countryId = $request->country_id_p;
             }
 
-            // Verificar si se han recibido datos esenciales para proceder
-            if (!$request->has('detention_type_id') || !$request->has('criminal_id')) {
-                return response()->json(['success' => false, 'message' => 'Debe proporcionar todos los datos necesarios.']);
+            // Manejo de Estado/Provincia
+            if ($request->filled('new_state_name_p')) {
+                $state = State::firstOrCreate(
+                    [
+                        'state_name' => $request->new_state_name_p,
+                        'country_id' => $countryId,
+                    ]
+                );
+                $stateId = $state->id;
+            } else {
+                $stateId = $request->province_id_p;
             }
 
-            // Inicializar variables para los datos de la prisión
-            $prisonID = $request->prison_name;
-            if ($prisonID === "otro" && $request->filled('otra_prision_nombre')) {
-                // Manejo de País
-                if ($request->filled('new_country_name_p')) {
+            // Manejo de Ciudad
+            if ($request->filled('new_city_name_p')) {
+                $city = City::firstOrCreate(
+                    [
+                        'city_name' => $request->new_city_name_p,
+                        'state_id' => $stateId,
+                    ]
+                );
+                $cityId = $city->id;
+            } else {
+                $cityId = $request->city_id_p;
+            }
+
+            // Crear nueva prisión
+            $Nprison = Prison::create([
+                'prison_name' => $request->otra_prision_nombre,
+                'prison_location' => $request->prison_location,
+                'country_id' => $countryId,
+                'state_id' => $stateId,
+                'city_id' => $cityId,
+            ]);
+            $prisonID = $Nprison->id;
+        }
+
+        // Crear o actualizar el registro en la tabla `conviction`
+        $condena = conviction::updateOrCreate(
+            [
+                'criminal_id' => $request->criminal_id,
+                'arrest_and_apprehension_history_id' => $existingHistory ? null : $final_history_id,
+                'detention_type_id' => $request->detention_type_id,
+            ]
+        );
+
+        // Llenar solo la tabla correspondiente según el tipo de detención
+        switch ($request->detention_type_id) {
+            case 1: // DETENCION PREVENTIVA
+                preventive_detention::create([
+                    'criminal_id' => $request->criminal_id,
+                    'arrest_and_apprehension_history_id' => $existingHistory ? null : $final_history_id,
+                    'conviction_id' => $condena->id,
+                    'prison_id' => $prisonID,
+                    'prison_entry_date' => $request->prison_entry_date,
+                    'prison_release_date' => $request->prison_release_date,
+                ]);
+                break;
+
+            case 2: // DETENCION DOMICILIARIA
+                // Manejo de País para detención domiciliaria
+                if ($request->filled('new_country_name_d')) {
                     $country = Country::firstOrCreate(
-                        ['country_name' => $request->new_country_name_p] // Buscar por nombre
+                        ['country_name' => $request->new_country_name_d]
                     );
-                    $countryId = $country->id; // Usar el ID del país encontrado o creado
+                    $countryId_d = $country->id;
                 } else {
-                    $countryId = $request->country_id_p; // Usar el ID del país seleccionado
+                    $countryId_d = $request->country_id_d;
                 }
 
-                // Manejo de Estado/Provincia
-                if ($request->filled('new_state_name_p')) {
+                // Manejo de Estado/Provincia para detención domiciliaria
+                if ($request->filled('new_state_name_d')) {
                     $state = State::firstOrCreate(
                         [
-                            'state_name' => $request->new_state_name_p, // Buscar por nombre
-                            'country_id' => $countryId,                // Y por el país asociado
+                            'state_name' => $request->new_state_name_d,
+                            'country_id' => $countryId_d,
                         ]
                     );
-                    $stateId = $state->id; // Usar el ID del estado encontrado o creado
+                    $stateId_d = $state->id;
                 } else {
-                    $stateId = $request->province_id_p; // Usar el ID del estado seleccionado
+                    $stateId_d = $request->province_id_d;
                 }
 
-                // Manejo de Ciudad
-                if ($request->filled('new_city_name_p')) {
+                // Manejo de Ciudad para detención domiciliaria
+                if ($request->filled('new_city_name_d')) {
                     $city = City::firstOrCreate(
                         [
-                            'city_name' => $request->new_city_name_p, // Buscar por nombre
-                            'state_id' => $stateId,                  // Y por el estado asociado
+                            'city_name' => $request->new_city_name_d,
+                            'state_id' => $stateId_d,
                         ]
                     );
-                    $cityId = $city->id; // Usar el ID de la ciudad encontrada o creada
+                    $cityId_d = $city->id;
                 } else {
-                    $cityId = $request->city_id_p; // Usar el ID de la ciudad seleccionada
+                    $cityId_d = $request->city_id_d;
                 }
 
-                // Crear nueva organización
-                $Nprison = Prison::create([
-                    'prison_name' => $request->otra_prision_nombre,
-                    'prison_location' => $request->prison_location,
-                    'country_id' => $countryId,
-                    'state_id' => $stateId,
-                    'city_id' => $cityId,
-                ]);
-                $prisonID = $Nprison->id;
-            }
-            // Crear o actualizar el registro en la tabla `conviction`
-            $condena = conviction::updateOrCreate(
-                [
+                house_arrest::create([
                     'criminal_id' => $request->criminal_id,
-                    'arrest_and_apprehension_history_id' => $existingHistory ? null : $history_id,
-                    'detention_type_id' => $request->detention_type_id,
-                ]
-            );
+                    'arrest_and_apprehension_history_id' => $existingHistory ? null : $final_history_id,
+                    'conviction_id' => $condena->id,
+                    'house_arrest_address' => $request->house_arrest_address,
+                    'country_id' => $countryId_d,
+                    'state_id' => $stateId_d,
+                    'city_id' => $cityId_d,
+                ]);
+                break;
 
+            case 3: // EXTRADICION
+                // Manejo de País para extradición
+                if ($request->filled('new_country_name_e')) {
+                    $country = Country::firstOrCreate(
+                        ['country_name' => $request->new_country_name_e]
+                    );
+                    $countryId_e = $country->id;
+                } else {
+                    $countryId_e = $request->country_id_e;
+                }
 
-            // Llenar solo la tabla correspondiente según el tipo de detención
-            switch ($request->detention_type_id) {
-                case 1: // DETENCION PREVENTIVA
-                    preventive_detention::create([
-                        'criminal_id' => $request->criminal_id,
-                        'arrest_and_apprehension_history_id' => $existingHistory ? null : $history_id,
-                        'conviction_id' => $condena->id,
-                        'prison_id' => $prisonID,
-                        'prison_entry_date' => $request->prison_entry_date,
-                        'prison_release_date' => $request->prison_release_date,
-                    ]);
-                    break;
+                // Manejo de Estado/Provincia para extradición
+                if ($request->filled('new_state_name_e')) {
+                    $state = State::firstOrCreate(
+                        [
+                            'state_name' => $request->new_state_name_e,
+                            'country_id' => $countryId_e,
+                        ]
+                    );
+                    $stateId_e = $state->id;
+                } else {
+                    $stateId_e = $request->province_id_e;
+                }
 
-                case 2: // DETENCION DOMICILIARIA
-                    // Manejo de País
-                    if ($request->filled('new_country_name_d')) {
-                        $country = Country::firstOrCreate(
-                            ['country_name' => $request->new_country_name_d] // Buscar por nombre
-                        );
-                        $countryId = $country->id; // Usar el ID del país encontrado o creado
-                    } else {
-                        $countryId = $request->country_id_d; // Usar el ID del país seleccionado
-                    }
+                extradition::create([
+                    'criminal_id' => $request->criminal_id,
+                    'arrest_and_apprehension_history_id' => $existingHistory ? null : $final_history_id,
+                    'conviction_id' => $condena->id,
+                    'extradition_date' => $request->extradition_date,
+                    'country_id' => $countryId_e,
+                    'state_id' => $stateId_e,
+                ]);
+                break;
 
-                    // Manejo de Estado/Provincia
-                    if ($request->filled('new_state_name_d')) {
-                        $state = State::firstOrCreate(
-                            [
-                                'state_name' => $request->new_state_name_d, // Buscar por nombre
-                                'country_id' => $countryId,                // Y por el país asociado
-                            ]
-                        );
-                        $stateId = $state->id; // Usar el ID del estado encontrado o creado
-                    } else {
-                        $stateId = $request->province_id_d; // Usar el ID del estado seleccionado
-                    }
+            case 4: // LIBERTAD
+                // Manejo de País para libertad
+                if ($request->filled('new_country_name_l')) {
+                    $country = Country::firstOrCreate(
+                        ['country_name' => $request->new_country_name_l]
+                    );
+                    $countryId_l = $country->id;
+                } else {
+                    $countryId_l = $request->country_id_l;
+                }
 
-                    // Manejo de Ciudad
-                    if ($request->filled('new_city_name_d')) {
-                        $city = City::firstOrCreate(
-                            [
-                                'city_name' => $request->new_city_name_d, // Buscar por nombre
-                                'state_id' => $stateId,                  // Y por el estado asociado
-                            ]
-                        );
-                        $cityId = $city->id; // Usar el ID de la ciudad encontrada o creada
-                    } else {
-                        $cityId = $request->city_id_d; // Usar el ID de la ciudad seleccionada
-                    }
+                // Manejo de Estado/Provincia para libertad
+                if ($request->filled('new_state_name_l')) {
+                    $state = State::firstOrCreate(
+                        [
+                            'state_name' => $request->new_state_name_l,
+                            'country_id' => $countryId_l,
+                        ]
+                    );
+                    $stateId_l = $state->id;
+                } else {
+                    $stateId_l = $request->province_id_l;
+                }
 
-                    house_arrest::create([
-                        'criminal_id' => $request->criminal_id,
-                        'arrest_and_apprehension_history_id' => $existingHistory ? null : $history_id,
-                        'conviction_id' => $condena->id,
-                        'house_arrest_address' => $request->house_arrest_address,
-                        'country_id' => $request->country_id_d,
-                        'state_id' => $request->province_id_d,
-                        'city_id' => $request->city_id_d,
+                // Manejo de Ciudad para libertad
+                if ($request->filled('new_city_name_l')) {
+                    $city = City::firstOrCreate(
+                        [
+                            'city_name' => $request->new_city_name_l,
+                            'state_id' => $stateId_l,
+                        ]
+                    );
+                    $cityId_l = $city->id;
+                } else {
+                    $cityId_l = $request->city_id_l;
+                }
 
-                    ]);
-                    break;
-
-                case 3: // EXTRADICION
-                    // Manejo de País
-                    if ($request->filled('new_country_name_e')) {
-                        $country = Country::firstOrCreate(
-                            ['country_name' => $request->new_country_name_e] // Buscar por nombre
-                        );
-                        $countryId = $country->id; // Usar el ID del país encontrado o creado
-                    } else {
-                        $countryId = $request->country_id_e; // Usar el ID del país seleccionado
-                    }
-
-                    // Manejo de Estado/Provincia
-                    if ($request->filled('new_state_name_e')) {
-                        $state = State::firstOrCreate(
-                            [
-                                'state_name' => $request->new_state_name_e, // Buscar por nombre
-                                'country_id' => $countryId,                // Y por el país asociado
-                            ]
-                        );
-                        $stateId = $state->id; // Usar el ID del estado encontrado o creado
-                    } else {
-                        $stateId = $request->province_id_e; // Usar el ID del estado seleccionado
-                    }
-
-                    extradition::create([
-                        'criminal_id' => $request->criminal_id,
-                        'arrest_and_apprehension_history_id' => $existingHistory ? null : $history_id,
-                        'conviction_id' => $condena->id,
-                        'extradition_date' => $request->extradition_date,
-                        'country_id' => $request->country_id_e,
-                        'state_id' => $request->province_id_e,
-                    ]);
-                    break;
-
-                case 4: // 
-                    // Manejo de País
-                    if ($request->filled('new_country_name_l')) {
-                        $country = Country::firstOrCreate(
-                            ['country_name' => $request->new_country_name_l] // Buscar por nombre
-                        );
-                        $countryId = $country->id; // Usar el ID del país encontrado o creado
-                    } else {
-                        $countryId = $request->country_id_l; // Usar el ID del país seleccionado
-                    }
-
-                    // Manejo de Estado/Provincia
-                    if ($request->filled('new_state_name_l')) {
-                        $state = State::firstOrCreate(
-                            [
-                                'state_name' => $request->new_state_name_l, // Buscar por nombre
-                                'country_id' => $countryId,                // Y por el país asociado
-                            ]
-                        );
-                        $stateId = $state->id; // Usar el ID del estado encontrado o creado
-                    } else {
-                        $stateId = $request->province_id_l; // Usar el ID del estado seleccionado
-                    }
-
-                    // Manejo de Ciudad
-                    if ($request->filled('new_city_name_l')) {
-                        $city = City::firstOrCreate(
-                            [
-                                'city_name' => $request->new_city_name_l, // Buscar por nombre
-                                'state_id' => $stateId,                  // Y por el estado asociado
-                            ]
-                        );
-                        $cityId = $city->id; // Usar el ID de la ciudad encontrada o creada
-                    } else {
-                        $cityId = $request->city_id_l; // Usar el ID de la ciudad seleccionada
-                    }
-
-                    liberty::create([
-                        'criminal_id' => $request->criminal_id,
-                        'arrest_and_apprehension_history_id' => $existingHistory ? null : $history_id,
-                        'conviction_id' => $condena->id,
-                        'country_id' => $countryId,
-                        'state_id' => $stateId,
-                        'city_id' => $cityId,
-                        'house_address' => $request->house_address,
-                    ]);
-                    break;
-            }
-            // Confirmar la transacción
-            DB::commit();
-
-            // Redirigir con un mensaje de éxito
-            return redirect()->route('criminals.history', [
-                'criminal_id' => $criminal_id,
-                'history_id' => $history_id
-            ])->with('success', 'Se agrego correctamente.');
-        } catch (\Exception $e) {
-            // Rollback en caso de error
-            DB::rollBack();
-
-            // Enviar respuesta JSON de error
-            return response()->json(['success' => false, 'message' => 'Ocurrió un error: ' . $e->getMessage()]);
+                liberty::create([
+                    'criminal_id' => $request->criminal_id,
+                    'arrest_and_apprehension_history_id' => $existingHistory ? null : $final_history_id,
+                    'conviction_id' => $condena->id,
+                    'country_id' => $countryId_l,
+                    'state_id' => $stateId_l,
+                    'city_id' => $cityId_l,
+                    'house_address' => $request->house_address,
+                ]);
+                break;
         }
+
+        // Confirmar la transacción
+        DB::commit();
+
+        // Redirigir con un mensaje de éxito usando el $final_history_id
+        return redirect()->route('criminals.history', [
+            'criminal_id' => $criminal_id,
+            'history_id' => $final_history_id
+        ])->with('success', 'Se agregó correctamente.');
+
+    } catch (\Exception $e) {
+        // Rollback en caso de error
+        DB::rollBack();
+
+        // Enviar respuesta JSON de error
+        return response()->json(['success' => false, 'message' => 'Ocurrió un error: ' . $e->getMessage()]);
     }
+}
 }

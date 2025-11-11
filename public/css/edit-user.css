@@ -1,0 +1,326 @@
+/* CSS del formulario criminal integrado */
+
+/* Separación de botones de acción */
+.action-buttons-container {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.action-buttons-container .camera-btn {
+    font-size: 1rem !important;
+    padding: 0.75rem 2rem !important;
+    min-width: auto !important;
+    width: auto !important;
+}
+
+/* Fallback para navegadores que no soporten gap */
+@supports not (gap: 1.5rem) {
+    .action-buttons-container .camera-btn:not(:last-child) {
+        margin-right: 1.5rem;
+    }
+}
+
+/* Estilos para modo solo lectura */
+.image-upload-container.view-only {
+    border-style: solid;
+    cursor: default;
+}
+
+.image-upload-container.view-only:hover {
+    border-color: #6b7280;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.preview-image.view-only {
+    cursor: default;
+}
+
+.preview-image.view-only:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.camera-btn.view-only:hover {
+    background-color: #4CAF50 !important;
+    transform: none !important;
+}
+.card-body {
+    background: linear-gradient(rgba(0, 0, 0, 0.874), rgba(0, 0, 0, 0.825));
+    background-size: cover;
+    background-position: center;
+    border-radius: 8px;
+    color: white;
+    padding: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.section-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #fff;
+    border-bottom: 2px solid #4CAF50;
+    padding-bottom: 5px;
+}
+
+.custom-file-label {
+    cursor: pointer;
+    padding: 6px 12px;
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    color: #495057;
+}
+
+.image-upload-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 1rem;
+    border: 2px dashed #6b7280;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.image-upload-container:hover {
+    border-color: #4CAF50;
+    background-color: rgba(76, 175, 80, 0.1);
+}
+
+.preview-image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border: 2px solid #ddd;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 0.5rem;
+}
+
+.preview-image:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.required-field::after {
+    content: " *";
+    color: #ff6b6b;
+}
+
+/* Estilos para los botones de cámara */
+.camera-options {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.camera-btn {
+    padding: 0.4rem 0.8rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    min-width: 70px;
+    justify-content: center;
+}
+
+/* Botones principales (como Guardar Cambios) sin min-width */
+.camera-btn[type="submit"] {
+    min-width: auto;
+    width: auto;
+    display: inline-flex;
+}
+
+.camera-btn.primary {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.camera-btn.primary:hover {
+    background-color: #45a049;
+    transform: translateY(-1px);
+}
+
+.camera-btn.secondary {
+    background-color: #6b7280;
+    color: white;
+}
+
+.camera-btn.secondary:hover {
+    background-color: #4b5563;
+    transform: translateY(-1px);
+}
+
+.camera-btn.danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.camera-btn.danger:hover {
+    background-color: #c82333;
+    transform: translateY(-1px);
+}
+
+.camera-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Responsive para la sección de fotos */
+@media (max-width: 640px) {
+    .image-upload-container {
+        padding: 0.75rem;
+    }
+    
+    .preview-image {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .camera-options {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .camera-btn {
+        width: 100%;
+        min-width: unset;
+    }
+}
+
+/* Mantener los estilos originales del switch y otros elementos */
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px #333 inset !important;
+    -webkit-text-fill-color: #fff !important;
+    border: 1px solid #555;
+}
+
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0px 1000px #444 inset !important;
+    -webkit-text-fill-color: #fff !important;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 25px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 25px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 19px;
+    width: 19px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked+.slider {
+    background-color: #28a745;
+}
+
+input:not(:checked)+.slider {
+    background-color: #dc3545;
+}
+
+input:checked+.slider:before {
+    transform: translateX(25px);
+}
+
+/* Mejorar la visibilidad de los elementos del formulario sobre el fondo oscuro */
+.form-control {
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ddd;
+    color: #333;
+}
+
+.form-control:focus {
+    background-color: rgba(255, 255, 255, 0.95);
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
+}
+
+.form-control[readonly] {
+    background-color: rgba(255, 255, 255, 0.6);
+    color: #666;
+    border: 1px solid #999;
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+.form-control[readonly]:focus {
+    background-color: rgba(255, 255, 255, 0.6);
+    border-color: #999;
+    box-shadow: none;
+    color: #666;
+}
+
+/* Agregar icono de candado a campos readonly */
+.readonly-field {
+    position: relative;
+}
+
+.readonly-field::after {
+    content: "🔒";
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+.form-check-label {
+    color: #fff;
+}
+
+.invalid-feedback {
+    color: #ff6b6b;
+}
+
+/* Texto muted para indicaciones */
+.text-muted {
+    color: #999 !important;
+    font-size: 0.85rem;
+    font-style: italic;
+}

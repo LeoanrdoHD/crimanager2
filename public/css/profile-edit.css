@@ -1,0 +1,190 @@
+/* Estilos específicos para la vista de editar perfil */
+
+/* Tema oscuro profesional */
+body {
+    background-color: #1a1a1a !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #fff;
+}
+
+.content-wrapper {
+    background-color: #333435 !important;
+}
+
+.card-dark {
+    background-color: #2d3748 !important;
+    border: 1px solid #4a5568 !important;
+}
+
+.card {
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.card-header {
+    padding: 1rem 1.25rem;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+.btn {
+    border-radius: 6px;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-width: 1px;
+}
+
+.btn-outline-primary {
+    color: #3b82f6;
+    border-color: #3b82f6;
+}
+
+.btn-outline-primary:hover {
+    background-color: #3b82f6;
+    border-color: #3b82f6;
+    color: white;
+}
+
+.btn-outline-secondary {
+    color: #6b7280;
+    border-color: #6b7280;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #6b7280;
+    border-color: #6b7280;
+    color: white;
+}
+
+.btn-outline-danger {
+    color: #ef4444;
+    border-color: #ef4444;
+}
+
+.btn-outline-danger:hover {
+    background-color: #ef4444;
+    border-color: #ef4444;
+    color: white;
+}
+
+.btn-primary {
+    background-color: #3b82f6;
+    border-color: #3b82f6;
+}
+
+.btn-primary:hover {
+    background-color: #2563eb;
+    border-color: #2563eb;
+}
+
+.btn-success {
+    background-color: #10b981;
+    border-color: #10b981;
+}
+
+.btn-success:hover {
+    background-color: #059669;
+    border-color: #059669;
+}
+
+.alert {
+    border-radius: 6px;
+    border: none;
+    font-weight: 500;
+}
+
+.breadcrumb {
+    background-color: transparent;
+    padding: 0;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    color: #6b7280;
+}
+
+.form-control {
+    border-radius: 6px;
+    padding: 0.75rem;
+}
+
+.form-control:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.25);
+}
+
+.form-control[readonly] {
+    background-color: #4b5563 !important;
+    border-color: #6b7280 !important;
+    color: #ffffff !important;
+}
+
+.bg-secondary {
+    background-color: #374151 !important;
+}
+
+.border-secondary {
+    border-color: #4b5563 !important;
+}
+
+.bg-dark {
+    background-color: #1a1b1d !important;
+}
+
+.text-uppercase {
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}
+
+.input-group-append .btn {
+    border-left: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.bg-gradient-info {
+    background: linear-gradient(135deg, #06b6d4 0%, #0284c7 100%);
+}
+
+/* Preview de imagen */
+#profileImage,
+#previewImage,
+#profileInitials {
+    transition: all 0.3s ease;
+}
+
+#profileImage:hover,
+#previewImage:hover,
+#profileInitials:hover {
+    transform: scale(1.02);
+}
+
+/* Form labels */
+.form-label {
+    margin-bottom: 0.5rem;
+}
+
+/* Error messages */
+.text-danger {
+    font-size: 0.875rem;
+    color: #ef4444 !important;
+}
+
+/* Colores específicos para iconos */
+.text-info {
+    color: #06b6d4 !important;
+}
+
+.text-warning {
+    color: #f59e0b !important;
+}
+
+.text-muted {
+    color: #9ca3af !important;
+}
+
+.card:hover {
+    box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+    transition: box-shadow 0.3s ease;
+}

@@ -1,5 +1,4 @@
 @extends('adminlte::page')
-@vite('resources/css/app.css')
 @section('title', 'Crimanager')
 
 @section('content_header')
@@ -34,20 +33,24 @@
     <h1 class="class text-center">REGISTRO DE NUEVO DELINCUENTE</h1>
 @stop
 @section('content')
+    <div class="row justify-content-center">
+        <div class="col-lg-11.5 col-md-11.5 col-11.5">
+            @if (session('error'))
+                <div id="errorAlert" class="alert alert-danger" style="color: rgb(225, 215, 215);">
+                    {{ session('error') }}
+                </div>
+            @endif
+            <script>
+                // Ocultar el mensaje de error después de 5 segundos
+                setTimeout(function() {
+                    const errorAlert = document.getElementById('errorAlert');
+                    if (errorAlert) {
+                        errorAlert.style.display = 'none';
+                    }
+                }, 5000);
+            </script>
 
-    @if (session('error'))
-        <div id="errorAlert" class="alert alert-danger" style="color: rgb(225, 215, 215);">
-            {{ session('error') }}
+            @include('criminals.partials.section0_perfil')
         </div>
-    @endif
-    <script>
-        // Ocultar el mensaje de error después de 5 segundos
-        setTimeout(function() {
-            const errorAlert = document.getElementById('errorAlert');
-            if (errorAlert) {
-                errorAlert.style.display = 'none';
-            }
-        }, 5000);
-    </script>
-    @include('criminals.partials.section0_perfil')
+    </div>
 @endsection

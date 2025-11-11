@@ -1,19 +1,20 @@
 <?php
-
 namespace App\Http\Controllers;
-
-use App\Models\arrest_and_apprehension_history;
 use App\Models\conviction;
 use App\Models\criminal;
 use App\Models\criminal_organization;
 use App\Models\criminal_phone_number;
 use App\Models\criminal_vehicle;
 use App\Models\photograph;
-use Illuminate\Http\Request;
-use Barryvdh\DomPDF\Facade\Pdf;
-use Dompdf\Options;
-use Illuminate\Support\Facades\Storage;
-
+use App\Models\apprehension_type;
+use App\Models\arrest_and_apprehension_history;
+use App\Models\relationship_type;
+use App\Models\criminal_specialty;
+use App\Models\legal_statuse;
+use App\Models\nationality;
+use App\Models\ocupation;
+use App\Models\criminal_complice;
+use App\Models\criminal_aliase;
 
 class ReportsController extends Controller
 {
@@ -27,6 +28,16 @@ class ReportsController extends Controller
         $vehicle = criminal_vehicle::all();
         $orga = criminal_organization::all();
         $condena = conviction::all();
+        $complice = criminal_complice::all();
+        $aliase = criminal_aliase::all();
+        $nacionalidad = nationality::all();
+        $t_relacion = relationship_type::all();
+        $criminals = criminal::get();
+        $date_crimi = criminal::all();
+        $lstatus = legal_statuse::all();
+        $t_aprehe = apprehension_type::all();
+        $cri_esp = criminal_specialty::all();
+        $ocupacion = ocupation::all();
         $crimi = Criminal::with(
             'civilState',
             'country',
@@ -67,7 +78,7 @@ class ReportsController extends Controller
             'liberties',
         )->get();
 
-        return view('criminals.search_cri', compact('crimi', 'history_cri', 'fotos', 'history', 'phone_cri', 'vehicle', 'orga', 'condena'));
+        return view('criminals.search_cri', compact('crimi', 'history_cri', 't_aprehe', 'fotos', 'history', 'phone_cri', 'vehicle', 'orga', 'condena', 'complice', 'aliase', 'nacionalidad', 'ocupacion', 'cri_esp'));
     }
 
     public function show_crimi($criminal_id)
@@ -102,72 +113,6 @@ class ReportsController extends Controller
 
         // Redirige a la vista con los datos
         return view('criminals.show_file', compact('criminal', 'history'));
-    }
-   
-    public function generatePDF($criminal_id)
-    {
-        $options = new Options();
-        $options->set('isRemoteEnabled', true);
-        $criminal = Criminal::with([
-            'civilState',
-            'country',
-            'state',
-            'city',
-            'nationality',
-            'occupation',
-            'photographs',
-            'arrestHistories',
-            'criminalAddresses.country',
-            'criminalAddresses.state',
-            'criminalAddresses.city',
-            'physicalCharacteristics.earType',
-            'physicalCharacteristics.eyeType',
-            'physicalCharacteristics.lipType',
-            'physicalCharacteristics.noseType',
-            'physicalCharacteristics.skinColor',
-            'physicalCharacteristics.Confleccion',
-            'physicalCharacteristics.criminalGender',
-            'criminalPartner.relationshipType'
-        ])
-            ->findOrFail($criminal_id);
-        // Cargar la vista
-        $pdf = PDF::loadView('exportar.pdf_todo', compact('criminal'));
-
-        // Descargar el PDF
-        return $pdf->download('tarjeta_todo.pdf');
-    }
-    
-    public function generatePDFfast($criminal_id)
-    {
-        $options = new Options();
-        $options->set('isRemoteEnabled', true);
-        $criminal = Criminal::with([
-            'civilState',
-            'country',
-            'state',
-            'city',
-            'nationality',
-            'occupation',
-            'photographs',
-            'arrestHistories',
-            'criminalAddresses.country',
-            'criminalAddresses.state',
-            'criminalAddresses.city',
-            'physicalCharacteristics.earType',
-            'physicalCharacteristics.eyeType',
-            'physicalCharacteristics.lipType',
-            'physicalCharacteristics.noseType',
-            'physicalCharacteristics.skinColor',
-            'physicalCharacteristics.Confleccion',
-            'physicalCharacteristics.criminalGender',
-            'criminalPartner.relationshipType'
-        ])
-            ->findOrFail($criminal_id);
-        // Cargar la vista
-        $pdf = PDF::loadView('exportar.pdf_rapido', compact('criminal'));
-
-        // Descargar el PDF
-        return $pdf->download('tarjeta_rapida.pdf');
     }
 
     public function showFileHistory($criminal_id, $history_id)
@@ -232,6 +177,16 @@ class ReportsController extends Controller
         $vehicle = criminal_vehicle::all();
         $orga = criminal_organization::all();
         $condena = conviction::all();
+        $complice = criminal_complice::all();
+        $aliase = criminal_aliase::all();
+        $nacionalidad = nationality::all();
+        $t_relacion = relationship_type::all();
+        $criminals = criminal::get();
+        $date_crimi = criminal::all();
+        $lstatus = legal_statuse::all();
+        $t_aprehe = apprehension_type::all();
+        $cri_esp = criminal_specialty::all();
+        $ocupacion = ocupation::all();
         $crimi = Criminal::with(
             'civilState',
             'country',
@@ -272,7 +227,7 @@ class ReportsController extends Controller
             'liberties',
         )->get();
 
-        return view('reports.search_criminal', compact('crimi', 'history_cri', 'fotos', 'history', 'phone_cri', 'vehicle', 'orga', 'condena'));
+        return view('reports.search_criminal', compact('crimi', 'history_cri', 't_aprehe', 'fotos', 'history', 'phone_cri', 'vehicle', 'orga', 'condena', 'complice', 'aliase', 'nacionalidad', 'ocupacion', 'cri_esp'));
     }
 
     public function show_criminal(Criminal $file)

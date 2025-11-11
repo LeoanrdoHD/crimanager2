@@ -26,6 +26,7 @@ class UserSession extends Model
     protected $casts = [
         'login_at' => 'datetime',
         'logout_at' => 'datetime',
+        'last_activity' => 'datetime', // ← Agregado este cast
     ];
 
     /**

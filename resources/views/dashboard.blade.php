@@ -1,52 +1,13 @@
 @extends('adminlte::page')
 
 @section('content')
-    <div class="card"
-        style="
-        width: 100%;
-        min-height: calc(100vh - 60px);
-        display: flex;
-        justify-content: flex-end; /* Alinea el contenido a la derecha */
-        align-items: center; /* Centra verticalmente */
-        overflow: hidden;
-        border-radius: 15px;
-        background: rgba(0, 0, 0, 0.8); /* Fondo más oscuro */
-        padding: 15px;
-        position: relative;
-    ">
-        <!-- Imagen de fondo con animación -->
-        <div class="background-animation"
-            style="
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('{{ asset('storage/FONDO.png') }}') no-repeat center center;
-            background-size: cover;
-            animation: fadeBlur 6s infinite alternate, scale 8s infinite ease-in-out;
-            border-radius: 15px;
-            filter: brightness(0.7); /* Oscurecer la imagen */
-        ">
-        </div>
+    <div class="card dashboard-card">
+        <!-- Imagen de fondo optimizada con lazy loading -->
+        <div class="background-animation" data-bg="{{ asset('storage/FONDO.png') }}"></div>
+        
         <!-- Destellos de la estrella -->
-        <div class="star-flare"
-            style="
- position: absolute;
- top: 0;
- left: 0;
- width: 100%;
- height: 100%;
- background: radial-gradient(
-     circle at 0% 50%,
-     rgba(255, 255, 255, 0.5) 0%,
-     rgba(255, 255, 255, 0) 50% /* Radio más pequeño */
- );
- animation: flare 6s infinite ease-in-out; /* Destellos más lentos */
- opacity: 0;
- border-radius: 15px;
-">
-        </div>
+        <div class="star-flare"></div>
+        
         <!-- Contenedor del mensaje -->
         <div class="user-welcome">
             <h3>BIENVENIDO A: CRIMANAGER-DACI</h3>
@@ -55,159 +16,337 @@
 
         <!-- Contenedor de botones -->
         <div class="botonnes">
-            @can('agregar.criminal')<a href="{{ url('criminals') }}" class="btn btn-custom-white">Registrar Nuevo</a>@endcan
+            @can('agregar.criminal')
+                <a href="{{ url('criminals') }}" class="btn btn-custom-white">Registrar Nuevo</a>
+            @endcan
             <a href="{{ url('criminals/search_cri') }}" class="btn btn-custom-black">Buscar Registros</a>
         </div>
     </div>
 
     <!-- Copyright -->
-    <div class="text-center mt-3" style="color: white; font-size: 14px;">
+    <div class="text-center mt-3 copyright">
         © <span id="currentYear"></span> LDH84.
     </div>
 
-    <!-- Animaciones con CSS -->
+    <!-- Estilos optimizados -->
     <style>
-        /* Animación de escalado */
+        /* Variables CSS para mejor rendimiento */
+        :root {
+            --bg-dark: rgba(0, 0, 0, 0.8);
+            --bg-semi: rgba(0, 0, 0, 0.5);
+            --bg-semi-mobile: rgba(0, 0, 0, 0.6);
+            --white: #ffffff;
+            --black: #000000;
+            --gray: #333333;
+            --border-gray: #727171;
+            --border-light: #cccccc;
+            --transition: 0.3s ease;
+            --radius: 15px;
+            --radius-small: 10px;
+            --radius-btn: 5px;
+        }
+
+        /* Estilos principales optimizados */
+        .dashboard-card {
+            width: 100%;
+            min-height: calc(100vh - 60px);
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            overflow: hidden;
+            border-radius: var(--radius);
+            background: var(--bg-dark);
+            padding: 15px;
+            position: relative;
+            /* Optimización para GPU */
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            perspective: 1000px;
+        }
+
+        /* Imagen de fondo optimizada */
+        .background-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: var(--radius);
+            filter: brightness(0.7);
+            /* Optimizaciones de GPU */
+            will-change: transform, opacity;
+            transform: translateZ(0);
+            /* Usar transform en lugar de background para mejor rendimiento */
+            background-color: #1a1a1a; /* Fallback mientras carga */
+        }
+
+        /* Cargar imagen de fondo de forma optimizada */
+        .background-animation.loaded {
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            /* Animaciones más suaves y eficientes */
+            animation: fadeBlur 6s infinite alternate ease-in-out, 
+                      scale 8s infinite ease-in-out;
+        }
+
+        /* Animaciones optimizadas usando transform */
         @keyframes scale {
-            0% {
-                transform: scale(1);
+            0%, 100% {
+                transform: translateZ(0) scale(1);
             }
-
             50% {
-                transform: scale(1.05);
-            }
-
-            100% {
-                transform: scale(1);
+                transform: translateZ(0) scale(1.02); /* Reducido para mejor rendimiento */
             }
         }
 
-        /* Animación de destellos */
-        @keyframes flare {
+        @keyframes fadeBlur {
             0% {
-                opacity: 0;
-                transform: scale(1);
-            }
-
-            50% {
+                filter: brightness(0.7) blur(0px);
                 opacity: 1;
-                transform: scale(1.2);
             }
-
             100% {
-                opacity: 0;
-                transform: scale(1);
+                filter: brightness(0.6) blur(1px);
+                opacity: 0.9;
             }
         }
 
-        /* Estilos para el mensaje de bienvenida */
+        /* Destellos optimizados */
+        .star-flare {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(
+                circle at 0% 50%,
+                rgba(255, 255, 255, 0.3) 0%,
+                rgba(255, 255, 255, 0) 40%
+            );
+            animation: flare 6s infinite ease-in-out;
+            opacity: 0;
+            border-radius: var(--radius);
+            will-change: opacity, transform;
+            transform: translateZ(0);
+        }
+
+        @keyframes flare {
+            0%, 100% {
+                opacity: 0;
+                transform: translateZ(0) scale(1);
+            }
+            50% {
+                opacity: 0.8;
+                transform: translateZ(0) scale(1.1);
+            }
+        }
+
+        /* Mensaje de bienvenida optimizado */
         .user-welcome {
             position: absolute;
             top: 20px;
             right: 20px;
-            background: rgba(0, 0, 0, 0.5);
+            background: var(--bg-semi);
             padding: 10px 20px;
-            border-radius: 10px;
-            color: white;
+            border-radius: var(--radius-small);
+            color: var(--white);
             font-weight: bold;
             text-align: right;
             z-index: 2;
+            /* Optimización de renderizado */
+            transform: translateZ(0);
+            backface-visibility: hidden;
         }
 
-        /* Estilos para el contenedor de botones */
+        .user-welcome h3 {
+            margin: 5px 0;
+            font-size: 1rem;
+        }
+
+        /* Contenedor de botones optimizado */
         .botonnes {
             position: absolute;
             top: 50%;
-            /* Centra verticalmente */
             right: 50px;
-            /* Margen a la derecha en pantallas grandes */
-            transform: translateY(-50%);
+            transform: translateY(-50%) translateZ(0);
             display: flex;
-            flex-direction: row; /* Botones uno al lado del otro */
-            /* Asegura que los botones estén uno debajo del otro */
+            flex-direction: row;
             align-items: center;
             gap: 20px;
             z-index: 2;
         }
 
-        /* Estilos específicos para móviles */
+        /* Botones optimizados */
+        .btn-custom-white,
+        .btn-custom-black {
+            padding: 12px 25px;
+            border-radius: var(--radius-btn);
+            text-decoration: none;
+            transition: all var(--transition);
+            display: block;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            border: 1px solid;
+            /* Optimizaciones de GPU */
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            will-change: background-color, transform;
+        }
+
+        .btn-custom-white {
+            background-color: var(--white);
+            color: var(--black);
+            border-color: var(--border-light);
+        }
+
+        .btn-custom-white:hover {
+            background-color: rgba(240, 240, 240, 0.9);
+            color: var(--black);
+            transform: translateZ(0) translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-custom-black {
+            background-color: var(--black);
+            color: var(--white);
+            border-color: var(--border-gray);
+        }
+
+        .btn-custom-black:hover {
+            background-color: var(--gray);
+            color: var(--white);
+            transform: translateZ(0) translateY(-2px);
+            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Copyright optimizado */
+        .copyright {
+            color: var(--white);
+            font-size: 14px;
+            transform: translateZ(0);
+        }
+
+        /* Media queries optimizadas */
         @media (max-width: 768px) {
             .user-welcome {
                 top: 10%;
                 left: 50%;
-                transform: translateX(-50%);
+                right: auto;
+                transform: translateX(-50%) translateZ(0);
                 text-align: center;
                 width: 90%;
-                background: rgba(0, 0, 0, 0.6);
+                background: var(--bg-semi-mobile);
                 padding: 15px;
-                border-radius: 10px;
+            }
+
+            .user-welcome h3 {
+                font-size: 0.9rem;
+                margin: 3px 0;
             }
 
             .botonnes {
-                position: absolute;
                 top: 60%;
-                /* Ajusta la posición vertical */
                 left: 50%;
-                transform: translate(-50%, -50%);
-                display: flex;
+                right: auto;
+                transform: translate(-50%, -50%) translateZ(0);
                 flex-direction: column;
-                /* Mantiene los botones en columna */
                 align-items: center;
-                /* Centra horizontalmente */
                 width: 100%;
-                /* Se extiende en todo el ancho */
                 padding: 20px;
+                gap: 15px;
             }
 
-            .botonnes a {
+            .btn-custom-white,
+            .btn-custom-black {
                 width: 80%;
-                /* Botones más grandes en móviles */
-                text-align: center;
+                font-size: 15px;
+                padding: 15px 20px;
             }
         }
 
-        /* Estilos personalizados para los botones */
-        .btn-custom-white {
-            background-color: white;
-            color: black;
-            border: 1px solid #ccc;
-            padding: 12px 25px;
-            border-radius: 5px;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
-            display: block;
-            text-align: center;
-            font-size: 16px;
-            font-weight: bold;
+        /* Optimización para pantallas de alta densidad */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .background-animation {
+                /* Usar imagen de mayor resolución si está disponible */
+                background-image: url('{{ asset('storage/FONDO@2x.png') }}'), 
+                                url('{{ asset('storage/FONDO.png') }}');
+            }
         }
 
-        .btn-custom-white:hover {
-            background-color: #f0f0f090;
-            color: rgb(12, 12, 12);
-        }
-
-        .btn-custom-black {
-            background-color: black;
-            color: white;
-            border: 1px solid #727171;
-            padding: 12px 25px;
-            border-radius: 5px;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
-            display: block;
-            text-align: center;
-            font-size: 16px;
-            font-weight: bold;
-        }
-
-        .btn-custom-black:hover {
-            background-color: #333;
-            color: white;
+        /* Reducir animaciones para usuarios que prefieren menos movimiento */
+        @media (prefers-reduced-motion: reduce) {
+            .background-animation {
+                animation: none;
+            }
+            
+            .star-flare {
+                animation: none;
+                opacity: 0.5;
+            }
+            
+            .btn-custom-white:hover,
+            .btn-custom-black:hover {
+                transform: translateZ(0);
+            }
         }
     </style>
 
-    <!-- Script para actualizar el año automáticamente -->
+    <!-- Script optimizado -->
     <script>
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        // Función optimizada para cargar imagen de fondo
+        function loadBackgroundImage() {
+            const bgElement = document.querySelector('.background-animation');
+            const bgUrl = bgElement.dataset.bg;
+            
+            // Crear imagen en memoria para precargar
+            const img = new Image();
+            img.onload = function() {
+                // Aplicar imagen solo cuando esté completamente cargada
+                bgElement.style.backgroundImage = `url(${bgUrl})`;
+                bgElement.classList.add('loaded');
+            };
+            img.onerror = function() {
+                // Fallback en caso de error
+                bgElement.style.backgroundColor = '#2c3e50';
+                bgElement.classList.add('loaded');
+            };
+            img.src = bgUrl;
+        }
+
+        // Función optimizada para actualizar año
+        function updateYear() {
+            const yearElement = document.getElementById('currentYear');
+            if (yearElement) {
+                yearElement.textContent = new Date().getFullYear();
+            }
+        }
+
+        // Usar requestAnimationFrame para mejor rendimiento
+        function initializeDashboard() {
+            requestAnimationFrame(() => {
+                updateYear();
+                loadBackgroundImage();
+            });
+        }
+
+        // Cargar solo cuando el DOM esté listo
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeDashboard);
+        } else {
+            initializeDashboard();
+        }
+
+        // Optimización adicional: pausar animaciones cuando la pestaña no está visible
+        document.addEventListener('visibilitychange', function() {
+            const animations = document.querySelectorAll('.background-animation, .star-flare');
+            animations.forEach(element => {
+                if (document.hidden) {
+                    element.style.animationPlayState = 'paused';
+                } else {
+                    element.style.animationPlayState = 'running';
+                }
+            });
+        });
     </script>
 @stop

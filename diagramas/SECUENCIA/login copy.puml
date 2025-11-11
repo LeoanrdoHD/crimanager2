@@ -1,0 +1,58 @@
+@startuml
+' Estilo visual
+skinparam sequenceArrowColor #4682B4
+skinparam actorBorderColor #8B4513
+skinparam actorBackgroundColor #FFFACD
+skinparam participantBorderColor #4682B4
+skinparam participantBackgroundColor #E6E6FA
+
+actor "Usuario" as User
+boundary "Index" as IndexView
+boundary "Show" as ShowView
+boundary "Create" as CreateView
+control "UserController" as Controller
+entity "users" as DB
+
+== Gestión de Usuarios (Parte 1) ==
+
+alt Usuario es administrador
+    ' Ver lista de usuarios
+    User -> IndexView : acceder()
+    IndexView -->> User : vistaCargada
+
+    IndexView -> Controller : index()
+    Controller -->> IndexView : solicitudRecibida
+
+    Controller -> DB : obtenerUsuarios()
+    DB -->> Controller : listaUsuarios
+
+    Controller -> IndexView : mostrarLista()
+    IndexView -->> Controller : listaMostrada
+
+    ' Ver detalles de un usuario
+    User -> ShowView : verDetalleUsuario(id)
+    ShowView -->> User : vistaDetalleCargada
+
+    ShowView -> Controller : show(id)
+    Controller -->> ShowView : solicitudRecibida
+
+    Controller -> DB : obtenerUsuario(id)
+    DB -->> Controller : datosUsuario
+
+    Controller -> ShowView : mostrarDetalle()
+    ShowView -->> Controller : detalleMostrado
+
+    ' Crear nuevo usuario
+    User -> CreateView : acceder()
+    CreateView -->> User : vistaFormularioCargada
+
+    CreateView -> Controller : store(datosUsuario)
+    Controller -->> CreateView : datosRecibidos
+
+    Controller -> DB : insertarUsuario()
+    DB -->> Controller : usuarioInsertado
+
+    Controller -> IndexView : redirigirConListaActualizada()
+    IndexView -->> Controller : listaRedirigida
+end
+@enduml

@@ -147,36 +147,58 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            color: rgba(0, 0, 0, 0.1); /* Color gris claro con opacidad */
-            font-size: 150px; /* Tamaño del texto */
-            font-weight: bold; /* Texto grueso */
-            transform: rotate(-45deg); /* Girar todo el contenedor de texto */
-            pointer-events: none; /* No afecta la interacción con el contenido */
+            color: rgba(0, 0, 0, 0.1);
+            /* Color gris claro con opacidad */
+            font-size: 150px;
+            /* Tamaño del texto */
+            font-weight: bold;
+            /* Texto grueso */
+            transform: rotate(-45deg);
+            /* Girar todo el contenedor de texto */
+            pointer-events: none;
+            /* No afecta la interacción con el contenido */
             overflow: hidden;
         }
 
         .watermark-text {
             position: absolute;
-            font-size: 150px; /* Tamaño ajustado para repetición */
-            color: rgba(0, 0, 0, 0.1); /* Color claro para la marca */
+            font-size: 150px;
+            /* Tamaño ajustado para repetición */
+            color: rgba(0, 0, 0, 0.1);
+            /* Color claro para la marca */
             font-weight: bold;
             white-space: nowrap;
         }
 
-           /* Repetición uniforme sin superposición */
-        .watermark-text:nth-child(1) { top: 0%; left: 10%; }
-        .watermark-text:nth-child(2) { top: 12%; left: -20%; }
-        .watermark-text:nth-child(3) { top: 24%; left: -40%; }
-        .watermark-text:nth-child(4) { top: 36%; left: -60%; }
+        /* Repetición uniforme sin superposición */
+        .watermark-text:nth-child(1) {
+            top: 0%;
+            left: 10%;
+        }
+
+        .watermark-text:nth-child(2) {
+            top: 12%;
+            left: -20%;
+        }
+
+        .watermark-text:nth-child(3) {
+            top: 24%;
+            left: -40%;
+        }
+
+        .watermark-text:nth-child(4) {
+            top: 36%;
+            left: -60%;
+        }
     </style>
 </head>
 
 <body>
     <div class="watermark">
-        <div class="watermark-text">D.A.C.D.A.C.I.    D.A.C.I.</div>
-        <div class="watermark-text">D.A.C.I   D.A.C.I.    D.A.C.I. </div>
-        <div class="watermark-text">D.A.C.I.   D.A.C.I.    D.A.C.I.</div>
-        <div class="watermark-text">D.A.C.I.     D.A.C.I  D.A.C.I.</div>
+        <div class="watermark-text">D.A.C.D.A.C.I. D.A.C.I.</div>
+        <div class="watermark-text">D.A.C.I D.A.C.I. D.A.C.I. </div>
+        <div class="watermark-text">D.A.C.I. D.A.C.I. D.A.C.I.</div>
+        <div class="watermark-text">D.A.C.I. D.A.C.I D.A.C.I.</div>
     </div>
     <div class="header-title">
         <table style="width: 100%; table-layout: fixed; border: none;">
@@ -276,7 +298,7 @@
                     <p>No hay fotografía de Rostro disponible.</p>
                 @endif
             </td>
-            
+
             <td colspan="5">
                 @forelse ($criminal->physicalCharacteristics as $characteristic)
                     <div class="physical-characteristics">
@@ -364,7 +386,8 @@
             <td colspan="3" class="photo-cell" style="text-align: center;">
                 @if ($criminal->photographs->last())
                     <img src="{{ public_path($criminal->photographs->last()->profile_izq_photo) }}"
-                        alt="Foto de Perfil Izquierda de {{ $criminal->first_name }}" class="img-fluid1 img-thumbnail1"
+                        alt="Foto de Perfil Izquierda de {{ $criminal->first_name }}"
+                        class="img-fluid1 img-thumbnail1"
                         style="width:80%; height: auto; max-width: 150px; object-fit: cover;">
                 @else
                     <p>No hay fotografía de Perfil Izquierda disponible.</p>
@@ -382,14 +405,15 @@
             <td colspan="3" class="photo-cell" style="text-align: center;">
                 @if ($criminal->photographs->last())
                     <img src="{{ public_path($criminal->photographs->last()->full_body_photo) }}"
-                        alt="Foto de Cuerpo Completo de {{ $criminal->first_name }}" class="img-fluid1 img-thumbnail1"
+                        alt="Foto de Cuerpo Completo de {{ $criminal->first_name }}"
+                        class="img-fluid1 img-thumbnail1"
                         style="width:80%; height: auto; max-width: 150px; object-fit: cover;">
                 @else
                     <p>No hay fotografía de Cuerpo Completo disponible.</p>
                 @endif
             </td>
         </tr>
-        
+
         <!-- Domicilio y Referencias -->
         <tr>
             <th colspan="6">DOMICILIO</th>
@@ -452,28 +476,54 @@
             </td>
         </tr>
 
+        <!-- Fila de Firmas con QR -->
         <tr>
-            <td colspan="6" class="signature-cell">
+            <td colspan="4" class="signature-cell">
                 <div class="signature-line"></div>
-                <span>FIRMA DIRECTOR DEL DACI:</span>
+                 <span>JEFE DE DIVISIÓN</span>
             </td>
-            <td colspan="6" class="seal-cell">
+            <td colspan="4" class="seal-cell">
                 <span>SELLO DACI</span>
             </td>
+            <td colspan="4" style="text-align: center; vertical-align: middle; padding: 5px;">
+                @if (isset($qrCodeBase64) && $qrCodeBase64)
+                    <div style="text-align: center;">
+                        <img src="data:image/png;base64,{{ $qrCodeBase64 }}" alt="QR Firma Digital"
+                            style="width: 120px; height: 120px; margin-bottom: 10px;">
+                        <br>
+                        <div style="font-size: 9px; color: #666; line-height: 1;">
+                            Verificación de Autenticidad<br>
+                            ID: DACI-{{ str_pad($criminal->id, 6, '0', STR_PAD_LEFT) }}
+                        </div>
+                    </div>
+                @else
+                    <div style="text-align: center;">
+                        <div
+                            style="width: 120px; height: 120px; margin: 0 auto 10px auto; display: flex; align-items: center; justify-content: center;">
+                            <div style="font-size: 10px; color: #666; text-align: center;">
+                                QR NO DISPONIBLE<br>
+                                <small style="font-size: 8px;">{{ date('Y-m-d H:i') }}</small>
+                            </div>
+                        </div>
+                        <br>
+                        <span style="font-size: 11px; font-weight: bold;">FIRMA DIGITAL</span>
+                    </div>
+                @endif
+            </td>
         </tr>
+
+        <!-- Información de generación -->
         <tr>
             <td colspan="12" class="text-justify">
-                <span>Generado a las {{ \Carbon\Carbon::now('America/La_Paz')->format('H:i:s') }} del
-                    {{ \Carbon\Carbon::now('America/La_Paz')->translatedFormat('l d \d\e F \d\e Y') }}</span>
+                <span>Generado a las
+                    {{ $generationInfo['hora_generacion'] ?? \Carbon\Carbon::now('America/La_Paz')->format('H:i:s') }}
+                    del
+                    {{ $generationInfo['fecha_generacion'] ?? \Carbon\Carbon::now('America/La_Paz')->translatedFormat('l d \d\e F \d\e Y') }}</span>
                 <span style="float: right;"> Usuario:
-                    {{ Auth::user()->name ?? 'Usuario desconocido' }}
+                    {{ $generationInfo['usuario'] ?? (Auth::user()->name ?? 'Usuario desconocido') }}
                 </span>
             </td>
         </tr>
-
-
-
-
     </table>
 </body>
 

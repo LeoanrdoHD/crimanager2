@@ -606,11 +606,13 @@
                         </div>
                         <div class="info-item">
                             <span class="label-bold">Nro de Identidad:</span>
-                            <span class="text-uppercase">{{ $aliase->alias_identity_number ?? 'No especificado' }}</span>
+                            <span
+                                class="text-uppercase">{{ $aliase->alias_identity_number ?? 'No especificado' }}</span>
                         </div>
                         <div class="info-item">
                             <span class="label-bold">Nacionalidad:</span>
-                            <span class="text-uppercase">{{ $aliase->nationality->nationality_name ?? 'No especificado' }}</span>
+                            <span
+                                class="text-uppercase">{{ $aliase->nationality->nationality_name ?? 'No especificado' }}</span>
                         </div>
                     @endforeach
                 </td>
@@ -678,9 +680,9 @@
                         </div>
                         <div class="info-item">
                             <span class="label-bold">Tipo:</span>
-                            <span class="text-uppercase">{{ $vehicle->model}}</span>
+                            <span class="text-uppercase">{{ $vehicle->model }}</span>
                             <span class="label-bold">Industria:</span>
-                            <span class="text-uppercase">{{ $vehicle->industry->industry_name}}</span>
+                            <span class="text-uppercase">{{ $vehicle->industry->industry_name }}</span>
                         </div>
                         <div class="info-item">
                             <span class="label-bold">Placa:</span>
@@ -696,14 +698,40 @@
         @endforeach
 
         <tr>
-            <td colspan="6" class="signature-cell">
+            <td colspan="4" class="signature-cell">
                 <div class="signature-line"></div>
-                <span>JEFE DE DIVISIÓN:</span>
+                <span>JEFE DE DIVISIÓN</span>
             </td>
-            <td colspan="6" class="seal-cell">
+            <td colspan="4" class="seal-cell">
                 <span>SELLO DACI</span>
             </td>
+            <td colspan="4" style="text-align: center; vertical-align: middle; padding: 5px;">
+                @if (isset($qrCodeBase64) && $qrCodeBase64)
+                    <div style="text-align: center;">
+                        <img src="data:image/png;base64,{{ $qrCodeBase64 }}" alt="QR Firma Digital"
+                            style="width: 120px; height: 120px; margin-bottom: 10px;">
+                        <br>
+                        <div style="font-size: 9px; color: #666; line-height: 1;">
+                            Verificación de Autenticidad<br>
+                            ID: DACI-{{ str_pad($criminal->id, 6, '0', STR_PAD_LEFT) }}
+                        </div>
+                    </div>
+                @else
+                    <div style="text-align: center;">
+                        <div
+                            style="width: 120px; height: 120px; margin: 0 auto 10px auto; display: flex; align-items: center; justify-content: center;">
+                            <div style="font-size: 10px; color: #666; text-align: center;">
+                                QR NO DISPONIBLE<br>
+                                <small style="font-size: 8px;">{{ date('Y-m-d H:i') }}</small>
+                            </div>
+                        </div>
+                        <br>
+                        <span style="font-size: 11px; font-weight: bold;">FIRMA DIGITAL</span>
+                    </div>
+                @endif
+            </td>
         </tr>
+
         <tr>
             <td colspan="12" class="text-justify">
                 <span>Generado a las {{ \Carbon\Carbon::now('America/La_Paz')->format('H:i:s') }} del

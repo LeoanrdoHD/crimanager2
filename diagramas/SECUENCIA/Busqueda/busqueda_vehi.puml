@@ -1,0 +1,25 @@
+@startuml
+skinparam sequenceArrowColor #4682B4
+skinparam actorBorderColor #8B4513
+skinparam actorBackgroundColor #FFFACD
+skinparam participantBorderColor #4682B4
+skinparam participantBackgroundColor #E6E6FA
+
+actor "Usuario" as User
+boundary "search_vehicle" as SearchVehicleView
+control "ReportsController" as Controller
+entity "criminals" as Criminals #FFD700
+entity "arrest_and_apprehension_history" as Arrests #FFA07A
+entity "criminal_vehicles" as Vehicles #87CEEB
+== Busqueda de Vehiculos ==
+
+User -> SearchVehicleView : Ingresar filtros (placa, marca, etc.)
+SearchVehicleView -> Controller : buscarVehículo(filtros)
+Controller -> Vehicles : consultar(filtros)
+Controller -> Criminals : obtenerConductores(vehículo_id)
+Controller -> Arrests : obtenerHistoriales(criminal_ids)
+Vehicles --> Controller : CoencidenciasEncontradas
+Controller --> SearchVehicleView : mostrarResultados()
+SearchVehicleView --> User : visualizarInformación()
+
+@enduml

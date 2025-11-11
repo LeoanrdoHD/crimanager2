@@ -1,35 +1,55 @@
 @startuml
-' Definición de colores y estilos
+' Estilo visual y colores
 skinparam sequenceArrowColor #4682B4
 skinparam actorBorderColor #8B4513
 skinparam actorBackgroundColor #FFFACD
 skinparam participantBorderColor #4682B4
 skinparam participantBackgroundColor #E6E6FA
 
-actor "Usuario\n(Administrador/Investigador)" as User
-entity "Sistema" as System
-entity "criminals" as Criminals #FFD700
-entity "criminal_addresses" as CriminalAddresses #87CEEB
-entity "criminal_aliases" as CriminalAliases #98FB98
-entity "physical_characteristics" as PhysicalCharacteristics #FFA07A
-entity "criminal_fingerprints" as CriminalFingerprints #DDA0DD
-entity "photographs" as Photographs #FF6347
+actor "Usuario" as User
 
-== Gestión de Datos Personales ==
-User -> System : Registrar datos personales del delincuente
-System -> Criminals : Crear registro del delincuente
-System -> CriminalAddresses : Registrar direcciones
-System -> CriminalAliases : Registrar alias
+boundary "create_criminal" as CreateView
+boundary "search_cri" as SearchView
+control "criminalcontroller" as Controller
+entity "criminals" as CriminalsDB
+entity "physical_characteristics" as CharacteristicsDB
+entity "photographs" as PhotographsDB
 
-User -> System : Registrar rasgos físicos del delincuente
-System -> PhysicalCharacteristics : Registrar características físicas
-System -> CriminalFingerprints : Registrar huellas dactilares
+== Registro completo del delincuente ==
 
-User -> System : Subir fotografías del delincuente
-System -> Photographs : Almacenar fotografías
+User -> CreateView : abrirFormulario()
+CreateView -->> User : formularioCargado
 
-User -> System : Editar información física y fotografías
-System -> PhysicalCharacteristics : Actualizar características físicas
-System -> Photographs : Actualizar fotografías
+User -> CreateView : llenarFormulario()
+User -> CreateView : PrecionarBotonGuardar()
+
+CreateView -> Controller : enviarFormularioCompleto()
+
+Controller --> Controller : validarDatosGenerales()
+
+Controller --> Controller : validarCaracteristicas()
+
+Controller --> Controller : validarFotografias()
+
+
+alt Todos los datos son válidos
+    Controller -> CriminalsDB : guardarDatosGenerales()
+    
+
+    Controller -> CharacteristicsDB : guardarCaracteristicas()
+  
+    Controller -> PhotographsDB : guardarFotografias()
+    PhotographsDB -->> Controller : confirmación
+
+    Controller --> SearchView : redirigir("Guardado con éxito")
+
+    SearchView --> User : mostrarVista("Lista de delincuentes")
+ 
+else Algún dato es inválido
+    Controller ---> CreateView : mostrarErrores("Errores de validación")
+
+    CreateView --> User : notificar("Revisar datos ingresados")
+   
+end
 
 @enduml

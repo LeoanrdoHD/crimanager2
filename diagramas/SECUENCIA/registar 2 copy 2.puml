@@ -1,0 +1,46 @@
+@startuml
+' Estilos visuales
+skinparam sequenceArrowColor #4682B4
+skinparam actorBorderColor #8B4513
+skinparam actorBackgroundColor #FFFACD
+skinparam participantBorderColor #4682B4
+skinparam participantBackgroundColor #E6E6FA
+
+actor "Usuario" as User
+boundary "create_arrest" as ArrestView
+control "historialcontroller" as Controller
+entity "criminal_tools" as ToolsDB #98FB98
+entity "criminal_phone_numbers" as PhonesDB #FFA07A
+entity "criminal_complices" as ComplicesDB #DDA0DD
+
+== Registro de Herramientas/Armas ==
+User -> ArrestView : llenarFormularioArmas()
+User -> ArrestView : presionarGuardarArmas()
+ArrestView -> Controller : enviarDatosArmas()
+Controller --> Controller : validarArmas()
+Controller -> ToolsDB : guardarArmas()
+ToolsDB -->> Controller : confirmación
+Controller --> ArrestView : mostrarMensaje("Herramientas agregadas con éxito")
+ArrestView --> User : mostrarMensaje
+
+== Registro de Teléfonos ==
+User -> ArrestView : llenarFormularioTeléfonos()
+User -> ArrestView : presionarGuardarTeléfonos()
+ArrestView -> Controller : enviarDatosTeléfonos()
+Controller --> Controller : validarTeléfonos()
+Controller -> PhonesDB : guardarTeléfonos()
+PhonesDB -->> Controller : confirmación
+Controller --> ArrestView : mostrarMensaje("Teléfonos agregados con éxito")
+ArrestView --> User : mostrarMensaje
+
+== Registro de Cómplices ==
+User -> ArrestView : llenarFormularioCómplices()
+User -> ArrestView : presionarGuardarCómplices()
+ArrestView -> Controller : enviarDatosCómplices()
+Controller --> Controller : validarCómplices()
+Controller -> ComplicesDB : guardarCómplices()
+ComplicesDB -->> Controller : confirmación
+Controller --> ArrestView : mostrarMensaje("Cómplices agregados con éxito")
+ArrestView --> User : mostrarMensaje
+
+@enduml

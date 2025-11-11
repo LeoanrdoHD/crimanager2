@@ -329,16 +329,17 @@ return [
             'label' => 4,
             'label_color' => 'success',
         ],*/
-        ['header' => 'COFIGURACIÓN DE CUENTA'],
+        ['header' => 'INFORMACIÓN DEL USUARIO'],
         [
-            'text' => 'Perfil',
+            'text' => 'Ver Perfil',
             'url' => 'user/profile',
             'icon' => 'fas fa-fw fa-user',
         ],
         [
-            'text' => 'Cambiar Contraseña ',
-            'url' => 'user/profile',
-            'icon' => 'fas fa-fw fa-lock',
+            'text' => 'Editar Perfil',
+            'url'  => 'user/profile/edit',
+            'icon' => 'fas fa-fw fa-pencil-alt', // Ícono de lápiz
+
         ],
 
         [
@@ -372,7 +373,7 @@ return [
             'icon' => 'fas fa-fw fa-search',
         ],
 
-       
+
         /*
         [
             'text' => 'Sobre la Captura',
@@ -410,16 +411,24 @@ return [
                 [
                     'text' => 'Descargar Reportes',
                     'url' => 'reports/search_criminal',
+                    'icon' => 'fas fa-download',
                 ],
                 [
                     'text' => 'Organizaciones',
                     'url' => 'reports/search_orga',
+                    'icon' => 'fas fa-sitemap',
                 ],
                 [
                     'text' => 'Vehículos',
                     'url' => 'reports/search_vehicle',
+                    'icon' => 'fas fa-car',
                 ],
-/*
+                [
+                    'text' => 'Estadísticas',
+                    'url' => 'reports/analytics',
+                    'icon' => 'fas fa-chart-bar',
+                ],
+                /*
                 [
                     'text' => 'Reporte rápido',
                     'url' => 'reports/search_fast',
@@ -452,7 +461,7 @@ return [
         [
             'text' => 'Bitacora',
             'url' => 'user_sessions',
-           'icon' => 'fas fa-fw fa-clipboard-list',
+            'icon' => 'fas fa-fw fa-clipboard-list',
             'can' => 'crear.Usuarios',
         ],
         /*

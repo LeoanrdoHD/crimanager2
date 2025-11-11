@@ -1,0 +1,28 @@
+@startuml
+skinparam sequenceArrowColor #4682B4
+skinparam actorBorderColor #8B4513
+skinparam actorBackgroundColor #FFFACD
+skinparam participantBorderColor #4682B4
+skinparam participantBackgroundColor #E6E6FA
+
+actor "Usuario" as User
+boundary "search_cri" as SearchView
+control "ReportsController" as Controller
+entity "criminals" as Criminals #FFD700
+entity "arrest_and_apprehension_history" as Arrests #FFA07A
+entity "PDFGenerator" as PDF #D3D3D3
+
+== Descargar Reporte==
+
+User -> SearchView : Ingresar filtros de búsqueda
+SearchView -> Controller : buscarDelincuente(filtros)
+Controller -> Criminals : consultar(filtros)
+Controller -> Arrests : obtenerHistorial(criminal_id)
+Arrests --> User : Mostrar_Delincuente_En_Tabla
+User -> SearchView : Precionar_Descargar PDF
+SearchView -> Controller : generarPDF(criminal_id)
+Controller -> PDF : construirPDF(info)
+PDF0 --> Controller : archivoPDF_Contruido
+Controller --> User : PDF_Descargado()
+
+@enduml

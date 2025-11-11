@@ -17,7 +17,7 @@ class photograph extends Model
         'barra_photo',
     ];
     public function criminal()
-    {
-        return $this->belongsTo('app\Models\criminal');
-    }
+{
+    return $this->belongsTo(\App\Models\criminal::class);
+}
 }

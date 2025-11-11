@@ -1,5 +1,4 @@
 @extends('adminlte::page')
-@vite('resources/css/app.css')
 
 @section('title', 'Crimanager')
 @section('content_header')
@@ -7,7 +6,11 @@
         Registro de Captura de: {{ $criminal->first_name }} {{ $criminal->last_nameP }} {{ $criminal->last_nameM }}
     </h1>
 @endsection
-
+@section('css')
+    <link rel="stylesheet" href="{{ asset('css/criminal-todo.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+@stop
 @section('content')
     @if (session('success'))
         <div id="success-alert"
@@ -78,6 +81,8 @@
 
         .row {
             margin-bottom: 1px;
+            text-transform: uppercase;
+            /* Convierte a mayúsculas */
         }
 
         .col-md-4,
@@ -86,7 +91,7 @@
             padding: 10px;
         }
 
-        p {
+        .parrafo-1 {
             margin: 6px 0;
             /* Reduce espacio entre líneas */
             font-size: 16px;
@@ -94,7 +99,6 @@
             text-transform: uppercase;
             /* Convierte a mayúsculas */
         }
-
 
         strong {
             text-transform: uppercase;
@@ -145,640 +149,1511 @@
             flex: 1 1 45%;
             /* 2 columnas por fila */
         }
+
+        /* Estilos adicionales para los tabs */
+        .nav-tabs .nav-link.active {
+            background-color: #28a745 !important;
+            border-color: #28a745 !important;
+            color: #fff !important;
+        }
+
+        .nav-tabs .nav-link:hover {
+            background-color: #555 !important;
+            border-color: #555 !important;
+            color: #fff !important;
+        }
+
+        .tab-content {
+            min-height: 280px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tab-pane {
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
     </style>
     <div class="todo">
-        <div class="card">
-            <div class="card-header">
-                <h3>Información del Criminal</h3>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <!-- Información de Nombres y Documento (4/12 columnas) -->
-                    <div class="col-md-4">
-                        <p><strong>Nombres y Apellidos:</strong> {{ $criminal->first_name }} {{ $criminal->last_nameP }}
-                            {{ $criminal->last_nameM }}</p>
-                        <p><strong>Alias:</strong> {{ $criminal->alias_name }}</p>
-                        <p><strong>Número de Identidad:</strong> {{ $criminal->identity_number }}</p>
-                        <p><strong>Fecha de Nacimiento:</strong> {{ \Carbon\Carbon::parse($criminal->date_of_birth)->format('d/m/Y') }}</p>
-                        <p><strong>Edad:</strong> {{ $criminal->age }}</p>
-                        <label>Lugar de Nacimiento:</label>
-                        <p><strong></strong> {{ $criminal->country->country_name ?? 'No especificado' }} -
-                            {{ $criminal->state->state_name ?? 'No especificado' }} -
-                            {{ $criminal->city->city_name ?? 'No especificada' }}</p>
-                        <p><strong>Nacionalidad:</strong>
-                            {{ $criminal->nationality->nationality_name ?? 'No especificado' }}</p>
-                        <p><strong>Estado Civil:</strong>
-                            {{ $criminal->civilState->civil_state_name ?? 'No especificado' }}
-                        </p>
-                        <p><strong>Ocupación:</strong> {{ $criminal->occupation->ocupation_name ?? 'No especificado' }}</p>
+        <!-- Información Principal del Criminal -->
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-md-10 col-12">
+                <div class="main-card mt-4" style="background: #000000; color: #ffffff;">
 
+                    <div class="card-header">
+                        <h3 class="section-title-main">
+                            <i class="fas fa-user me-2"></i>Información del Criminal
+                        </h3>
                     </div>
 
-                    <div class="col-md-3">
-                        @php
-                            // Convertir la fecha del arresto a un formato comparable con la fecha de las fotos (si es necesario)
-                            $arrestDate = \Carbon\Carbon::parse($history->arrest_date)->format('Y-m-d'); // O ajusta el formato según cómo estén almacenadas las fechas de las fotos
-                        @endphp
-
-                        @php
-                            // Buscar la fotografía que coincida con la fecha del arresto
-                            $photo = $criminal->photographs->firstWhere(function ($photo) use ($arrestDate) {
-                                return \Carbon\Carbon::parse($photo->created_at)->format('Y-m-d') === $arrestDate;
-                            });
-
-                            // Si no se encuentra una foto que coincida, obtener la última foto
-                            if (!$photo) {
-                                $photo = $criminal->photographs->last();
-                            }
-                        @endphp
-
-                        @if ($photo)
-                            <img src="{{ asset($photo->face_photo) }}" alt="Foto Frontal de {{ $criminal->first_name }}"
-                                class="img-fluid1 img-thumbnail1"
-                                style="width: 100%; max-width: 225px; border-radius: 20%; object-fit: cover;">
-                            <p><strong>Fotografía Rostro</strong></p>
-                        @else
-                            <p>No hay fotografía de Rostro disponible.</p>
-                        @endif
-                    </div>
-                    <!-- Galería de Fotografías Restantes (5/12 columnas) -->
-                    <div class="col-md-5">
-                        <h5>Otras Fotografías:</h5>
-                        <div class="row g-3">
-                            <!-- Fotografía Frontal -->
-                            <div class="col-6 col-sm-4">
-                                @php
-                                    // Buscar la fotografía frontal que coincida con la fecha del arresto
-                                    $frontalPhoto = $criminal->photographs->firstWhere(function ($photo) use (
-                                        $arrestDate,
-                                    ) {
-                                        return \Carbon\Carbon::parse($photo->created_at)->format('Y-m-d') ===
-                                            $arrestDate;
-                                    });
-
-                                    // Si no se encuentra una foto frontal que coincida, obtener la última
-                                    if (!$frontalPhoto) {
-                                        $frontalPhoto = $criminal->photographs->last();
-                                    }
-                                @endphp
-                                @if ($frontalPhoto)
-                                    <img src="{{ asset($frontalPhoto->frontal_photo) }}" class="img-fluid img-thumbnail"
-                                        alt="Foto Frontal"
-                                        style="width: 50%; max-width: 125px; border-radius: 20%; object-fit: cover;">
-                                    <p><strong>Fotografía Frontal</strong></p>
-                                @else
-                                    <p>No hay fotografía Frontal disponible.</p>
-                                @endif
+                    <div class="card-body">
+                        <div class="row g-2">
+                            <!-- Información Personal -->
+                            <div class="col-12 col-lg-4">
+                                <div class="info-group">
+                                    <div class="info-item">
+                                        <strong>Nombres y Apellidos:</strong>
+                                        <span>{{ $criminal->first_name }} {{ $criminal->last_nameP }}
+                                            {{ $criminal->last_nameM }}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <strong>Alias:</strong>
+                                        <span>{{ $criminal->alias_name ?? 'No especificado' }}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <strong>Número de Identidad:</strong>
+                                        <span>{{ $criminal->identity_number ?? 'No especificado' }}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <strong>Fecha de Nacimiento:</strong>
+                                        <span>{{ $criminal->date_of_birth ? \Carbon\Carbon::parse($criminal->date_of_birth)->format('d/m/Y') : 'No especificada' }}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <strong>Edad:</strong>
+                                        <span>{{ $criminal->age ?? 'No especificada' }}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <strong>Lugar de Nacimiento:</strong>
+                                        <span>{{ $criminal->country->country_name ?? 'No especificado' }} -
+                                            {{ $criminal->state->state_name ?? 'No especificado' }} -
+                                            {{ $criminal->city->city_name ?? 'No especificada' }}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <strong>Nacionalidad:</strong>
+                                        <span>{{ $criminal->nationality->nationality_name ?? 'No especificado' }}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <strong>Estado Civil:</strong>
+                                        <span>{{ $criminal->civilState->civil_state_name ?? 'No especificado' }}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <strong>Ocupación:</strong>
+                                        <span>{{ $criminal->occupation->ocupation_name ?? 'No especificado' }}</span>
+                                    </div>
+                                </div>
                             </div>
 
-                            <!-- Fotografía de cuerpo completo -->
-                            <div class="col-6 col-sm-4">
-                                @php
-                                    // Buscar la fotografía de cuerpo completo que coincida con la fecha del arresto
-                                    $fullBodyPhoto = $criminal->photographs->firstWhere(function ($photo) use (
-                                        $arrestDate,
-                                    ) {
-                                        return \Carbon\Carbon::parse($photo->created_at)->format('Y-m-d') ===
-                                            $arrestDate;
-                                    });
+                            @php
+                                // Convertir la fecha del arresto a un formato comparable con la fecha de las fotos
+                                $arrestDate = \Carbon\Carbon::parse($history->arrest_date)->format('Y-m-d');
 
-                                    // Si no se encuentra una foto de cuerpo completo que coincida, obtener la última
-                                    if (!$fullBodyPhoto) {
-                                        $fullBodyPhoto = $criminal->photographs->last();
-                                    }
-                                @endphp
-                                @if ($fullBodyPhoto)
-                                    <img src="{{ asset($fullBodyPhoto->full_body_photo) }}" class="img-fluid img-thumbnail"
-                                        alt="Foto de Cuerpo Completo"
-                                        style="width: 50%; max-width: 125px; border-radius: 20%; object-fit: cover;">
-                                    <p class="text-center"><strong>Cuerpo Completo</strong></p>
-                                @else
-                                    <p>No hay fotografía de Cuerpo Completo disponible.</p>
-                                @endif
+                                // Buscar la fotografía que coincida con la fecha del arresto
+                                $photo = $criminal->photographs->firstWhere(function ($photo) use ($arrestDate) {
+                                    return \Carbon\Carbon::parse($photo->created_at)->format('Y-m-d') === $arrestDate;
+                                });
+
+                                // Si no se encuentra una foto que coincida, obtener la última foto
+                                if (!$photo) {
+                                    $photo = $criminal->photographs->last();
+                                }
+
+                                // Definir las fotografías disponibles según la fecha del arresto
+                                $frontalPhoto = $criminal->photographs->firstWhere(function ($p) use ($arrestDate) {
+                                    return \Carbon\Carbon::parse($p->created_at)->format('Y-m-d') === $arrestDate;
+                                });
+                                if (!$frontalPhoto) {
+                                    $frontalPhoto = $criminal->photographs->last();
+                                }
+
+                                $fullBodyPhoto = $criminal->photographs->firstWhere(function ($p) use ($arrestDate) {
+                                    return \Carbon\Carbon::parse($p->created_at)->format('Y-m-d') === $arrestDate;
+                                });
+                                if (!$fullBodyPhoto) {
+                                    $fullBodyPhoto = $criminal->photographs->last();
+                                }
+
+                                $profileIzqPhoto = $criminal->photographs->firstWhere(function ($p) use ($arrestDate) {
+                                    return \Carbon\Carbon::parse($p->created_at)->format('Y-m-d') === $arrestDate;
+                                });
+                                if (!$profileIzqPhoto) {
+                                    $profileIzqPhoto = $criminal->photographs->last();
+                                }
+
+                                $profileDerPhoto = $criminal->photographs->firstWhere(function ($p) use ($arrestDate) {
+                                    return \Carbon\Carbon::parse($p->created_at)->format('Y-m-d') === $arrestDate;
+                                });
+                                if (!$profileDerPhoto) {
+                                    $profileDerPhoto = $criminal->photographs->last();
+                                }
+
+                                $aditionalPhoto = $criminal->photographs->firstWhere(function ($p) use ($arrestDate) {
+                                    return \Carbon\Carbon::parse($p->created_at)->format('Y-m-d') === $arrestDate;
+                                });
+                                if (!$aditionalPhoto) {
+                                    $aditionalPhoto = $criminal->photographs->last();
+                                }
+
+                                $barraPhoto = $criminal->photographs->firstWhere(function ($p) use ($arrestDate) {
+                                    return \Carbon\Carbon::parse($p->created_at)->format('Y-m-d') === $arrestDate;
+                                });
+                                if (!$barraPhoto) {
+                                    $barraPhoto = $criminal->photographs->last();
+                                }
+                            @endphp
+
+                            <!-- Foto Principal Expandida -->
+                            <div class="col-12 col-lg-4">
+                                <div class="main-photo-container-expanded">
+                                    @if ($photo && $photo->face_photo)
+                                        <div class="main-photo-wrapper" data-bs-toggle="modal"
+                                            data-bs-target="#mainPhotoModal">
+                                            <img src="{{ asset($photo->face_photo) }}"
+                                                alt="Foto de {{ $criminal->first_name }}" class="main-photo-expanded">
+                                        </div>
+                                        <h5 class="photo-title-main">Fotografía Principal (Rostro)</h5>
+                                    @else
+                                        <div class="no-photo-expanded">
+                                            <i class="fas fa-user fa-4x"></i>
+                                            <p class="mt-3">No hay fotografía disponible</p>
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
 
-                            <!-- Fotografía de Perfil Izquierdo -->
-                            <div class="col-6 col-sm-4">
-                                @php
-                                    // Buscar la fotografía de perfil izquierdo que coincida con la fecha del arresto
-                                    $profileIzqPhoto = $criminal->photographs->firstWhere(function ($photo) use (
-                                        $arrestDate,
-                                    ) {
-                                        return \Carbon\Carbon::parse($photo->created_at)->format('Y-m-d') ===
-                                            $arrestDate;
-                                    });
+                            <!-- Galería de Fotografías con Tabs -->
+                            <div class="col-12 col-lg-4">
+                                <div class="photo-gallery-expanded">
+                                    @if ($frontalPhoto || $fullBodyPhoto || $profileIzqPhoto || $profileDerPhoto || $aditionalPhoto || $barraPhoto)
+                                        <div class="photo-tabs-container">
+                                            <ul class="nav nav-tabs nav-justified photo-tabs-custom" id="photoTabs"
+                                                role="tablist">
+                                                @if ($frontalPhoto && $frontalPhoto->frontal_photo)
+                                                    <li class="nav-item" role="presentation">
+                                                        <button class="nav-link active photo-tab-btn" id="frontal-tab"
+                                                            data-bs-toggle="tab" data-bs-target="#frontal" type="button"
+                                                            role="tab">
+                                                            <i class="fas fa-user"></i><span class="tab-text">Frontal</span>
+                                                        </button>
+                                                    </li>
+                                                @endif
+                                                @if ($fullBodyPhoto && $fullBodyPhoto->full_body_photo)
+                                                    <li class="nav-item" role="presentation">
+                                                        <button class="nav-link photo-tab-btn" id="fullbody-tab"
+                                                            data-bs-toggle="tab" data-bs-target="#fullbody" type="button"
+                                                            role="tab">
+                                                            <i class="fas fa-male"></i><span class="tab-text">Cuerpo</span>
+                                                        </button>
+                                                    </li>
+                                                @endif
+                                                @if ($profileIzqPhoto && $profileIzqPhoto->profile_izq_photo)
+                                                    <li class="nav-item" role="presentation">
+                                                        <button class="nav-link photo-tab-btn" id="profile-izq-tab"
+                                                            data-bs-toggle="tab" data-bs-target="#profile-izq"
+                                                            type="button" role="tab">
+                                                            <i class="fas fa-arrow-left"></i><span
+                                                                class="tab-text">P.Izq</span>
+                                                        </button>
+                                                    </li>
+                                                @endif
+                                                @if ($profileDerPhoto && $profileDerPhoto->profile_der_photo)
+                                                    <li class="nav-item" role="presentation">
+                                                        <button class="nav-link photo-tab-btn" id="profile-der-tab"
+                                                            data-bs-toggle="tab" data-bs-target="#profile-der"
+                                                            type="button" role="tab">
+                                                            <i class="fas fa-arrow-right"></i><span
+                                                                class="tab-text">P.Der</span>
+                                                        </button>
+                                                    </li>
+                                                @endif
+                                                @if ($aditionalPhoto && $aditionalPhoto->aditional_photo)
+                                                    <li class="nav-item" role="presentation">
+                                                        <button class="nav-link photo-tab-btn" id="additional-tab"
+                                                            data-bs-toggle="tab" data-bs-target="#additional" type="button"
+                                                            role="tab">
+                                                            <i class="fas fa-plus"></i><span class="tab-text">Extra</span>
+                                                        </button>
+                                                    </li>
+                                                @endif
+                                                @if ($barraPhoto && $barraPhoto->barra_photo)
+                                                    <li class="nav-item" role="presentation">
+                                                        <button class="nav-link photo-tab-btn" id="barra-tab"
+                                                            data-bs-toggle="tab" data-bs-target="#barra" type="button"
+                                                            role="tab">
+                                                            <i class="fas fa-barcode"></i><span
+                                                                class="tab-text">Barra</span>
+                                                        </button>
+                                                    </li>
+                                                @endif
+                                            </ul>
 
-                                    // Si no se encuentra una foto de perfil izquierdo que coincida, obtener la última
-                                    if (!$profileIzqPhoto) {
-                                        $profileIzqPhoto = $criminal->photographs->last();
-                                    }
-                                @endphp
-                                @if ($profileIzqPhoto)
-                                    <img src="{{ asset($profileIzqPhoto->profile_izq_photo) }}"
-                                        class="img-fluid img-thumbnail" alt="Perfil Izquierdo"
-                                        style="width: 50%; max-width: 125px; border-radius: 20%; object-fit: cover;">
-                                    <p><strong>Perfil Izquierdo</strong></p>
-                                @else
-                                    <p>No hay fotografía de Perfil Izquierdo disponible.</p>
-                                @endif
+                                            <div class="tab-content photo-tab-content" id="photoTabContent">
+                                                @if ($frontalPhoto && $frontalPhoto->frontal_photo)
+                                                    <div class="tab-pane fade show active" id="frontal"
+                                                        role="tabpanel">
+                                                        <div class="tab-photo-container-expanded" data-bs-toggle="modal"
+                                                            data-bs-target="#photoModal_frontal">
+                                                            <img src="{{ asset($frontalPhoto->frontal_photo) }}"
+                                                                class="tab-photo-expanded" alt="Fotografía Frontal">
+                                                        </div>
+                                                        <h6 class="photo-title-secondary">Fotografía Frontal</h6>
+                                                    </div>
+                                                @endif
+                                                @if ($fullBodyPhoto && $fullBodyPhoto->full_body_photo)
+                                                    <div class="tab-pane fade" id="fullbody" role="tabpanel">
+                                                        <div class="tab-photo-container-expanded" data-bs-toggle="modal"
+                                                            data-bs-target="#photoModal_fullbody">
+                                                            <img src="{{ asset($fullBodyPhoto->full_body_photo) }}"
+                                                                class="tab-photo-expanded" alt="Cuerpo Completo">
+                                                        </div>
+                                                        <h6 class="photo-title-secondary">Cuerpo Completo</h6>
+                                                    </div>
+                                                @endif
+                                                @if ($profileIzqPhoto && $profileIzqPhoto->profile_izq_photo)
+                                                    <div class="tab-pane fade" id="profile-izq" role="tabpanel">
+                                                        <div class="tab-photo-container-expanded" data-bs-toggle="modal"
+                                                            data-bs-target="#photoModal_profile_izq">
+                                                            <img src="{{ asset($profileIzqPhoto->profile_izq_photo) }}"
+                                                                class="tab-photo-expanded" alt="Perfil Izquierdo">
+                                                        </div>
+                                                        <h6 class="photo-title-secondary">Perfil Izquierdo</h6>
+                                                    </div>
+                                                @endif
+                                                @if ($profileDerPhoto && $profileDerPhoto->profile_der_photo)
+                                                    <div class="tab-pane fade" id="profile-der" role="tabpanel">
+                                                        <div class="tab-photo-container-expanded" data-bs-toggle="modal"
+                                                            data-bs-target="#photoModal_profile_der">
+                                                            <img src="{{ asset($profileDerPhoto->profile_der_photo) }}"
+                                                                class="tab-photo-expanded" alt="Perfil Derecho">
+                                                        </div>
+                                                        <h6 class="photo-title-secondary">Perfil Derecho</h6>
+                                                    </div>
+                                                @endif
+                                                @if ($aditionalPhoto && $aditionalPhoto->aditional_photo)
+                                                    <div class="tab-pane fade" id="additional" role="tabpanel">
+                                                        <div class="tab-photo-container-expanded" data-bs-toggle="modal"
+                                                            data-bs-target="#photoModal_additional">
+                                                            <img src="{{ asset($aditionalPhoto->aditional_photo) }}"
+                                                                class="tab-photo-expanded" alt="Foto Adicional">
+                                                        </div>
+                                                        <h6 class="photo-title-secondary">Foto Adicional</h6>
+                                                    </div>
+                                                @endif
+                                                @if ($barraPhoto && $barraPhoto->barra_photo)
+                                                    <div class="tab-pane fade" id="barra" role="tabpanel">
+                                                        <div class="tab-photo-container-expanded" data-bs-toggle="modal"
+                                                            data-bs-target="#photoModal_barra">
+                                                            <img src="{{ asset($barraPhoto->barra_photo) }}"
+                                                                class="tab-photo-expanded" alt="Foto de Barra">
+                                                        </div>
+                                                        <h6 class="photo-title-secondary">Foto de Barra</h6>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @else
+                                        <div class="no-photos-alert-expanded">
+                                            <i class="fas fa-images fa-2x"></i>
+                                            <p class="mt-3">No hay fotografías disponibles</p>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Segunda fila de información -->
+                        <div class="row g-2 mt-2">
+                            <!-- Domicilio -->
+                            <div class="col-12 col-lg-4">
+                                <div class="info-section">
+                                    <h6 class="section-subtitle">
+                                        <i class="fas fa-home me-1"></i>Domicilio de Referencia
+                                    </h6>
+                                    @forelse ($criminal->criminalAddresses as $address)
+                                        <div class="info-item">
+                                            <strong>Ubicación:</strong>
+                                            <span>{{ $address->country->country_name ?? 'No especificado' }} -
+                                                {{ $address->state->state_name ?? 'No especificado' }} -
+                                                {{ $address->city->city_name ?? 'No especificada' }}</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <strong>Dirección:</strong>
+                                            <span>{{ $address->street ?? 'No especificado' }}</span>
+                                        </div>
+                                    @empty
+                                        <div class="no-data">No hay direcciones registradas</div>
+                                    @endforelse
+                                </div>
                             </div>
 
-                            <!-- Fotografía de Perfil Derecho -->
-                            <div class="col-6 col-sm-4">
-                                @php
-                                    // Buscar la fotografía de perfil derecho que coincida con la fecha del arresto
-                                    $profileDerPhoto = $criminal->photographs->firstWhere(function ($photo) use (
-                                        $arrestDate,
-                                    ) {
-                                        return \Carbon\Carbon::parse($photo->created_at)->format('Y-m-d') ===
-                                            $arrestDate;
-                                    });
-
-                                    // Si no se encuentra una foto de perfil derecho que coincida, obtener la última
-                                    if (!$profileDerPhoto) {
-                                        $profileDerPhoto = $criminal->photographs->last();
-                                    }
-                                @endphp
-                                @if ($profileDerPhoto)
-                                    <img src="{{ asset($profileDerPhoto->profile_der_photo) }}"
-                                        class="img-fluid img-thumbnail" alt="Perfil Derecho"
-                                        style="width: 50%; max-width: 125px; border-radius: 20%; object-fit: cover;">
-                                    <p><strong>Perfil Derecho</strong></p>
-                                @else
-                                    <p>No hay fotografía de Perfil Derecho disponible.</p>
-                                @endif
+                            <!-- Referencias -->
+                            <div class="col-12 col-lg-4">
+                                <div class="info-section">
+                                    <h6 class="section-subtitle">
+                                        <i class="fas fa-users me-1"></i>Referencias
+                                    </h6>
+                                    @forelse ($criminal->criminalPartner as $Partner)
+                                        <div class="info-item">
+                                            <strong>Persona de Referencia:</strong>
+                                            <span>{{ $Partner->partner_name ?? 'No especificado' }}</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <strong>Relación:</strong>
+                                            <span>{{ $Partner->relationshipType->relationship_type_name ?? 'No especificado' }}</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <strong>Dirección:</strong>
+                                            <span>{{ $Partner->partner_address ?? 'No especificado' }}</span>
+                                        </div>
+                                    @empty
+                                        <div class="no-data">No hay referencias registradas</div>
+                                    @endforelse
+                                </div>
                             </div>
 
-                            <!-- Fotografía Adicional -->
-                            <div class="col-6 col-sm-4">
-                                @php
-                                    // Buscar la fotografía adicional que coincida con la fecha del arresto
-                                    $aditionalPhoto = $criminal->photographs->firstWhere(function ($photo) use (
-                                        $arrestDate,
-                                    ) {
-                                        return \Carbon\Carbon::parse($photo->created_at)->format('Y-m-d') ===
-                                            $arrestDate;
-                                    });
+                            <!-- Características Físicas -->
+                            <div class="col-12 col-lg-4">
+                                <div class="info-section">
+                                    <h6 class="section-subtitle">
+                                        <i class="fas fa-id-card me-1"></i>Características Físicas
+                                    </h6>
+                                    @forelse ($criminal->physicalCharacteristics as $characteristic)
+                                        <div class="characteristics-grid">
+                                            <div class="info-item">
+                                                <strong>Altura:</strong>
+                                                <span>{{ $characteristic->height ?? 'N/A' }} cm</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <strong>Peso:</strong>
+                                                <span>{{ $characteristic->weight ?? 'N/A' }} kg</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <strong>Sexo:</strong>
+                                                <span>{{ $characteristic->sex ?? 'N/A' }}</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <strong>Género:</strong>
+                                                <span>{{ $characteristic->criminalGender->gender_name ?? 'N/A' }}</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <strong>Complexión:</strong>
+                                                <span>{{ $characteristic->confleccion->conflexion_name ?? 'N/A' }}</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <strong>Color de Piel:</strong>
+                                                <span>{{ $characteristic->skinColor->skin_color_name ?? 'N/A' }}</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <strong>Ojos:</strong>
+                                                <span>{{ $characteristic->eyeType->eye_type_name ?? 'N/A' }}</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <strong>Oídos:</strong>
+                                                <span>{{ $characteristic->earType->ear_type_name ?? 'N/A' }}</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <strong>Labios:</strong>
+                                                <span>{{ $characteristic->lipType->lip_type_name ?? 'N/A' }}</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <strong>Nariz:</strong>
+                                                <span>{{ $characteristic->noseType->nose_type_name ?? 'N/A' }}</span>
+                                            </div>
+                                        </div>
+                                        @if ($characteristic->distinctive_marks)
+                                            <div class="info-item mt-2">
+                                                <strong>Marcas Distintivas:</strong>
+                                                <span>{{ $characteristic->distinctive_marks }}</span>
+                                            </div>
+                                        @endif
+                                    @empty
+                                        <div class="no-data">No hay características físicas disponibles</div>
+                                    @endforelse
 
-                                    // Si no se encuentra una foto adicional que coincida, obtener la última
-                                    if (!$aditionalPhoto) {
-                                        $aditionalPhoto = $criminal->photographs->last();
-                                    }
-                                @endphp
-                                @if ($aditionalPhoto)
-                                    <img src="{{ asset($aditionalPhoto->aditional_photo) }}"
-                                        class="img-fluid img-thumbnail" alt="Foto Adicional"
-                                        style="width: 50%; max-width: 125px; border-radius: 20%; object-fit: cover;">
-                                    <p><strong>Fotografía Adicional</strong></p>
-                                @else
-                                    <p>No hay fotografía Adicional disponible.</p>
-                                @endif
-                            </div>
-
-                            <!-- Fotografía de Barra -->
-                            <div class="col-6 col-sm-4">
-                                @php
-                                    // Buscar la fotografía de barra que coincida con la fecha del arresto
-                                    $barraPhoto = $criminal->photographs->firstWhere(function ($photo) use (
-                                        $arrestDate,
-                                    ) {
-                                        return \Carbon\Carbon::parse($photo->created_at)->format('Y-m-d') ===
-                                            $arrestDate;
-                                    });
-
-                                    // Si no se encuentra una foto de barra que coincida, obtener la última
-                                    if (!$barraPhoto) {
-                                        $barraPhoto = $criminal->photographs->last();
-                                    }
-                                @endphp
-                                @if ($barraPhoto)
-                                    <img src="{{ asset($barraPhoto->barra_photo) }}" class="img-fluid img-thumbnail"
-                                        alt="Foto de Barra"
-                                        style="width: 50%; max-width: 125px; border-radius: 20%; object-fit: cover;">
-                                    <p><strong>Fotografía de Barra</strong></p>
-                                @else
-                                    <p>No hay fotografía de Barra disponible.</p>
-                                @endif
+                                    @can('agregar.criminal')
+                                        <div class="edit-button-container">
+                                            <a href="{{ route('criminals.edit', $criminal->id) }}" class="btn-edit">
+                                                <i class="fas fa-edit me-1"></i>Editar
+                                            </a>
+                                        </div>
+                                    @endcan
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="row">
-                    <div class="col-md-4">
-                        <h4 class="section-title">Direccion de Residencia:</h4>
-                        @forelse ($criminal->criminalAddresses as $address)
-                            <p><strong></strong> {{ $address->country->country_name ?? 'No especificado' }} -
-                                {{ $address->state->state_name ?? 'No especificado' }} -
-                                {{ $address->city->city_name ?? 'No especificada' }}</p>
-                            <p><strong>Dirección:</strong> {{ $address->street ?? 'No especificado' }}</p>
-                        @empty
-                            <p>No hay direcciones registradas para este criminal.</p>
-                        @endforelse
-                    </div>
-                    <div class="col-md-3">
-                        <h4 class="section-title">Referencias:</h4>
-                        @forelse ($criminal->criminalPartner as $Partner)
-                            <p><strong>Persona de Referencia:</strong> {{ $Partner->partner_name ?? 'No especificado' }}
-                            </p>
-                            <p><strong>Relacion con el Delincuente:</strong>
-                                {{ $Partner->relationshipType->relationship_type_name ?? 'No especificado' }}</p>
-                            <p><strong>Dirección:</strong> {{ $Partner->partner_address ?? 'No especificado' }}</p>
-                        @empty
-                            <p>No hay direcciones registradas para este criminal.</p>
-                        @endforelse
-                    </div>
-
-                    <div class="col-md-5">
-                        <h4 class="section-title">Caracteristicas Fisicas:</h4>
-                        @forelse ($criminal->physicalCharacteristics as $characteristic)
-                            <div class="row">
-                                <!-- Columna 1 -->
-                                <div class="col-md-5">
-                                    <p><strong>Altura:</strong> {{ $characteristic->height ?? 'No especificado' }} cm</p>
-                                    <p><strong>Peso:</strong> {{ $characteristic->weight ?? 'No especificado' }} kg</p>
-                                    <p><strong>Sexo:</strong> {{ $characteristic->sex ?? 'No especificado' }}</p>
-                                    <p><strong>Género:</strong>
-                                        {{ $characteristic->criminalGender->gender_name ?? 'No especificado' }}</p>
-                                    <p><strong>Complexión:</strong>
-                                        {{ $characteristic->confleccion->conflexion_name ?? 'No especificado' }}</p>
-                                </div>
-                                <!-- Columna 2 -->
-                                <div class="col-md-7">
-                                    <p><strong>Color de Piel:</strong>
-                                        {{ $characteristic->skinColor->skin_color_name ?? 'No especificado' }}</p>
-                                    <p><strong>Tipo de Ojos:</strong>
-                                        {{ $characteristic->eyeType->eye_type_name ?? 'No especificado' }}</p>
-                                    <p><strong>Tipo de Oídos:</strong>
-                                        {{ $characteristic->earType->ear_type_name ?? 'No especificado' }}</p>
-                                    <p><strong>Tipo de Labios:</strong>
-                                        {{ $characteristic->lipType->lip_type_name ?? 'No especificado' }}</p>
-                                    <p><strong>Tipo de Nariz:</strong>
-                                        {{ $characteristic->noseType->nose_type_name ?? 'No especificado' }}</p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <p><strong>Marcas Distintivas:</strong>
-                                        {{ $characteristic->distinctive_marks ?? 'No especificadas' }}</p>
-                                </div>
-                            </div>
-                        @empty
-                            <p>No hay características físicas disponibles para este criminal.</p>
-                        @endforelse
-                        <br>
-                    </div>
-                </div>
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-header">
-                <h3>Detalles del Historial de Arresto</h3>
+        <!-- Modales para las fotografías principales con lógica de fecha -->
+        @php
+            // Reutilizar las variables ya definidas en la sección anterior
+            $arrestDate = \Carbon\Carbon::parse($history->arrest_date)->format('Y-m-d');
+
+            // Buscar la fotografía que coincida con la fecha del arresto
+            $photo = $criminal->photographs->firstWhere(function ($photo) use ($arrestDate) {
+                return \Carbon\Carbon::parse($photo->created_at)->format('Y-m-d') === $arrestDate;
+            });
+
+            // Si no se encuentra una foto que coincida, obtener la última foto
+            if (!$photo) {
+                $photo = $criminal->photographs->last();
+            }
+
+            // Definir las fotografías específicas por tipo
+            $frontalPhoto = $criminal->photographs->firstWhere(function ($p) use ($arrestDate) {
+                return \Carbon\Carbon::parse($p->created_at)->format('Y-m-d') === $arrestDate;
+            });
+            if (!$frontalPhoto) {
+                $frontalPhoto = $criminal->photographs->last();
+            }
+
+            $fullBodyPhoto = $criminal->photographs->firstWhere(function ($p) use ($arrestDate) {
+                return \Carbon\Carbon::parse($p->created_at)->format('Y-m-d') === $arrestDate;
+            });
+            if (!$fullBodyPhoto) {
+                $fullBodyPhoto = $criminal->photographs->last();
+            }
+
+            $profileIzqPhoto = $criminal->photographs->firstWhere(function ($p) use ($arrestDate) {
+                return \Carbon\Carbon::parse($p->created_at)->format('Y-m-d') === $arrestDate;
+            });
+            if (!$profileIzqPhoto) {
+                $profileIzqPhoto = $criminal->photographs->last();
+            }
+
+            $profileDerPhoto = $criminal->photographs->firstWhere(function ($p) use ($arrestDate) {
+                return \Carbon\Carbon::parse($p->created_at)->format('Y-m-d') === $arrestDate;
+            });
+            if (!$profileDerPhoto) {
+                $profileDerPhoto = $criminal->photographs->last();
+            }
+
+            $aditionalPhoto = $criminal->photographs->firstWhere(function ($p) use ($arrestDate) {
+                return \Carbon\Carbon::parse($p->created_at)->format('Y-m-d') === $arrestDate;
+            });
+            if (!$aditionalPhoto) {
+                $aditionalPhoto = $criminal->photographs->last();
+            }
+
+            $barraPhoto = $criminal->photographs->firstWhere(function ($p) use ($arrestDate) {
+                return \Carbon\Carbon::parse($p->created_at)->format('Y-m-d') === $arrestDate;
+            });
+            if (!$barraPhoto) {
+                $barraPhoto = $criminal->photographs->last();
+            }
+        @endphp
+
+        <!-- Modal para foto principal (rostro) -->
+        @if ($photo && $photo->face_photo)
+            <div class="modal fade" id="mainPhotoModal" tabindex="-1">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content bg-dark">
+                        <div class="modal-header border-secondary">
+                            <h5 class="modal-title text-success">
+                                <i class="fas fa-user me-2"></i>Fotografía Principal - {{ $criminal->first_name }}
+                                {{ $criminal->last_nameP }}
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body text-center p-2">
+                            <img src="{{ asset($photo->face_photo) }}" class="img-fluid rounded shadow"
+                                alt="Fotografía Principal" style="max-height: 70vh; object-fit: contain;">
+                            <div class="mt-3">
+                                <p class="text-light mb-1">
+                                    <strong>{{ $criminal->first_name }} {{ $criminal->last_nameP }}</strong>
+                                </p>
+                                <small class="text-muted">
+                                    Fotografía de Rostro | Fecha del arresto:
+                                    {{ \Carbon\Carbon::parse($history->arrest_date)->format('d/m/Y') }}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-4">
-                        <p>
-                            <strong>Registro de Captura:</strong>
-                            <span style="font-style: italic;">
-                                Fecha: {{ \Carbon\Carbon::parse($history->arrest_date)->format('d/m/Y') }},  
-                                Hora: {{ \Carbon\Carbon::parse($history->arrest_time)->format('H:i') }}
-                                
-                            </span>
-                        </p>
+        @endif
 
-                        @if ($history->legalStatus)
-                            <p><strong>Situación Legal:</strong> {{ $history->legalStatus->status_name }}</p>
-                        @endif
-
-                        @if ($history->apprehensionType)
-                            <p><strong>Tipo de Captura:</strong> {{ $history->apprehensionType->type_name }}</p>
-                        @endif
-
-                        @if ($history->cud_number)
-                            <p><strong>Número de CUD:</strong> {{ $history->cud_number }}</p>
-                        @endif
-
-                        @if ($history->arrest_location)
-                            <p><strong>Lugar de Captura:</strong> {{ $history->arrest_location }}</p>
-                        @endif
-
-                        @if ($history->criminal_specialty_id)
-                            <p><strong>Especialidad o Motivo de Captura:</strong>
-                                {{ $history->criminalSpecialty->specialty_name }}
-                            </p>
-                        @endif
-
-                        @if ($history->arrest_details)
-                            <p><strong>Detalles de Captura:</strong> {{ $history->arrest_details }}</p>
-                        @endif
-                    </div>
-                    <!-- HERRAMIENTAS Y ARMAS -->
-                    <div class="col-md-4">
-                        <h4 class="section-title">Objetos, Armas y Herramientas Usadas:</h4>
-
-                        @if ($history->criminalTools->isNotEmpty())
-                            <div class="tools-list">
-                                @foreach ($history->criminalTools as $tool)
-                                    <div class="tool-item">
-                                        <p><strong>Tipo:</strong> {{ $tool->toolType->tool_type_name }}</p>
-                                        <p><strong>Descripción:</strong> {{ $tool->tool_details }}</p>
-                                        <hr class="separator"> <!-- Línea separadora -->
-                                    </div>
-                                @endforeach
+        <!-- Modal para foto frontal -->
+        @if ($frontalPhoto && $frontalPhoto->frontal_photo)
+            <div class="modal fade" id="photoModal_frontal" tabindex="-1">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content bg-dark">
+                        <div class="modal-header border-secondary">
+                            <h5 class="modal-title text-success">
+                                <i class="fas fa-user me-2"></i>Fotografía Frontal - {{ $criminal->first_name }}
+                                {{ $criminal->last_nameP }}
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body text-center p-2">
+                            <img src="{{ asset($frontalPhoto->frontal_photo) }}" class="img-fluid rounded shadow"
+                                alt="Fotografía Frontal" style="max-height: 70vh; object-fit: contain;">
+                            <div class="mt-3">
+                                <p class="text-light mb-1">
+                                    <strong>{{ $criminal->first_name }} {{ $criminal->last_nameP }}</strong>
+                                </p>
+                                <small class="text-muted">
+                                    Vista Frontal | Fecha del arresto:
+                                    {{ \Carbon\Carbon::parse($history->arrest_date)->format('d/m/Y') }}
+                                </small>
                             </div>
-                        @else
-                            <p>No se encontraron herramientas relacionadas para este historial.</p>
-                        @endif
-
-                    </div>
-                    <div class="col-md-4">
-                        <h4 class="section-title">Numero de Telefono Usados:</h4>
-
-                        @if ($history->phoneNumber->isNotEmpty())
-                            <div class="tools-list">
-                                @foreach ($history->phoneNumber as $phone)
-                                    <div class="tool-item">
-                                        <p><strong>Nro. Celular:</strong>{{ $phone->phone_number }} </p>
-                                        <p><strong>Compañia:</strong>{{ $phone->company->companies_name }} </p>
-                                        <p><strong>Nro. IMEI:</strong> {{ $phone->imei_number }}</p>
-                                        <hr class="separator"> <!-- Línea separadora -->
-                                    </div>
-                                @endforeach
-                            </div>
-                        @else
-                            <p>No se encontraron nuneros de telefono relacionadas para este historial.</p>
-                        @endif
-
+                        </div>
                     </div>
                 </div>
+            </div>
+        @endif
 
-                <div class="row">
-                    <div class="col-md-4">
-                        <h4 class="section-title">Otras Identidades:</h4>
-                        @if ($history->criminalAliase->isNotEmpty())
-                            <div class="tools-list">
-                                @foreach ($history->criminalAliase as $aliase)
-                                    <div class="tool-item">
-                                        <p><strong>Nombres y Apellidos:</strong> {{ $aliase->alias_name }}</p>
-                                        <p><strong>Nro de Identidad:</strong> {{ $aliase->alias_identity_number }}</p>
-                                        <p><strong>Nacionalidad:</strong>
-                                            {{ $aliase->nationality->nationality_name ?? 'No especificada' }}</p>
-                                        <hr class="separator"> <!-- Línea separadora -->
-                                    </div>
-                                @endforeach
+        <!-- Modal para foto de cuerpo completo -->
+        @if ($fullBodyPhoto && $fullBodyPhoto->full_body_photo)
+            <div class="modal fade" id="photoModal_fullbody" tabindex="-1">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content bg-dark">
+                        <div class="modal-header border-secondary">
+                            <h5 class="modal-title text-success">
+                                <i class="fas fa-male me-2"></i>Cuerpo Completo - {{ $criminal->first_name }}
+                                {{ $criminal->last_nameP }}
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body text-center p-2">
+                            <img src="{{ asset($fullBodyPhoto->full_body_photo) }}" class="img-fluid rounded shadow"
+                                alt="Cuerpo Completo" style="max-height: 70vh; object-fit: contain;">
+                            <div class="mt-3">
+                                <p class="text-light mb-1">
+                                    <strong>{{ $criminal->first_name }} {{ $criminal->last_nameP }}</strong>
+                                </p>
+                                <small class="text-muted">
+                                    Cuerpo Completo | Fecha del arresto:
+                                    {{ \Carbon\Carbon::parse($history->arrest_date)->format('d/m/Y') }}
+                                </small>
                             </div>
-                        @else
-                            <p>No se encontraron Identidades relacionadas para este historial.</p>
-                        @endif
-                        <h4 class="section-title">Otra Direccion de Residencia:</h4>
-                        @if ($history->criminalAliase->isNotEmpty())
-                            <div class="tools-list">
-                                @foreach ($history->criminalAliase as $aliase)
-                                    <div class="tool-item">
-                                        <strong>PAIS - ESTADO - CIUDAD:</strong>
-                                        <p> {{ $address->country->country_name ?? 'No especificado' }} -
-                                            {{ $address->state->state_name ?? 'No especificado' }} -
-                                            {{ $address->city->city_name ?? 'No especificada' }}</p>
-                                        <p><strong>Dirección:</strong> {{ $address->street ?? 'No especificado' }}</p>
-                                        <hr class="separator"> <!-- Línea separadora -->
-                                    </div>
-                                @endforeach
-                            </div>
-                        @else
-                            <p>No se encontraron direcciones relacionadas para este historial.</p>
-                        @endif
-                    </div>
-                    <!-- HERRAMIENTAS Y ARMAS -->
-                    <div class="col-md-4">
-                        <h4 class="section-title">Nombre de Complices:</h4>
-
-                        @if ($history->criminalComplice->isNotEmpty())
-                            <div class="tools-list">
-                                @foreach ($history->criminalComplice as $complice)
-                                    <div class="tool-item">
-                                        <p><strong>Nombres Y Apellidos:</strong> {{ $complice->complice_name }}</p>
-                                        <p><strong>Nro. de Identidad:</strong> {{ $complice->CI_complice }}</p>
-                                        <p><strong>Otros detalles:</strong> {{ $complice->detail_complice }}</p>
-                                        <hr class="separator"> <!-- Línea separadora -->
-                                    </div>
-                                @endforeach
-                            </div>
-                        @else
-                            <p>No se encontraron complices relacionados para este historial.</p>
-                        @endif
-                    </div>
-                    <div class="col-md-4">
-                        <h4 class="section-title">Organizacion Criminal:</h4>
-                        @if ($history->criminalOrganization->isNotEmpty())
-                            <div class="tools-list">
-                                @foreach ($history->criminalOrganization as $grupo)
-                                    <div class="tool-item">
-                                        <p><strong>Nombre:</strong> {{ $grupo->organization->organization_name }}</p>
-                                        <p><strong>Especialidad:</strong>
-                                            {{ $grupo->organization->Criminal_Organization_Specialty }}</p>
-                                        <p><strong>Rol en la Organizacion:</strong> {{ $grupo->criminal_rol }}</p>
-                                        <hr class="separator"> <!-- Línea separadora -->
-                                    </div>
-                                @endforeach
-                            </div>
-                        @else
-                            <p>No se encontraron Organizaciones criminales relacionadas para este historial.</p>
-                        @endif
+                        </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-8">
-                        <h4 class="section-title">Vehículos Usados en el Hecho:</h4>
-                        @if ($history->criminalVehicle->isNotEmpty())
-                            <div class="row">
-                                @foreach ($history->criminalVehicle as $vehicle)
-                                    <div class="col-md-6 mb-4"> <!-- Dividimos en 2 columnas -->
-                                        <div class="tool-item">
-                                            <p><strong>Color:</strong> {{ $vehicle->vehicleColor->color_name }}</p>
-                                            <p><strong>Clase:</strong> {{ $vehicle->vehicleType->vehicle_type_name }}</p>
-                                            <p><strong>Modelo:</strong> {{ $vehicle->year }}</p>
-                                            <p><strong>Marca:</strong> {{ $vehicle->brandVehicle->brand_name }}</p>
-                                            <p><strong>Tipo:</strong> {{ $vehicle->model }}</p>
-                                            <p><strong>Industria:</strong> {{ $vehicle->industry->industry_name }}</p>
-                                            <p><strong>Placa:</strong> {{ $vehicle->license_plate }}</p>
-                                            <p><strong>Servicio:</strong> {{ $vehicle->vehicleService->service_name }}</p>
-                                            <p><strong>Detalles:</strong> {{ $vehicle->details }}</p>
-                                        </div>
-                                        <hr class="separator"> <!-- Línea separadora -->
-                                    </div>
-                                    <div class="col-md-6 mb-4"> <!-- Dividimos en 2 columnas -->
-                                        <div class="tool-item">
-                                            @if ($vehicle->itv_valid)
-                                                <p><strong>ITV válido:</strong> Sí</p>
-                                                <p><strong>Propietario:</strong> {{ $vehicle->user_name }}</p>
-                                                <p><strong>CI propietario:</strong> {{ $vehicle->user_ci }}</p>
-                                                <p><strong>Relación con el propietario:</strong>
-                                                    {{ $vehicle->relationshipWithOwner->relationship_name }}
-                                                </p>
-                                                <p><strong>Observaciones:</strong> {{ $vehicle->observations }}</p>
-                                                <p><strong>Conductor:</strong> {{ $vehicle->driver_name }}</p>
-                                            @else
-                                                <p>No tiene inspección técnica vehicular (ITV).</p>
-                                            @endif
-                                        </div>
-                                    </div>
-                                @endforeach
+            </div>
+        @endif
+
+        <!-- Modal para perfil izquierdo -->
+        @if ($profileIzqPhoto && $profileIzqPhoto->profile_izq_photo)
+            <div class="modal fade" id="photoModal_profile_izq" tabindex="-1">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content bg-dark">
+                        <div class="modal-header border-secondary">
+                            <h5 class="modal-title text-success">
+                                <i class="fas fa-arrow-left me-2"></i>Perfil Izquierdo - {{ $criminal->first_name }}
+                                {{ $criminal->last_nameP }}
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body text-center p-2">
+                            <img src="{{ asset($profileIzqPhoto->profile_izq_photo) }}" class="img-fluid rounded shadow"
+                                alt="Perfil Izquierdo" style="max-height: 70vh; object-fit: contain;">
+                            <div class="mt-3">
+                                <p class="text-light mb-1">
+                                    <strong>{{ $criminal->first_name }} {{ $criminal->last_nameP }}</strong>
+                                </p>
+                                <small class="text-muted">
+                                    Perfil Izquierdo | Fecha del arresto:
+                                    {{ \Carbon\Carbon::parse($history->arrest_date)->format('d/m/Y') }}
+                                </small>
                             </div>
-                            @php
-                                // Verificamos si al menos un vehículo tiene alguna fotografía registrada
-                                $hasPhotos = $history->criminalVehicle->some(function ($vehicle) {
-                                    return $vehicle->front_photo ||
-                                        $vehicle->left_side_photo ||
-                                        $vehicle->right_side_photo ||
-                                        $vehicle->rear_photo;
-                                });
-                            @endphp
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
 
-                            @if ($hasPhotos)
-                                <!-- Muestra la sección solo si hay fotos -->
-                                <h4 class="section-title text-center">Fotografías del Vehículo:</h4>
-                                <div class="row">
-                                    @foreach ($history->criminalVehicle as $vehicle)
-                                        @if ($vehicle->front_photo || $vehicle->left_side_photo || $vehicle->right_side_photo || $vehicle->rear_photo)
-                                            @if ($vehicle->front_photo)
-                                                <div class="col-6 col-sm-3 mb-4">
-                                                    <!-- 2 columnas en móviles, 4 columnas en pantallas más grandes -->
-                                                    <div class="tool-item text-center">
-                                                        <img src="{{ asset($vehicle->front_photo) }}" class="img-fluid"
-                                                            alt="Frontal"
-                                                            style="width: 50%; max-width: 125px; border-radius: 10%; border: 1px solid #ddd; object-fit: cover;">
-                                                        <p><strong>Frontal</strong></p>
-                                                    </div>
-                                                </div>
-                                            @endif
+        <!-- Modal para perfil derecho -->
+        @if ($profileDerPhoto && $profileDerPhoto->profile_der_photo)
+            <div class="modal fade" id="photoModal_profile_der" tabindex="-1">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content bg-dark">
+                        <div class="modal-header border-secondary">
+                            <h5 class="modal-title text-success">
+                                <i class="fas fa-arrow-right me-2"></i>Perfil Derecho - {{ $criminal->first_name }}
+                                {{ $criminal->last_nameP }}
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body text-center p-2">
+                            <img src="{{ asset($profileDerPhoto->profile_der_photo) }}" class="img-fluid rounded shadow"
+                                alt="Perfil Derecho" style="max-height: 70vh; object-fit: contain;">
+                            <div class="mt-3">
+                                <p class="text-light mb-1">
+                                    <strong>{{ $criminal->first_name }} {{ $criminal->last_nameP }}</strong>
+                                </p>
+                                <small class="text-muted">
+                                    Perfil Derecho | Fecha del arresto:
+                                    {{ \Carbon\Carbon::parse($history->arrest_date)->format('d/m/Y') }}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
 
-                                            @if ($vehicle->left_side_photo)
-                                                <div class="col-6 col-sm-3 mb-4">
-                                                    <div class="tool-item text-center">
-                                                        <img src="{{ asset($vehicle->left_side_photo) }}"
-                                                            class="img-fluid" alt="Lateral Izquierda"
-                                                            style="width: 50%; max-width: 125px; border-radius: 10%; border: 1px solid #ddd; object-fit: cover;">
-                                                        <p><strong>Lateral Izquierda</strong></p>
-                                                    </div>
-                                                </div>
-                                            @endif
+        <!-- Modal para foto adicional -->
+        @if ($aditionalPhoto && $aditionalPhoto->aditional_photo)
+            <div class="modal fade" id="photoModal_additional" tabindex="-1">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content bg-dark">
+                        <div class="modal-header border-secondary">
+                            <h5 class="modal-title text-success">
+                                <i class="fas fa-plus me-2"></i>Foto Adicional - {{ $criminal->first_name }}
+                                {{ $criminal->last_nameP }}
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body text-center p-2">
+                            <img src="{{ asset($aditionalPhoto->aditional_photo) }}" class="img-fluid rounded shadow"
+                                alt="Foto Adicional" style="max-height: 70vh; object-fit: contain;">
+                            <div class="mt-3">
+                                <p class="text-light mb-1">
+                                    <strong>{{ $criminal->first_name }} {{ $criminal->last_nameP }}</strong>
+                                </p>
+                                <small class="text-muted">
+                                    Fotografía Adicional | Fecha del arresto:
+                                    {{ \Carbon\Carbon::parse($history->arrest_date)->format('d/m/Y') }}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
 
-                                            @if ($vehicle->right_side_photo)
-                                                <div class="col-6 col-sm-3 mb-4">
-                                                    <div class="tool-item text-center">
-                                                        <img src="{{ asset($vehicle->right_side_photo) }}"
-                                                            class="img-fluid" alt="Lateral Derecha"
-                                                            style="width: 50%; max-width: 125px; border-radius: 10%; border: 1px solid #ddd; object-fit: cover;">
-                                                        <p><strong>Lateral Derecha</strong></p>
-                                                    </div>
-                                                </div>
-                                            @endif
-                                            @if ($vehicle->rear_photo)
-                                                <div class="col-6 col-sm-3 mb-4">
-                                                    <div class="tool-item text-center">
-                                                        <img src="{{ asset($vehicle->rear_photo) }}" class="img-fluid"
-                                                            alt="Trasera"
-                                                            style=" width: 50%; max-width: 125px; border-radius: 10%; border: 1px solid #ddd; object-fit: cover;">
-                                                        <p><strong>Trasera</strong></p>
-                                                    </div>
-                                                </div>
-                                            @endif
+        <!-- Modal para foto de barra -->
+        @if ($barraPhoto && $barraPhoto->barra_photo)
+            <div class="modal fade" id="photoModal_barra" tabindex="-1">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content bg-dark">
+                        <div class="modal-header border-secondary">
+                            <h5 class="modal-title text-success">
+                                <i class="fas fa-barcode me-2"></i>Foto de Barra - {{ $criminal->first_name }}
+                                {{ $criminal->last_nameP }}
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body text-center p-2">
+                            <img src="{{ asset($barraPhoto->barra_photo) }}" class="img-fluid rounded shadow"
+                                alt="Foto de Barra" style="max-height: 70vh; object-fit: contain;">
+                            <div class="mt-3">
+                                <p class="text-light mb-1">
+                                    <strong>{{ $criminal->first_name }} {{ $criminal->last_nameP }}</strong>
+                                </p>
+                                <small class="text-muted">
+                                    Fotografía de Barra | Fecha del arresto:
+                                    {{ \Carbon\Carbon::parse($history->arrest_date)->format('d/m/Y') }}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-md-10 col-12">
+                <div class="card mt-4" style="background: #000000; color: #ffffff;">
+                    <div class="card-header">
+                        <h3 class="section-title-main">
+                            <i class="fas fa-save me-2"></i>Datos guardados del arresto
+                        </h3>
+                    </div>
+                    <!-- Primera fila: Detalles del Arresto -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-12">
+                            <div class="arrest-detail-card">
+                                <div class="detail-card-header">
+                                    <h6 class="detail-card-title">
+                                        <i class="fas fa-info-circle me-2"></i>Detalles del Arresto
+                                    </h6>
+                                </div>
+                                <div class="detail-card-body">
+                                    <div class="arrest-details-grid-enhanced">
+                                        <div class="detail-item-enhanced">
+                                            <span class="detail-label">Fecha de Captura:</span>
+                                            <span class="detail-value">
+                                                <span
+                                                    class="badge bg-info">{{ \Carbon\Carbon::parse($history->arrest_date)->format('d/m/Y') }}</span>
+                                            </span>
+                                        </div>
+                                        <div class="detail-item-enhanced">
+                                            <span class="detail-label">Hora de Captura:</span>
+                                            <span class="detail-value">
+                                                <span
+                                                    class="badge bg-info">{{ \Carbon\Carbon::parse($history->arrest_time)->format('H:i') }}</span>
+                                            </span>
+                                        </div>
+                                        @if ($history->legalStatus)
+                                            <div class="detail-item-enhanced">
+                                                <span class="detail-label">Situación Legal:</span>
+                                                <span class="detail-value">
+                                                    <span
+                                                        class="badge bg-primary">{{ $history->legalStatus->status_name }}</span>
+                                                </span>
+                                            </div>
                                         @endif
-                                    @endforeach
+                                        @if ($history->apprehensionType)
+                                            <div class="detail-item-enhanced">
+                                                <span class="detail-label">Tipo de Captura:</span>
+                                                <span
+                                                    class="detail-value">{{ $history->apprehensionType->type_name }}</span>
+                                            </div>
+                                        @endif
+                                        @if ($history->cud_number)
+                                            <div class="detail-item-enhanced">
+                                                <span class="detail-label">Número de CUD:</span>
+                                                <span class="detail-value"><code>{{ $history->cud_number }}</code></span>
+                                            </div>
+                                        @endif
+                                        @if ($history->arrest_location)
+                                            <div class="detail-item-enhanced">
+                                                <span class="detail-label">Lugar de Captura:</span>
+                                                <span class="detail-value">{{ $history->arrest_location }}</span>
+                                            </div>
+                                        @endif
+                                        @if ($history->criminal_specialty_id && $history->criminalSpecialty)
+                                            <div class="detail-item-enhanced">
+                                                <span class="detail-label">Especialidad:</span>
+                                                <span
+                                                    class="detail-value">{{ $history->criminalSpecialty->specialty_name }}</span>
+                                            </div>
+                                        @endif
+                                        @if ($history->arrest_details)
+                                            <div class="detail-item-enhanced full-width">
+                                                <span class="detail-label">Detalles:</span>
+                                                <span class="detail-value">{{ $history->arrest_details }}</span>
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
-                            @endif
-                        @else
-                            <p>No se encontraron Vehículos relacionadas para este historial.</p>
-                        @endif
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- CONDENAS -->
-                    <div class="col-md-4">
-                        <h4 class="section-title">CONDENAS:</h4>
-                        @if ($history->criminalConviction->isNotEmpty())
-                            <div class="tools-list">
-                                @foreach ($history->criminalConviction as $condena)
-                                    <div class="tool-item">
-                                        <p><strong>Tipo de Condena:</strong> {{ $condena->detentionType->detention_name }}
-                                        </p>
-                                    </div>
-                                @endforeach
+                    <!-- Segunda fila: Herramientas, Teléfonos y Cómplices -->
+                    <div class="row g-3 mb-4">
+                        <!-- Herramientas y Armas -->
+                        <div class="col-12 col-lg-4">
+                            <div class="special-detail-card">
+                                <div class="special-detail-header">
+                                    <h6 class="special-detail-title">
+                                        <i class="fas fa-tools me-1"></i>Herramientas y Armas
+                                    </h6>
+                                </div>
+                                <div class="special-detail-body">
+                                    @if ($history->criminalTools && $history->criminalTools->isNotEmpty())
+                                        @foreach ($history->criminalTools as $tool)
+                                            <div class="special-item">
+                                                <div class="special-item-type">
+                                                    {{ $tool->toolType->tool_type_name ?? 'No especificado' }}
+                                                </div>
+                                                <div class="special-item-details">
+                                                    {{ $tool->tool_details ?? 'Sin detalles' }}
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        <div class="no-data-special">No se encontraron herramientas</div>
+                                    @endif
+                                </div>
                             </div>
-                        @else
-                            <p>No se encontraron condenas relacionados para este historial.</p>
-                            @can('agregar.criminal')
-                                <a href="{{ route('criminals.edit_condena', ['criminal' => $criminal->id, 'history' => $history->id]) }}"
-                                    class="btn btn-warning btn-sm w-30 mb-2">Agregar Condena</a>
-                            @endcan
-                        @endif
-                        @if ($history->preventiveDetentions->isNotEmpty())
-                            <div class="tools-list">
-                                @foreach ($history->preventiveDetentions as $preventivo)
-                                    <div class="tool-item">
-                                        <p><strong>Prisión:</strong> {{ $preventivo->prison->prison_name }}</p>
-                                        <p><strong>Dirección de la Prisión:</strong>
-                                            {{ $preventivo->prison->prison_location }}
-                                        </p>
-                                        <strong>PAÍS - ESTADO - CIUDAD:</strong>
-                                        <p>{{ $preventivo->prison->country->country_name }} -
-                                            {{ $preventivo->prison->state->state_name }} -
-                                            {{ $preventivo->prison->city->city_name }}</p>
-                                        <p><strong>Fecha de Entrada:</strong> {{ $preventivo->prison_entry_date }}</p>
-                                        <p><strong>Fecha de Salida:</strong> {{ $preventivo->prison_release_date }}</p>
-                                    </div>
-                                @endforeach
+                        </div>
+
+                        <!-- Números de Teléfono -->
+                        <div class="col-12 col-lg-4">
+                            <div class="special-detail-card">
+                                <div class="special-detail-header">
+                                    <h6 class="special-detail-title">
+                                        <i class="fas fa-phone me-1"></i>Números de Teléfono
+                                    </h6>
+                                </div>
+                                <div class="special-detail-body">
+                                    @if ($history->phoneNumber && $history->phoneNumber->isNotEmpty())
+                                        @foreach ($history->phoneNumber as $phone)
+                                            <div class="special-item">
+                                                <div class="special-item-type">
+                                                    <i class="fas fa-mobile-alt me-1"></i>
+                                                    {{ $phone->phone_number ?? 'No especificado' }}
+                                                </div>
+                                                <div class="special-item-details">
+                                                    {{ $phone->company->companies_name ?? 'N/A' }}
+                                                    |
+                                                    IMEI: {{ $phone->imei_number ?? 'N/A' }}
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        <div class="no-data-special">No se encontraron números de teléfono</div>
+                                    @endif
+                                </div>
                             </div>
-                        @endif
-                        @if ($history->extraditions->isNotEmpty())
-                            <div class="tools-list">
-                                @foreach ($history->extraditions as $extradicion)
-                                    <div class="tool-item">
-                                        </p>
-                                        <strong>PAÍS - CIUDAD:</strong>
-                                        <p>{{ $extradicion->country->country_name }} -
-                                            {{ $extradicion->state->state_name }}</p>
-                                        <p><strong>Fecha de Extradición:</strong> {{ $extradicion->extradition_date }}</p>
-                                    </div>
-                                @endforeach
+                        </div>
+
+                        <!-- Cómplices -->
+                        <div class="col-12 col-lg-4">
+                            <div class="special-detail-card">
+                                <div class="special-detail-header">
+                                    <h6 class="special-detail-title">
+                                        <i class="fas fa-users me-1"></i>Cómplices
+                                    </h6>
+                                </div>
+                                <div class="special-detail-body">
+                                    @if ($history->criminalComplice && $history->criminalComplice->isNotEmpty())
+                                        @foreach ($history->criminalComplice as $complice)
+                                            <div class="special-item">
+                                                <div class="special-item-type">
+                                                    {{ $complice->complice_name ?? 'No especificado' }}
+                                                </div>
+                                                <div class="special-item-details">
+                                                    CI: {{ $complice->CI_complice ?? 'N/A' }} |
+                                                    {{ $complice->detail_complice ?? 'Sin detalles' }}
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        <div class="no-data-special">No se encontraron cómplices</div>
+                                    @endif
+                                </div>
                             </div>
-                        @endif
-                        @if ($history->houseArrests->isNotEmpty())
-                            <div class="tools-list">
-                                @foreach ($history->houseArrests as $harrest)
-                                    <div class="tool-item">
-                                        <p><strong>Dirección de Arresto Domiciliario:</strong>
-                                            {{ $harrest->house_arrest_address }}
-                                        </p>
-                                        <strong>PAÍS - ESTADO - CIUDAD:</strong>
-                                        <p>{{ $harrest->country->country_name }} -
-                                            {{ $harrest->state->state_name }} -
-                                            {{ $harrest->city->city_name }}</p>
-                                    </div>
-                                @endforeach
+                        </div>
+                    </div>
+
+                    <!-- Tercera fila: Otras Identidades y Organizaciones -->
+                    <div class="row g-3 mb-4">
+                        <!-- Otras Identidades -->
+                        <div class="col-12 col-lg-4">
+                            <div class="arrest-detail-card">
+                                <div class="detail-card-header">
+                                    <h6 class="detail-card-title">
+                                        <i class="fas fa-user-secret me-2"></i>Otras Identidades
+                                    </h6>
+                                </div>
+                                <div class="detail-card-body">
+                                    @if ($history->criminalAliase && $history->criminalAliase->isNotEmpty())
+                                        <div class="simple-details-grid">
+                                            @foreach ($history->criminalAliase as $aliase)
+                                                <div class="detail-item-enhanced">
+                                                    <span class="detail-label">Alias:</span>
+                                                    <span
+                                                        class="detail-value">{{ $aliase->alias_name ?? 'No especificado' }}</span>
+                                                </div>
+                                                <div class="detail-item-enhanced">
+                                                    <span class="detail-label">CI:</span>
+                                                    <span
+                                                        class="detail-value">{{ $aliase->alias_identity_number ?? 'N/A' }}</span>
+                                                </div>
+                                                <div class="detail-item-enhanced">
+                                                    <span class="detail-label">Nacionalidad:</span>
+                                                    <span
+                                                        class="detail-value">{{ $aliase->nationality->nationality_name ?? 'N/A' }}</span>
+                                                </div>
+                                                @if (!$loop->last)
+                                                    <hr class="detail-separator">
+                                                @endif
+                                            @endforeach
+                                        </div>
+                                    @else
+                                        <div class="no-data-simple">No se encontraron identidades</div>
+                                    @endif
+                                </div>
                             </div>
-                        @endif
-                        @if ($history->liberties->isNotEmpty())
-                            <div class="tools-list">
-                                @foreach ($history->liberties as $liberty)
-                                    <div class="tool-item">
-                                        <p><strong>Dirección:</strong>
-                                            {{ $liberty->house_address }}
-                                        </p>
-                                        <strong>PAÍS - ESTADO - CIUDAD:</strong>
-                                        <p>{{ $liberty->country->country_name }} -
-                                            {{ $liberty->state->state_name }} -
-                                            {{ $liberty->city->city_name }}</p>
-                                    </div>
-                                @endforeach
+                        </div>
+
+                        <!-- Organización Criminal -->
+                        <div class="col-12 col-lg-4">
+                            <div class="arrest-detail-card">
+                                <div class="detail-card-header">
+                                    <h6 class="detail-card-title">
+                                        <i class="fas fa-skull-crossbones me-2"></i>Organización Criminal
+                                    </h6>
+                                </div>
+                                <div class="detail-card-body">
+                                    @if ($history->criminalOrganization && $history->criminalOrganization->isNotEmpty())
+                                        <div class="simple-details-grid">
+                                            @foreach ($history->criminalOrganization as $grupo)
+                                                <div class="detail-item-enhanced">
+                                                    <span class="detail-label">Organización:</span>
+                                                    <span
+                                                        class="detail-value">{{ $grupo->organization->organization_name ?? 'No especificada' }}</span>
+                                                </div>
+                                                <div class="detail-item-enhanced">
+                                                    <span class="detail-label">Especialidad:</span>
+                                                    <span
+                                                        class="detail-value">{{ $grupo->organization->Criminal_Organization_Specialty ?? 'N/A' }}</span>
+                                                </div>
+                                                <div class="detail-item-enhanced">
+                                                    <span class="detail-label">Rol:</span>
+                                                    <span class="detail-value">{{ $grupo->criminal_rol ?? 'N/A' }}</span>
+                                                </div>
+                                                @if (!$loop->last)
+                                                    <hr class="detail-separator">
+                                                @endif
+                                            @endforeach
+                                        </div>
+                                    @else
+                                        <div class="no-data-simple">No se encontraron organizaciones</div>
+                                    @endif
+                                </div>
                             </div>
-                        @endif
+                        </div>
+
+                        <!-- Condenas y Situación Legal -->
+                        <div class="col-12 col-lg-4">
+                            <div class="arrest-detail-card">
+                                <div class="detail-card-header">
+                                    <h6 class="detail-card-title">
+                                        <i class="fas fa-gavel me-2"></i>Condenas y Situación Legal
+                                    </h6>
+                                </div>
+                                <div class="detail-card-body">
+                                    @if ($history->criminalConviction && $history->criminalConviction->isNotEmpty())
+                                        <div class="legal-section-compact mb-3">
+                                            <div class="legal-type-compact text-danger">
+                                                <i class="fas fa-hammer me-2"></i>Condenas
+                                            </div>
+                                            @foreach ($history->criminalConviction as $condena)
+                                                <div class="legal-item-compact conviction mb-2">
+                                                    <div class="card bg-dark border-danger">
+                                                        <div class="card-body p-2">
+                                                            <span class="badge bg-danger w-100">
+                                                                {{ $condena->detentionType->detention_name }}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @else
+                                        @can('agregar.criminal')
+                                            <div class="text-center mb-3">
+                                                <a href="{{ route('criminals.edit_condena', ['criminal' => $criminal->id, 'history' => $history->id]) }}"
+                                                    class="btn btn-warning btn-sm w-100 fw-bold shadow">
+                                                    <i class="fas fa-plus-circle me-2"></i>Agregar Condena
+                                                </a>
+                                            </div>
+                                        @endcan
+                                    @endif
+
+                                    @if ($history->preventiveDetentions && $history->preventiveDetentions->isNotEmpty())
+                                        <div class="legal-section-compact mb-3">
+                                            <div class="legal-type-compact text-info">
+                                                <i class="fas fa-building me-2"></i>Detención Preventiva
+                                            </div>
+                                            @foreach ($history->preventiveDetentions as $preventivo)
+                                                <div class="legal-item-compact detention mb-2">
+                                                    <div class="card bg-dark border-info">
+                                                        <div class="card-body p-2">
+                                                            <h6 class="text-info mb-2 small">
+                                                                {{ $preventivo->prison->prison_name ?? 'No especificada' }}
+                                                            </h6>
+                                                            <div class="small text-light">
+                                                                <div><strong><i
+                                                                            class="fas fa-map-marker-alt me-1"></i>Dirección:</strong>
+                                                                    {{ $preventivo->prison->prison_location ?? 'N/A' }}
+                                                                </div>
+                                                                <div><strong><i
+                                                                            class="fas fa-globe me-1"></i>Ubicación:</strong>
+                                                                    {{ $preventivo->prison->country->country_name ?? 'N/A' }}
+                                                                    -
+                                                                    {{ $preventivo->prison->state->state_name ?? 'N/A' }}
+                                                                    -
+                                                                    {{ $preventivo->prison->city->city_name ?? 'N/A' }}
+                                                                </div>
+                                                                <div class="row mt-1">
+                                                                    <div class="col-6">
+                                                                        <strong><i
+                                                                                class="fas fa-sign-in-alt me-1 text-success"></i>Entrada:</strong><br>
+                                                                        <small
+                                                                            class="text-success">{{ $preventivo->prison_entry_date ?? 'N/A' }}</small>
+                                                                    </div>
+                                                                    <div class="col-6">
+                                                                        <strong><i
+                                                                                class="fas fa-sign-out-alt me-1 text-warning"></i>Salida:</strong><br>
+                                                                        <small
+                                                                            class="text-warning">{{ $preventivo->prison_release_date ?? 'N/A' }}</small>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
+
+                                    @if ($history->extraditions && $history->extraditions->isNotEmpty())
+                                        <div class="legal-section-compact mb-3">
+                                            <div class="legal-type-compact text-warning">
+                                                <i class="fas fa-plane me-2"></i>Extradiciones
+                                            </div>
+                                            @foreach ($history->extraditions as $extradicion)
+                                                <div class="legal-item-compact extradition mb-2">
+                                                    <div class="card bg-dark border-warning">
+                                                        <div class="card-body p-2">
+                                                            <div class="small text-light">
+                                                                <div><strong><i
+                                                                            class="fas fa-globe me-1"></i>Destino:</strong>
+                                                                    {{ $extradicion->country->country_name ?? 'N/A' }} -
+                                                                    {{ $extradicion->state->state_name ?? 'N/A' }}
+                                                                </div>
+                                                                <div><strong><i
+                                                                            class="fas fa-calendar me-1"></i>Fecha:</strong>
+                                                                    <span
+                                                                        class="badge bg-warning text-dark">{{ $extradicion->extradition_date ?? 'N/A' }}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
+
+                                    @if ($history->houseArrests && $history->houseArrests->isNotEmpty())
+                                        <div class="legal-section-compact mb-3">
+                                            <div class="legal-type-compact text-success">
+                                                <i class="fas fa-home me-2"></i>Arresto Domiciliario
+                                            </div>
+                                            @foreach ($history->houseArrests as $harrest)
+                                                <div class="legal-item-compact house-arrest mb-2">
+                                                    <div class="card bg-dark border-success">
+                                                        <div class="card-body p-2">
+                                                            <div class="small text-light">
+                                                                <div><strong><i
+                                                                            class="fas fa-home me-1"></i>Dirección:</strong>
+                                                                    {{ $harrest->house_arrest_address ?? 'N/A' }}
+                                                                </div>
+                                                                <div><strong><i
+                                                                            class="fas fa-globe me-1"></i>Ubicación:</strong>
+                                                                    {{ $harrest->country->country_name ?? 'N/A' }} -
+                                                                    {{ $harrest->state->state_name ?? 'N/A' }} -
+                                                                    {{ $harrest->city->city_name ?? 'N/A' }}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
+
+                                    @if ($history->liberties && $history->liberties->isNotEmpty())
+                                        <div class="legal-section-compact mb-3">
+                                            <div class="legal-type-compact text-primary">
+                                                <i class="fas fa-unlock me-2"></i>Libertad
+                                            </div>
+                                            @foreach ($history->liberties as $liberty)
+                                                <div class="legal-item-compact liberty mb-2">
+                                                    <div class="card bg-dark border-primary">
+                                                        <div class="card-body p-2">
+                                                            <div class="small text-light">
+                                                                <div><strong><i
+                                                                            class="fas fa-home me-1"></i>Dirección:</strong>
+                                                                    {{ $liberty->house_address ?? 'N/A' }}
+                                                                </div>
+                                                                <div><strong><i
+                                                                            class="fas fa-globe me-1"></i>Ubicación:</strong>
+                                                                    {{ $liberty->country->country_name ?? 'N/A' }} -
+                                                                    {{ $liberty->state->state_name ?? 'N/A' }} -
+                                                                    {{ $liberty->city->city_name ?? 'N/A' }}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
+
+                                    @if (
+                                        (!$history->criminalConviction || $history->criminalConviction->isEmpty()) &&
+                                            (!$history->preventiveDetentions || $history->preventiveDetentions->isEmpty()) &&
+                                            (!$history->extraditions || $history->extraditions->isEmpty()) &&
+                                            (!$history->houseArrests || $history->houseArrests->isEmpty()) &&
+                                            (!$history->liberties || $history->liberties->isEmpty()))
+                                        <div class="no-data-simple">No se encontraron condenas o situaciones legales
+                                            relacionadas para este historial.</div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cuarta fila: Vehículos (SIN MODALES DENTRO) -->
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <div class="arrest-detail-card">
+                                <div class="detail-card-header">
+                                    <h6 class="detail-card-title">
+                                        <i class="fas fa-car me-2"></i>Vehículos Usados
+                                    </h6>
+                                </div>
+                                <div class="detail-card-body">
+                                    @if ($history->criminalVehicle->isNotEmpty())
+                                        @foreach ($history->criminalVehicle as $vehicleIndex => $vehicle)
+                                            @php
+                                                // ID único para cada vehículo
+                                                $vehicleModalId = "vm_details_v{$vehicleIndex}";
+                                            @endphp
+
+                                            <div class="vehicle-card-enhanced">
+                                                <div class="vehicle-header-enhanced">
+                                                    <span class="vehicle-title-enhanced">Vehículo
+                                                        {{ $loop->iteration }}</span>
+                                                    <span
+                                                        class="vehicle-plate-enhanced">{{ $vehicle->license_plate ?? 'N/A' }}</span>
+                                                </div>
+
+                                                <div class="row g-3">
+                                                    <!-- Detalles del Vehículo -->
+                                                    <div class="col-12 col-lg-4">
+                                                        <div class="vehicle-section">
+                                                            <h6 class="vehicle-section-title">Detalles del Vehículo</h6>
+                                                            <div class="vehicle-details-list">
+                                                                <div class="vehicle-detail-item">
+                                                                    <span class="vehicle-label">Color:</span>
+                                                                    <span
+                                                                        class="vehicle-value">{{ $vehicle->vehicleColor->color_name ?? 'N/A' }}</span>
+                                                                </div>
+                                                                <div class="vehicle-detail-item">
+                                                                    <span class="vehicle-label">Marca:</span>
+                                                                    <span
+                                                                        class="vehicle-value">{{ $vehicle->brandVehicle->brand_name ?? 'N/A' }}</span>
+                                                                </div>
+                                                                <div class="vehicle-detail-item">
+                                                                    <span class="vehicle-label">Modelo:</span>
+                                                                    <span
+                                                                        class="vehicle-value">{{ $vehicle->model ?? 'N/A' }}</span>
+                                                                </div>
+                                                                <div class="vehicle-detail-item">
+                                                                    <span class="vehicle-label">Año:</span>
+                                                                    <span
+                                                                        class="vehicle-value">{{ $vehicle->year ?? 'N/A' }}</span>
+                                                                </div>
+                                                                <div class="vehicle-detail-item">
+                                                                    <span class="vehicle-label">Tipo:</span>
+                                                                    <span
+                                                                        class="vehicle-value">{{ $vehicle->vehicleType->vehicle_type_name ?? 'N/A' }}</span>
+                                                                </div>
+                                                                <div class="vehicle-detail-item">
+                                                                    <span class="vehicle-label">Servicio:</span>
+                                                                    <span
+                                                                        class="vehicle-value">{{ $vehicle->vehicleService->service_name ?? 'N/A' }}</span>
+                                                                </div>
+                                                                @if ($vehicle->details)
+                                                                    <div class="vehicle-detail-item full-width">
+                                                                        <span class="vehicle-label">Detalles:</span>
+                                                                        <span
+                                                                            class="vehicle-value">{{ $vehicle->details }}</span>
+                                                                    </div>
+                                                                @endif
+                                                                @if ($vehicle->observations)
+                                                                    <div class="vehicle-detail-item full-width">
+                                                                        <span class="vehicle-label">Observaciones:</span>
+                                                                        <span
+                                                                            class="vehicle-value">{{ $vehicle->observations }}</span>
+                                                                    </div>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Datos de ITV -->
+                                                    <div class="col-12 col-lg-4">
+                                                        <div class="vehicle-section">
+                                                            <h6 class="vehicle-section-title">Datos de ITV y Propietario
+                                                            </h6>
+                                                            <div class="vehicle-details-list">
+                                                                @if ($vehicle->itv_valid)
+                                                                    <div class="vehicle-detail-item">
+                                                                        <span class="itv-status-enhanced valid">ITV
+                                                                            Válido</span>
+                                                                    </div>
+                                                                    <div class="vehicle-detail-item">
+                                                                        <span class="vehicle-label">Propietario:</span>
+                                                                        <span
+                                                                            class="vehicle-value">{{ $vehicle->user_name ?? 'N/A' }}</span>
+                                                                    </div>
+                                                                    <div class="vehicle-detail-item">
+                                                                        <span class="vehicle-label">CI Propietario:</span>
+                                                                        <span
+                                                                            class="vehicle-value">{{ $vehicle->user_ci ?? 'N/A' }}</span>
+                                                                    </div>
+                                                                    <div class="vehicle-detail-item">
+                                                                        <span class="vehicle-label">Relación:</span>
+                                                                        <span
+                                                                            class="vehicle-value">{{ $vehicle->relationshipWithOwner->relationship_name ?? 'N/A' }}</span>
+                                                                    </div>
+                                                                    <div class="vehicle-detail-item">
+                                                                        <span class="vehicle-label">Conductor:</span>
+                                                                        <span
+                                                                            class="vehicle-value">{{ $vehicle->driver_name ?? 'N/A' }}</span>
+                                                                    </div>
+                                                                @else
+                                                                    <div class="vehicle-detail-item">
+                                                                        <span class="itv-status-enhanced invalid">Sin
+                                                                            ITV</span>
+                                                                    </div>
+                                                                    <div class="no-data-vehicle">
+                                                                        <p>No hay información de propietario disponible</p>
+                                                                    </div>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Fotografías (SOLO THUMBNAILS - SIN MODALES) -->
+                                                    <div class="col-12 col-lg-4">
+                                                        <div class="vehicle-section">
+                                                            <h6 class="vehicle-section-title">Fotografías</h6>
+                                                            <div class="vehicle-photos-enhanced">
+                                                                @php
+                                                                    $hasPhotos =
+                                                                        $vehicle->front_photo ||
+                                                                        $vehicle->left_side_photo ||
+                                                                        $vehicle->right_side_photo ||
+                                                                        $vehicle->rear_photo;
+                                                                    $photoCount = collect([
+                                                                        $vehicle->front_photo,
+                                                                        $vehicle->left_side_photo,
+                                                                        $vehicle->right_side_photo,
+                                                                        $vehicle->rear_photo,
+                                                                    ])
+                                                                        ->filter()
+                                                                        ->count();
+                                                                @endphp
+
+                                                                @if ($hasPhotos)
+                                                                    <div class="photos-grid-enhanced">
+                                                                        @if ($vehicle->front_photo && file_exists(public_path($vehicle->front_photo)))
+                                                                            <div class="photo-thumb-enhanced"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#{{ $vehicleModalId }}_front">
+                                                                                <img src="{{ asset($vehicle->front_photo) }}"
+                                                                                    alt="Frontal">
+                                                                                <span
+                                                                                    class="photo-label-enhanced">Frontal</span>
+                                                                            </div>
+                                                                        @endif
+                                                                        @if ($vehicle->left_side_photo && file_exists(public_path($vehicle->left_side_photo)))
+                                                                            <div class="photo-thumb-enhanced"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#{{ $vehicleModalId }}_left">
+                                                                                <img src="{{ asset($vehicle->left_side_photo) }}"
+                                                                                    alt="Lateral Izq">
+                                                                                <span class="photo-label-enhanced">Lat.
+                                                                                    Izq</span>
+                                                                            </div>
+                                                                        @endif
+                                                                        @if ($vehicle->right_side_photo && file_exists(public_path($vehicle->right_side_photo)))
+                                                                            <div class="photo-thumb-enhanced"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#{{ $vehicleModalId }}_right">
+                                                                                <img src="{{ asset($vehicle->right_side_photo) }}"
+                                                                                    alt="Lateral Der">
+                                                                                <span class="photo-label-enhanced">Lat.
+                                                                                    Der</span>
+                                                                            </div>
+                                                                        @endif
+                                                                        @if ($vehicle->rear_photo && file_exists(public_path($vehicle->rear_photo)))
+                                                                            <div class="photo-thumb-enhanced"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#{{ $vehicleModalId }}_rear">
+                                                                                <img src="{{ asset($vehicle->rear_photo) }}"
+                                                                                    alt="Trasera">
+                                                                                <span
+                                                                                    class="photo-label-enhanced">Trasera</span>
+                                                                            </div>
+                                                                        @endif
+                                                                    </div>
+                                                                    <div class="photo-count-info">
+                                                                        <small><i
+                                                                                class="fas fa-camera me-1"></i>{{ $photoCount }}
+                                                                            fotografía{{ $photoCount > 1 ? 's' : '' }}
+                                                                            disponible{{ $photoCount > 1 ? 's' : '' }}</small>
+                                                                    </div>
+                                                                @else
+                                                                    <div class="no-photos-vehicle">
+                                                                        <i class="fas fa-camera-retro fa-2x"></i>
+                                                                        <p class="mt-2">No hay fotografías disponibles
+                                                                        </p>
+                                                                    </div>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            @if (!$loop->last)
+                                                <hr class="vehicle-separator">
+                                            @endif
+                                        @endforeach
+                                    @else
+                                        <div class="no-data-simple">No se encontraron vehículos</div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+
         </div>
+        {{-- ============================================ --}}
+        {{-- SECCIÓN DE MODALES CORREGIDA - FUERA DEL CONTENIDO --}}
+        {{-- ============================================ --}}
+        @if ($history->criminalVehicle && $history->criminalVehicle->isNotEmpty())
+            @foreach ($history->criminalVehicle as $vehicleIndex => $vehicle)
+                @php
+                    // Mismo ID que se usa en los thumbnails
+                    $vehicleModalId = "vm_details_v{$vehicleIndex}";
+                @endphp
+
+                {{-- Modal para foto FRONTAL --}}
+                @if ($vehicle->front_photo && file_exists(public_path($vehicle->front_photo)))
+                    <div class="modal fade" id="{{ $vehicleModalId }}_front" tabindex="-1"
+                        aria-labelledby="{{ $vehicleModalId }}_front_label" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content bg-dark">
+                                <div class="modal-header border-secondary">
+                                    <h5 class="modal-title text-success" id="{{ $vehicleModalId }}_front_label">
+                                        <i class="fas fa-car me-2"></i>Vista Frontal -
+                                        {{ $vehicle->license_plate ?? 'Vehículo' }}
+                                    </h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                        aria-label="Cerrar"></button>
+                                </div>
+                                <div class="modal-body text-center p-2">
+                                    <img src="{{ asset($vehicle->front_photo) }}" class="img-fluid rounded shadow"
+                                        alt="Vista Frontal - {{ $vehicle->license_plate ?? 'Vehículo' }}"
+                                        style="max-height: 70vh; object-fit: contain;">
+                                    <div class="mt-3">
+                                        <p class="text-light mb-1">
+                                            <strong>{{ $vehicle->brandVehicle->brand_name ?? 'Marca N/A' }}
+                                                {{ $vehicle->model ?? 'Modelo N/A' }}</strong>
+                                        </p>
+                                        <small class="text-muted">
+                                            {{ $vehicle->vehicleColor->color_name ?? 'Color N/A' }} |
+                                            {{ $vehicle->year ?? 'Año N/A' }}
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+                {{-- Modal para foto LATERAL IZQUIERDA --}}
+                @if ($vehicle->left_side_photo && file_exists(public_path($vehicle->left_side_photo)))
+                    <div class="modal fade" id="{{ $vehicleModalId }}_left" tabindex="-1"
+                        aria-labelledby="{{ $vehicleModalId }}_left_label" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content bg-dark">
+                                <div class="modal-header border-secondary">
+                                    <h5 class="modal-title text-success" id="{{ $vehicleModalId }}_left_label">
+                                        <i class="fas fa-car me-2"></i>Vista Lateral Izquierda -
+                                        {{ $vehicle->license_plate ?? 'Vehículo' }}
+                                    </h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                        aria-label="Cerrar"></button>
+                                </div>
+                                <div class="modal-body text-center p-2">
+                                    <img src="{{ asset($vehicle->left_side_photo) }}" class="img-fluid rounded shadow"
+                                        alt="Vista Lateral Izquierda - {{ $vehicle->license_plate ?? 'Vehículo' }}"
+                                        style="max-height: 70vh; object-fit: contain;">
+                                    <div class="mt-3">
+                                        <p class="text-light mb-1">
+                                            <strong>{{ $vehicle->brandVehicle->brand_name ?? 'Marca N/A' }}
+                                                {{ $vehicle->model ?? 'Modelo N/A' }}</strong>
+                                        </p>
+                                        <small class="text-muted">
+                                            {{ $vehicle->vehicleColor->color_name ?? 'Color N/A' }} |
+                                            {{ $vehicle->year ?? 'Año N/A' }}
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+                {{-- Modal para foto LATERAL DERECHA --}}
+                @if ($vehicle->right_side_photo && file_exists(public_path($vehicle->right_side_photo)))
+                    <div class="modal fade" id="{{ $vehicleModalId }}_right" tabindex="-1"
+                        aria-labelledby="{{ $vehicleModalId }}_right_label" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content bg-dark">
+                                <div class="modal-header border-secondary">
+                                    <h5 class="modal-title text-success" id="{{ $vehicleModalId }}_right_label">
+                                        <i class="fas fa-car me-2"></i>Vista Lateral Derecha -
+                                        {{ $vehicle->license_plate ?? 'Vehículo' }}
+                                    </h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                        aria-label="Cerrar"></button>
+                                </div>
+                                <div class="modal-body text-center p-2">
+                                    <img src="{{ asset($vehicle->right_side_photo) }}" class="img-fluid rounded shadow"
+                                        alt="Vista Lateral Derecha - {{ $vehicle->license_plate ?? 'Vehículo' }}"
+                                        style="max-height: 70vh; object-fit: contain;">
+                                    <div class="mt-3">
+                                        <p class="text-light mb-1">
+                                            <strong>{{ $vehicle->brandVehicle->brand_name ?? 'Marca N/A' }}
+                                                {{ $vehicle->model ?? 'Modelo N/A' }}</strong>
+                                        </p>
+                                        <small class="text-muted">
+                                            {{ $vehicle->vehicleColor->color_name ?? 'Color N/A' }} |
+                                            {{ $vehicle->year ?? 'Año N/A' }}
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+                {{-- Modal para foto TRASERA --}}
+                @if ($vehicle->rear_photo && file_exists(public_path($vehicle->rear_photo)))
+                    <div class="modal fade" id="{{ $vehicleModalId }}_rear" tabindex="-1"
+                        aria-labelledby="{{ $vehicleModalId }}_rear_label" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content bg-dark">
+                                <div class="modal-header border-secondary">
+                                    <h5 class="modal-title text-success" id="{{ $vehicleModalId }}_rear_label">
+                                        <i class="fas fa-car me-2"></i>Vista Trasera -
+                                        {{ $vehicle->license_plate ?? 'Vehículo' }}
+                                    </h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                        aria-label="Cerrar"></button>
+                                </div>
+                                <div class="modal-body text-center p-2">
+                                    <img src="{{ asset($vehicle->rear_photo) }}" class="img-fluid rounded shadow"
+                                        alt="Vista Trasera - {{ $vehicle->license_plate ?? 'Vehículo' }}"
+                                        style="max-height: 70vh; object-fit: contain;">
+                                    <div class="mt-3">
+                                        <p class="text-light mb-1">
+                                            <strong>{{ $vehicle->brandVehicle->brand_name ?? 'Marca N/A' }}
+                                                {{ $vehicle->model ?? 'Modelo N/A' }}</strong>
+                                        </p>
+                                        <small class="text-muted">
+                                            {{ $vehicle->vehicleColor->color_name ?? 'Color N/A' }} |
+                                            {{ $vehicle->year ?? 'Año N/A' }}
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            @endforeach
+        @endif
     </div>
+
+    <!-- Bootstrap 5 CSS y JavaScript -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <div class="text-center">
         <style>
             .btn-export-pdf {
@@ -797,55 +1672,42 @@
                 border-radius: 5px;
             }
         </style>
-        <a href="{{ route('generate-pdf', $criminal->id) }}" class="btn-export-pdf">Exportar a PDF</a>
-        <button id="printButton" class="btn-imprimir">Imprimir</button>
+        <a href="{{ route('document.generate.complete', $criminal->id) }}" class="btn-export-pdf">Exportar a PDF</a>
 
         <script>
-            document.getElementById('printButton').addEventListener('click', function() {
-                const printContents = document.querySelector('.todo').outerHTML;
-                const originalContents = document.body.innerHTML;
+            // Efecto hover para las tarjetas
+            document.querySelectorAll('.card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
+                    this.style.boxShadow = '0 8px 15px rgba(0, 0, 0, 0.4)';
+                    this.style.transition = 'all 0.3s ease';
+                });
 
-                const printHTML = `
-                        <html>
-                        <head>
-                            <style>
-                                body {
-                                    font-family: Arial, sans-serif;
-                                    color: #000 !important;
-                                    background-color: #fff;
-                                }
-                                .card {
-                                    border: 1px solid #ccc;
-                                    margin: 10px;
-                                    padding: 20px;
-                                    border-radius: 10px;
-                                    background-color: #fff;
-                                }
-                                .img-thumbnail {
-                                    object-fit: cover;
-                                    width: 200px;
-                                    height: 150px;
-                                    margin: 10px;
-                                }
-                                h3, h4, p, strong {
-                                    color: #000 !important;
-                                      text-transform: uppercase;
-                                }
-                                      
-                            </style>
-                        </head>
-                        <body>
-                            ${printContents}
-                        </body>
-                        </html>
-                    `;
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.3)';
+                });
+            });
 
-                document.body.innerHTML = printHTML;
-                window.print();
-                document.body.innerHTML = originalContents;
-                window.location.reload();
+            // Lazy loading para imágenes
+            document.querySelectorAll('img').forEach(img => {
+                img.addEventListener('error', function() {
+                    this.style.display = 'none';
+                    const parent = this.parentElement;
+                    if (parent) {
+                        const errorDiv = document.createElement('div');
+                        errorDiv.className = 'alert alert-dark text-center';
+                        errorDiv.innerHTML =
+                            '<i class="fas fa-image fa-2x mb-2"></i><p class="parrafo-1">Imagen no disponible</p>';
+                        parent.appendChild(errorDiv);
+                    }
+                });
             });
         </script>
     </div>
     <br>
 @endsection
+@section('js')
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('js/criminal-ver.js') }}"></script>
+@stop
